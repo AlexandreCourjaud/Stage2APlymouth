@@ -6,6 +6,7 @@ ros::NodeHandle nh;
 
 #include "ConfigTrimaran.h"
 #include "ConfigIMU.h"
+#include "ConfigGps.h"
 
 
 void setup()
@@ -13,6 +14,7 @@ void setup()
   nh.getHardware()->setBaud(115200);
   nh.initNode();
   Serial.begin(115200);
+  SoftSerial.begin(9600);
   Wire.begin();
   Serial.println("Initializing I2C devices...");
   setupActuator();

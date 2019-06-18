@@ -1,25 +1,24 @@
 
-#include <SoftwareSerial.h>
+void setupGps(){
+   nh.advertise(pubGps);
 
-
-
-SoftwareSerial SoftSerial(10, 11);
-unsigned char buffer[200];
-int count=0;   
-
-void setup() {
-  SoftSerial.begin(9600);
-  Serial.begin(115200);
-  
 }
 
-void loop() {
+
+void updateGps(){
   getGPS();
-  
+  publishGps();
+}
+
+void publishGps(){
+  //char buf[10] = "hello";
+  //gpsMsg.data = buf;
+  pubGps.publish(&gpsMsg);
 }
 
 void getGPS() {
-  
+  clearBufferArray(); 
+  count = 0;   
   if (SoftSerial.available())                    
     {
         char currentchar = '.';
@@ -48,17 +47,23 @@ void getGPS() {
            }
         }
         delay(10);
+        
+        
         if(isGPSGPGGA(buffer) == 1) 
         {
-        Serial.write(buffer, count);
-        Serial.println("");
+         
+          strcpy(position, buffer);
+          gpsMsg.data = position;
+        //Serial.write(buffer, count);
+        //Serial.println("");
         }
-        clearBufferArray();                      
-        count = 0;                               
+        
+                            
+                                     
     }
 }
 
-int isGPSGPGGA(unsigned char* trameGPS) {
+int isGPSGPGGA( char* trameGPS) {
   if(trameGPS[0] == '$' && trameGPS[1] == 'G' && trameGPS[2] == 'P' && trameGPS[3] == 'G' && trameGPS[4] == 'G' && trameGPS[5] == 'A')
     return 1;
   else

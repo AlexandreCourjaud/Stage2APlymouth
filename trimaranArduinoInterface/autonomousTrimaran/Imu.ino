@@ -37,12 +37,13 @@ void publishImu(){
 /********** send calibration in imuCalib suscriber to calibrate the IMU *********************/
 /* the parametre will be write in the node rosserial, you can change them in configIMU.h for the time*/ 
 
-void imuCallBack(const std_msgs::String& cmd){
-  if (cmd.data == "Calibrate"){
-    Mxyz_init_calibrated();
+void imuCallBack(const std_msgs::Bool& cmd){
+  nh.loginfo("tentative calib...");
+  if (cmd.data == 1){
+    //Mxyz_init_calibrated();
   }
   else{
-    nh.loginfo("To calibrate imu, send 'calibrate' to the topic imuCalibrate");
+    nh.loginfo("To calibrate imu, send 1 to the topic imuCalibrate");
   }
 }
 
@@ -88,16 +89,23 @@ void Mxyz_init_calibrated ()
   
   nh.loginfo("     ");
   nh.loginfo("compass calibration parameter ");
-  nh.loginfo(" %f ",mx_centre);
-  nh.loginfo(my_centre);
-  nh.loginfo(mz_centre);
+
+  char buff[10] = "";
+  dtostrf(mx_centre,7,3,buff);
+  nh.loginfo(buff);
+  dtostrf(my_centre,7,3,buff);
+  nh.loginfo(buff);
+  dtostrf(mz_centre,7,3,buff);
+  nh.loginfo(buff);
 }
 
 
 void get_calibration_Data ()
 {
+  nh.loginfo("goo");
     for (int i=0; i<sample_num_mdate;i++)
       {
+      
       get_one_sample_date_mxyz();
       /*
       Serial.print(mx_sample[2]);
@@ -115,7 +123,7 @@ void get_calibration_Data ()
       if (mz_sample[2]<=mz_sample[0])mz_sample[0] = mz_sample[2];
             
       }
-      
+      nh.loginfo("end calib");
       mx_max = mx_sample[1];
       my_max = my_sample[1];
       mz_max = mz_sample[1];      
