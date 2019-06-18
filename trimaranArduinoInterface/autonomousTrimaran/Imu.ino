@@ -2,6 +2,7 @@
 void setupImu(){
  accelgyro.initialize();
  nh.advertise(pubImu);
+ nh.subscribe(imuSub);
  Serial.println("Testing device connections...");
  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
  delay(1000);
@@ -31,9 +32,19 @@ void publishImu(){
   imuMsgs.orientation.z = Mxyz[2];
   pubImu.publish(&imuMsgs);
   
-  
 }
 
+/********** send calibration in imuCalib suscriber to calibrate the IMU *********************/
+/* the parametre will be write in the node rosserial, you can change them in configIMU.h for the time*/ 
+
+void imuCallBack(const std_msgs::String& cmd){
+  if (cmd.data == "Calibrate"){
+    Mxyz_init_calibrated();
+  }
+  else{
+    nh.loginfo("To calibrate imu, send 'calibrate' to the topic imuCalibrate");
+  }
+}
 
 
 
@@ -63,27 +74,23 @@ void getTiltHeading(void)
 void Mxyz_init_calibrated ()
 {
   
-  Serial.println(F("Before using 9DOF,we need to calibrate the compass frist,It will takes about 2 minutes."));
-  Serial.print("  ");
-  Serial.println(F("During  calibratting ,you should rotate and turn the 9DOF all the time within 2 minutes."));
-  Serial.print("  ");
-  Serial.println(F("If you are ready ,please sent a command data 'ready' to start sample and calibrate."));
-  while(!Serial.find("ready")); 
-  Serial.println("  ");
-  Serial.println("ready");
-  Serial.println("Sample starting......");
-  Serial.println("waiting ......");
+  nh.loginfo("Before using 9DOF,we need to calibrate the compass frist,It will takes about 2 minutes.");
+  nh.loginfo("  ");
+  nh.loginfo("During  calibratting ,you should rotate and turn the 9DOF all the time within 2 minutes.");
+  nh.loginfo("  ");
+  nh.loginfo("Wait 5s");
+  nh.loginfo("  ");
+  nh.loginfo("ready");
+  nh.loginfo("Sample starting......");
+  nh.loginfo("waiting ......");
   
   get_calibration_Data ();
   
-  Serial.println("     ");
-  Serial.println("compass calibration parameter ");
-  Serial.print(mx_centre);
-  Serial.print("     ");
-  Serial.print(my_centre);
-  Serial.print("     ");
-  Serial.println(mz_centre);
-  Serial.println("    ");
+  nh.loginfo("     ");
+  nh.loginfo("compass calibration parameter ");
+  nh.loginfo(" %f ",mx_centre);
+  nh.loginfo(my_centre);
+  nh.loginfo(mz_centre);
 }
 
 

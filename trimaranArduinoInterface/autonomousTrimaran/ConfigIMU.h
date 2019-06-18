@@ -6,6 +6,7 @@
 #include "I2Cdev.h"
 #include "MPU6050.h"
 #include <sensor_msgs/Imu.h>
+#include <std_msgs/String.h>
 
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
@@ -52,3 +53,6 @@ volatile int mz_min =0;
 
 sensor_msgs::Imu imuMsgs;
 ros::Publisher pubImu("ImuNoFiltre",&imuMsgs);
+
+void imuCallBack(const std_msgs::String& cmd);
+ros::Subscriber<std_msgs::Float32> imuSub("imuCalibrate", &imuCallBack );
