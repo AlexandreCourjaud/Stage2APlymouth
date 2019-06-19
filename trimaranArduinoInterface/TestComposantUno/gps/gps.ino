@@ -3,7 +3,7 @@
 
 
 
-SoftwareSerial SoftSerial(10, 11);
+SoftwareSerial SoftSerial(19, 18);
 unsigned char buffer[200];
 int count=0;   
 

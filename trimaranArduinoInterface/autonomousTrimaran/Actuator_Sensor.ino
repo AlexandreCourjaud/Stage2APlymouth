@@ -21,10 +21,12 @@ void Actuator(){
 void setupSensor(){
   setupImu();
   setupGps();
+  setupRC();
 }
 
 
 void Sensor(){
   updateImu();
   updateGps();
+  updateRC();
 }

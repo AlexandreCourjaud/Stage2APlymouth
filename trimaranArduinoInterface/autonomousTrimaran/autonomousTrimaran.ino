@@ -7,6 +7,10 @@ ros::NodeHandle nh;
 #include "ConfigTrimaran.h"
 #include "ConfigIMU.h"
 #include "ConfigGps.h"
+#include "ConfigRC.h"
+
+
+bool watchRc = 0;
 
 
 void setup()
@@ -19,6 +23,7 @@ void setup()
   Serial.println("Initializing I2C devices...");
   setupActuator();
   setupSensor();
+ 
   
   
 }
