@@ -22,11 +22,13 @@ void setupSensor(){
   setupImu();
   setupGps();
   setupRC();
+  setupWind();
 }
 
 
-void Sensor(){
+void updateSensor(){
   updateImu();
   updateGps();
   updateRC();
+  updateWind();
 }

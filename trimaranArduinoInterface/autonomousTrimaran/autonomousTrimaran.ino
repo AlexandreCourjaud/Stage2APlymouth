@@ -8,6 +8,7 @@ ros::NodeHandle nh;
 #include "ConfigIMU.h"
 #include "ConfigGps.h"
 #include "ConfigRC.h"
+#include "ConfigWind.h"
 
 
 bool watchRc = 0;
@@ -33,8 +34,9 @@ void setup()
 void loop()
 {
   nh.spinOnce();
-  Sensor();
+  updateSensor();
   Actuator();
+ 
   
   delay(10);
 }

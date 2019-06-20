@@ -2,7 +2,6 @@
 void setupImu(){
  accelgyro.initialize();
  nh.advertise(pubImu);
- nh.subscribe(imuSub);
  Serial.println("Testing device connections...");
  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
  delay(1000);
@@ -25,26 +24,13 @@ void publishImu(){
   imuMsgs.linear_acceleration.y = Axyz[1];
   imuMsgs.linear_acceleration.z = Axyz[2];
   imuMsgs.angular_velocity.x = Gxyz[0];
-  imuMsgs.angular_velocity.y = Gxyz[0];
-  imuMsgs.angular_velocity.z = Gxyz[0];
+  imuMsgs.angular_velocity.y = Gxyz[1];
+  imuMsgs.angular_velocity.z = Gxyz[2];
   imuMsgs.orientation.x = Mxyz[0];
   imuMsgs.orientation.y = Mxyz[1];
   imuMsgs.orientation.z = Mxyz[2];
   pubImu.publish(&imuMsgs);
   
-}
-
-/********** send calibration in imuCalib suscriber to calibrate the IMU *********************/
-/* the parametre will be write in the node rosserial, you can change them in configIMU.h for the time*/ 
-
-void imuCallBack(const std_msgs::Bool& cmd){
-  nh.loginfo("tentative calib...");
-  if (cmd.data == 1){
-    //Mxyz_init_calibrated();
-  }
-  else{
-    nh.loginfo("To calibrate imu, send 1 to the topic imuCalibrate");
-  }
 }
 
 
@@ -162,6 +148,11 @@ void getGyro_Data(void)
   Gxyz[0] = (double) gx * 250 / 32768;
   Gxyz[1] = (double) gy * 250 / 32768;
   Gxyz[2] = (double) gz * 250 / 32768;
+
+  Gxyz[0] = Gxyz[0] * PI/180;
+  Gxyz[1] = Gxyz[0] * PI/180;
+  Gxyz[2] = Gxyz[0] * PI/180;
+  
 }
 
 void getCompass_Data(void)

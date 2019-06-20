@@ -8,6 +8,7 @@ void setupGps(){
 void updateGps(){
   getGPS();
   publishGps();
+  
 }
 
 void publishGps(){
@@ -18,11 +19,11 @@ void publishGps(){
 
 void getGPS() {
   clearBufferArray(); 
-  count = 0;   
+  count = 0;  
   if (SoftSerial.available())                    
     {
         char currentchar = '.';
-        while(SoftSerial.available())
+        /*while(SoftSerial.available())
         {
           
           char currentchar = SoftSerial.read();
@@ -34,32 +35,33 @@ void getGPS() {
             
             break;
             }
+          }*/
+          
+        currentchar = SoftSerial.read();
+        if (currentchar == '$'){
+          buffer[count++]='$';
+          currentchar = '.';
+          while( currentchar != '*')       
+          {
+             if (SoftSerial.available())
+             {
+              currentchar=SoftSerial.read();
+              buffer[count++]=currentchar;
+              if(count == 200)break;
+             }
           }
           
-        currentchar = '.';
-        while( currentchar != '*')       
-        {
-           if (SoftSerial.available())
-           {
-            currentchar=SoftSerial.read();
-            buffer[count++]=currentchar;
-            if(count == 200)break;
-           }
-        }
-        delay(10);
-        
-        
-        if(isGPSGPGGA(buffer) == 1) 
-        {
-         
-          strcpy(position, buffer);
-          gpsMsg.data = position;
-        //Serial.write(buffer, count);
-        //Serial.println("");
-        }
-        
-                            
-                                     
+          
+          
+          if(isGPSGPGGA(buffer) == 1) 
+          {
+           
+            strcpy(position, buffer);
+            gpsMsg.data = position;
+          //Serial.write(buffer, count);
+          //Serial.println("");
+          }          
+        }                   
     }
 }
 

@@ -3,7 +3,7 @@
 
 
 
-SoftwareSerial SoftSerial(19, 18);
+SoftwareSerial SoftSerial(10, 11);
 unsigned char buffer[200];
 int count=0;   
 
@@ -22,8 +22,9 @@ void getGPS() {
   
   if (SoftSerial.available())                    
     {
-        char currentchar = '.';
-        while(SoftSerial.available())
+        //char currentchar = '.';
+        
+        /*while(SoftSerial.available())
         {
           
           char currentchar = SoftSerial.read();
@@ -36,25 +37,34 @@ void getGPS() {
             break;
             }
           }
-          
-        currentchar = '.';
-        while( currentchar != '*')       
-        {
-           if (SoftSerial.available())
-           {
-            currentchar=SoftSerial.read();
-            buffer[count++]=currentchar;
-            if(count == 200)break;
-           }
-        }
-        delay(10);
-        if(isGPSGPGGA(buffer) == 1) 
-        {
-        Serial.write(buffer, count);
-        Serial.println("");
+        */
+
+        char currentchar = SoftSerial.read();
+        if (currentchar ==  '$'){
+          buffer[count++]='$';
+          currentchar = '.';
+          while( currentchar != '*')       
+          {
+             if (SoftSerial.available())
+             {
+              currentchar=SoftSerial.read();
+              buffer[count++]=currentchar;
+              if(count == 200)break;
+             }
+          }
+          delay(10);
+          if(isGPSGPGGA(buffer) == 1) 
+          {
+            Serial.write(buffer, count);
+            Serial.println("");
+          }
         }
         clearBufferArray();                      
-        count = 0;                               
+        count = 0;      
+                                
+    }
+    else{
+      //Serial.println("NoSignal");
     }
 }
 

@@ -53,6 +53,3 @@ volatile int mz_min =0;
 
 sensor_msgs::Imu imuMsgs;
 ros::Publisher pubImu("ImuNoFiltre",&imuMsgs);
-
-void imuCallBack(const std_msgs::Bool& cmd);
-ros::Subscriber<std_msgs::Bool> imuSub("imuCalibrate", &imuCallBack );
