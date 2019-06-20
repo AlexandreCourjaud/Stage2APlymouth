@@ -36,5 +36,5 @@ void loop()
   Sensor();
   Actuator();
   
-  delay(500);
+  delay(10);
 }

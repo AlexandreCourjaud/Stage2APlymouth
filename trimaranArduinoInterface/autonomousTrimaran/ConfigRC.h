@@ -12,3 +12,5 @@ const int chB = 3; // channel 3 sur le pin 3
 
 float ch1;
 float ch3;
+
+unsigned long duration = 100000;
