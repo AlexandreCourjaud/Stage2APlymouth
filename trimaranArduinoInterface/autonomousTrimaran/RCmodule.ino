@@ -6,7 +6,7 @@ void setupRC(){
 
 void updateRC(){
  ch1 = pulseIn (chA,HIGH,duration);
- Serial.println(ch1);
+ //Serial.println(ch1);
  if (ch1 !=0){
    ch1 = pulseIn (chA,HIGH);
    ch3 = pulseIn (chB,HIGH);
