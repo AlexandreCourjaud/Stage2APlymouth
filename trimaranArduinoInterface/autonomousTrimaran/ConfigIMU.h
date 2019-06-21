@@ -1,10 +1,9 @@
-#include "I2Cdev.h"
-#include "MPU6050.h"
+
 
 // I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files
 // for both classes must be in the include path of your project
 #include "I2Cdev.h"
-#include "MPU6050.h"
+#include "MPU9250.h"
 #include <sensor_msgs/Imu.h>
 #include <std_msgs/Bool.h>
 
@@ -12,7 +11,7 @@
 // specific I2C addresses may be passed as a parameter here
 // AD0 low = 0x68 (default for InvenSense evaluation board)
 // AD0 high = 0x69
-MPU6050 accelgyro;
+MPU9250 accelgyro;
 I2Cdev   I2C_M;
 
 uint8_t buffer_m[6];

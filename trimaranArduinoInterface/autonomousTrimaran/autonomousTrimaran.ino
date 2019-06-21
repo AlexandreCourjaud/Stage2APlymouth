@@ -34,6 +34,7 @@ void setup()
 void loop()
 {
   nh.spinOnce();
+  //nh.loginfo("next");
   updateSensor();
   Actuator();
  
