@@ -17,8 +17,8 @@ void updateImu(){
 
 void publishImu(){
   //nh.loginfo("envoie imu ...");
-  //imuMsgs.header.stamp = millis();
-  //magMsgs.header.time = millis();
+  imuMsgs.header.stamp.sec = millis();
+  magMsgs.header.stamp.sec = millis();
   imuMsgs.linear_acceleration.x = Axyz[0];
   imuMsgs.linear_acceleration.y = Axyz[1];
   imuMsgs.linear_acceleration.z = Axyz[2];
