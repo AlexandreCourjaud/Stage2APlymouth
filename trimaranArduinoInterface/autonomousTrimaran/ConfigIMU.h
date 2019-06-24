@@ -55,4 +55,4 @@ sensor_msgs::Imu imuMsgs;
 ros::Publisher pubImu("ImuNoFiltre",&imuMsgs);
 
 sensor_msgs::MagneticField magMsgs;
-ros::Publisher pubMag("ImuNoFiltre",&magMsgs);
+ros::Publisher pubMag("MagNoFiltre",&magMsgs);
