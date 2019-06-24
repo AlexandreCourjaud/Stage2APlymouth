@@ -1,0 +1,22 @@
+#include "ros/ros.h"
+
+using namespace std;
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////	Main
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int main(int argc, char **argv){
+
+        ros::init(argc, argv, "dart");
+        ros::NodeHandle n;
+        int status;
+
+        ros::Rate loop_rate(25);
+        while (ros::ok()){
+        sleep(1);
+        return 0;
+        }
+}

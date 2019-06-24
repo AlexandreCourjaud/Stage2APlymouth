@@ -6,6 +6,7 @@
 #include "MPU9250.h"
 #include <sensor_msgs/Imu.h>
 #include <std_msgs/Bool.h>
+#include <sensor_msgs/MagneticField.h>
 
 // class default I2C address is 0x68
 // specific I2C addresses may be passed as a parameter here
@@ -52,3 +53,6 @@ volatile int mz_min =0;
 
 sensor_msgs::Imu imuMsgs;
 ros::Publisher pubImu("ImuNoFiltre",&imuMsgs);
+
+sensor_msgs::MagneticField magMsgs;
+ros::Publisher pubMag("ImuNoFiltre",&magMsgs);

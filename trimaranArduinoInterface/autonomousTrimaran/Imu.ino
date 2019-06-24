@@ -2,6 +2,7 @@
 void setupImu(){
  accelgyro.initialize();
  nh.advertise(pubImu);
+ nh.advertise(pubMag);
  Serial.println("Testing device connections...");
  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
  delay(1000);
@@ -22,10 +23,13 @@ void publishImu(){
   imuMsgs.angular_velocity.x = Gxyz[0];
   imuMsgs.angular_velocity.y = Gxyz[1];
   imuMsgs.angular_velocity.z = Gxyz[2];
-  imuMsgs.orientation.x = Mxyz[0];
-  imuMsgs.orientation.y = Mxyz[1];
-  imuMsgs.orientation.z = Mxyz[2];
+  
+  magMsgs.magnetic_field.x = Mxyz[0];
+  magMsgs.magnetic_field.y = Mxyz[1];
+  magMsgs.magnetic_field.z = Mxyz[2];
+
   pubImu.publish(&imuMsgs);
+  pubMag.publish(&magMsgs);
   
 }
 
