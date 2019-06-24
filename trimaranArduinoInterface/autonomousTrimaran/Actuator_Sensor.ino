@@ -20,15 +20,15 @@ void Actuator(){
 
 void setupSensor(){
   setupImu();
-  //setupGps();
+  setupGps();
   setupRC();
   setupWind();
 }
 
 
 void updateSensor(){
+  updateGps();
   updateImu();
-  //updateGps();
   updateRC();
   updateWind();
 }

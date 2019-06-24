@@ -25,6 +25,7 @@ void publishImu(){
   imuMsgs.linear_acceleration.x = Axyz[0];
   imuMsgs.linear_acceleration.y = Axyz[1];
   imuMsgs.linear_acceleration.z = Axyz[2];
+  
   imuMsgs.angular_velocity.x = Gxyz[0];
   imuMsgs.angular_velocity.y = Gxyz[1];
   imuMsgs.angular_velocity.z = Gxyz[2];
@@ -56,8 +57,8 @@ void getAccelGyroCompass_Data(void){
   Gxyz[2] = (double) gz * 250 / 32768;
   // degres/sec -> rad/sec
   Gxyz[0] = Gxyz[0] * PI/180;
-  Gxyz[1] = Gxyz[0] * PI/180;
-  Gxyz[2] = Gxyz[0] * PI/180;
+  Gxyz[1] = Gxyz[1] * PI/180;
+  Gxyz[2] = Gxyz[2] * PI/180;
   
   Mxyz[0] = (double) mx * 1200 / 4096;
   Mxyz[1] = (double) my * 1200 / 4096;

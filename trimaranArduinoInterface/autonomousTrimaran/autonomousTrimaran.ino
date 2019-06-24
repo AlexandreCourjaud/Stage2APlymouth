@@ -12,7 +12,7 @@ ros::NodeHandle nh;
 
 
 bool watchRc = 0;
-
+bool gp = 0;
 
 void setup()
 {
