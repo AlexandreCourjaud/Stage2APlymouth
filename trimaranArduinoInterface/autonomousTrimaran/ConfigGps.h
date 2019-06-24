@@ -6,7 +6,7 @@ char buffer[64];
 char position[64];
 int count=0;   
 int wait = 0;
-int wait_max = 0;
+int wait_max = 5;
 
 std_msgs::String gpsMsg;
 ros::Publisher pubGps("gpsBrut",&gpsMsg);
