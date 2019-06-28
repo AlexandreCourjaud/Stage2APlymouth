@@ -6,6 +6,7 @@ ros::NodeHandle nh;
 
 #include "ConfigTrimaran.h"
 #include "ConfigIMU.h"
+#include "ConfigImuCmps12.h"
 #include "ConfigGps.h"
 #include "ConfigRC.h"
 #include "ConfigWind.h"
@@ -16,10 +17,9 @@ bool gp = 0;
 
 void setup()
 {
-  nh.getHardware()->setBaud(115200);
+  //nh.getHardware()->setBaud(115200);
   nh.initNode();
-  Serial.begin(115200);
-  SoftSerial.begin(9600);
+  Serial.begin(57600);
   Wire.begin();
   Serial.println("Initializing I2C devices...");
   setupActuator();
@@ -35,9 +35,9 @@ void loop()
 {
   nh.spinOnce();
   //nh.loginfo("next");
-  updateSensor();
+  
   Actuator();
- 
+  updateSensor();
   
   delay(10);
 }

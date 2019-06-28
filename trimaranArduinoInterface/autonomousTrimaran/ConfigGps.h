@@ -1,12 +1,13 @@
 #include <SoftwareSerial.h>
-#include <std_msgs/String.h>
+#include <gps_common/GPSFix.h>
+#include "TinyGPS++.h"
 
-SoftwareSerial SoftSerial(10, 11);
-char buffer[64];
-char position[64];
+//SoftwareSerial SoftSerial(10, 11);
+
+char position[100];
 int count=0;   
-int wait = 0;
-int wait_max = 5;
+TinyGPSPlus gps;
 
-std_msgs::String gpsMsg;
+
+gps_common::GPSFix gpsMsg;
 ros::Publisher pubGps("gpsBrut",&gpsMsg);

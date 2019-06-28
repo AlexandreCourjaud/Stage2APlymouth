@@ -54,5 +54,7 @@ volatile int mz_min =0;
 sensor_msgs::Imu imuMsgs;
 ros::Publisher pubImu("ImuNoFiltre",&imuMsgs);
 
+/*
 sensor_msgs::MagneticField magMsgs;
 ros::Publisher pubMag("MagNoFiltre",&magMsgs);
+*/

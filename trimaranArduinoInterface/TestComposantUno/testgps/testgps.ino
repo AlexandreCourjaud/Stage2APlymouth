@@ -1,63 +1,58 @@
+#include "TinyGPS++.h"
 
-void setupGps(){
-   nh.advertise(pubGps);
-   Serial2.begin(9600);
-   Serial2.setTimeout(10);
+String buf;
+int count = 0;
+unsigned long t0;
 
-}
+TinyGPSPlus gps;
 
-
-void updateGps(){
-  testGPS();
-}
-
-void publishGps(){
+void setup() {
+  Serial2.begin(9600);
+  Serial.begin(57600);
+  Serial2.setTimeout(10);
+  /*
+  Serial2.print("$PMTK000*32\r\n");
+  while(Serial2.available()<0);
+  Serial.println(Serial2.readString());
+  */
   
-  gpsMsg.header.stamp.sec = millis()/1000;
-  gpsMsg.status.header.stamp.sec = gps.time.value();
-  gpsMsg.latitude = gps.location.lat();
-  gpsMsg.longitude = gps.location.lng();
-  gpsMsg.altitude = gps.altitude.meters();
-  gpsMsg.track = gps.course.deg();
-  gpsMsg.speed = gps.speed.mps();
-  //gpsMsg.status.satellites_used = gps.satellites.values();
-  gpsMsg.hdop = gps.hdop.value();
-  gpsMsg.time = gps.date.value();
-  pubGps.publish(&gpsMsg);
 }
 
-
-void testGPS(){
-  //unsigned long t0 = millis();
-  String buf;
-  while (Serial2.available()>0){
+void loop() {
+  t0 = millis();
+  
+  if (Serial2.available()){
+    //buf = Serial2.readString();
     buf = Serial2.readStringUntil('\n');
-    //Serial.println(buf);
+    
     if (isTrame(buf)){
-      if (isGPSGPRMC(buf) == 1 ){//|| isGPSGPGGA(buf) == 1){
-        //Serial.println(buf);
+      if (isGPSGPGGA(buf) == 1 || isGPSGPRMC(buf) == 1){
+        Serial.println(buf);
         for(int i = 0; i<buf.length(); i++){
           gps.encode(buf[i]);
         }
-        publishGps();
+        Serial.print("LAT=");  Serial.println(gps.location.lat(), 6);
+        Serial.print("LONG="); Serial.println(gps.location.lng(), 6);
+        Serial.print("ALT=");  Serial.println(gps.altitude.meters());
+
         
-        
+
       }
+      
     }
     
     
-  }
   
+  }
   //Serial.print("temps : ");
   //Serial.println(millis()-t0);
+  
 }
-
 
 int isTrame(String trameGPS){
   int count = 1;
   int res = 0;
   char currentchar = trameGPS[count];
-  //Serial.println(trameGPS);
   int len = trameGPS.length();
   while (currentchar != '*' && count<len)
   {
@@ -71,17 +66,16 @@ int isTrame(String trameGPS){
   check[0] = trameGPS[count+1];
   check[1] = trameGPS[count+2];
   int test  = strtol(check,NULL,16);
+  /*Serial.print(" res : ");
+  Serial.print(res,HEX);
+  Serial.print("Check : ");
+  Serial.println(test,HEX);
+  */
   if (test == res){
     return 1;
   }
   else
   {
-    /*
-    Serial.print(" error : ");
-    Serial.print(test);
-    Serial.print(" ");
-    Serial.println(trameGPS);
-    */
     return 0;
   }
 }
@@ -103,4 +97,4 @@ int isGPSGPGGA( String trameGPS) {
     }
   else
     return 0;
-}
+  }

@@ -8,26 +8,28 @@ unsigned char buffer[200];
 int count=0;   
 
 void setup() {
-  SoftSerial.begin(9600);
+  Serial2.begin(9600);
   Serial.begin(115200);
   
 }
 
 void loop() {
   getGPS();
-  
+
+  delay(50);
 }
 
 void getGPS() {
-  
-  if (SoftSerial.available())                    
+  //delay(100);
+  //Serial.println("go");
+  if (Serial2.available())                    
     {
         //char currentchar = '.';
         
-        /*while(SoftSerial.available())
+        /*while(Serial2.available())
         {
           
-          char currentchar = SoftSerial.read();
+          char currentchar = Serial2.read();
           
           if(currentchar == '$') 
            {
@@ -39,21 +41,20 @@ void getGPS() {
           }
         */
 
-        char currentchar = SoftSerial.read();
+        char currentchar = Serial2.read();
         if (currentchar ==  '$'){
           buffer[count++]='$';
           currentchar = '.';
-          while( currentchar != '*')       
+          while(currentchar != '*' )       
           {
-             if (SoftSerial.available())
+             if (Serial2.available())
              {
-              currentchar=SoftSerial.read();
+              currentchar=Serial2.read();
               buffer[count++]=currentchar;
               if(count == 200)break;
              }
           }
-          delay(10);
-          if(isGPSGPGGA(buffer) == 1) 
+          if(1 == 1) 
           {
             Serial.write(buffer, count);
             Serial.println("");
