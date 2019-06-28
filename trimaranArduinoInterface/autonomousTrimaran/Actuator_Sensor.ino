@@ -20,7 +20,6 @@ void Actuator(){
 
 void setupSensor(){
   //setupImu();
-  
   setupImuCmps();
   setupRC();
   setupWind();
