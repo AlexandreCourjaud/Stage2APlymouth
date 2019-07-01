@@ -1,17 +1,53 @@
 #include <ros/ros.h>
 #include <std_msgs/Float32.h>
 
-float wind;
+float windData;
+float Gamma = 10;
+float windchap= 0;
+
+float alpha = 0;
+float beta = 0.2;
+
+float newData = 0;
+
+void kalmanFilter(){
+    windchap = windchap + (Gamma/(Gamma + alpha))*(windData - windchap);
+    Gamma = (1- Gamma/(Gamma+alpha))*Gamma + beta;
+
+}
+
 
 void windCB(const std_msgs::Float32 msgWind){
-    wind = msgWind.data;
+    windData = msgWind.data;
+    newData = 1;
+    kalmanFilter();
 }
 
 
 int main(int argc, char **argv)
 {
+
   ros::init(argc, argv, "windFiltre");
   ros::NodeHandle nh;
 
-  ROS_INFO("Hello world!");
+  ros::Subscriber sub_Wind = nh.subscribe("ardu_send_windDirection",0,windCB);
+
+  std_msgs::Float32 windMsg;
+  ros::Publisher pub_wind = nh.advertise<std_msgs::Float32>("filter_send_windDirection",0);
+
+  ros::Rate loop_rate(25);
+  while (ros::ok){
+      ros::spinOnce();
+
+      if (newData == 1){
+        windMsg.data =  windchap;
+        ROS_INFO("%f",windchap);
+        pub_wind.publish(windMsg);
+        newData = 0;
+      }
+
+      loop_rate.sleep();
+  }
+    //sleep(1);
+    return 0;
 }
