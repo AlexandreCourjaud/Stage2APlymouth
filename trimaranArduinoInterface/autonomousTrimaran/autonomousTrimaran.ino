@@ -17,9 +17,9 @@ bool gp = 0;
 
 void setup()
 {
-  //nh.getHardware()->setBaud(115200);
+  nh.getHardware()->setBaud(115200);
   nh.initNode();
-  Serial.begin(57600);
+  Serial.begin(115200);
   Wire.begin();
   Serial.println("Initializing I2C devices...");
   setupActuator();

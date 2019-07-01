@@ -22,8 +22,6 @@ int16_t ax, ay, az;
 int16_t gx, gy, gz;
 int16_t   mx, my, mz;
 
-
-
 float heading;
 float tiltheading;
 
@@ -43,17 +41,9 @@ static float mx_centre = 0;
 static float my_centre = 0;
 static float mz_centre = 0;
 
-volatile int mx_max =0;
-volatile int my_max =0;
-volatile int mz_max =0;
-
-volatile int mx_min =0;
-volatile int my_min =0;
-volatile int mz_min =0;
-
 sensor_msgs::Imu imuMsgs;
-ros::Publisher pubImu("ImuNoFiltre",&imuMsgs);
+ros::Publisher pubImu("ardu_send_imu",&imuMsgs);
 
 
 sensor_msgs::MagneticField magMsgs;
-ros::Publisher pubMag("MagNoFiltre",&magMsgs);
+ros::Publisher pubMag("ardu_send_mag",&magMsgs);

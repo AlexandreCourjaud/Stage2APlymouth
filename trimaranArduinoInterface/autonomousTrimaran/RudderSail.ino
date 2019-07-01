@@ -10,11 +10,11 @@ void controlRudder(){
   delay(10);
 }
 
-
+// commande entre -pi/4 et pi/4
 void rudderCallBack(const std_msgs::Float32& cmd){
   if (watchRc == 0){
     //si la telecommande n'est pas allumee
-    rudderAngle = 155*(cmd.data+PI/2)/PI;
+    rudderAngle = 155*(cmd.data+PI/4)/(PI/2);
     rudderAngle = max(minRudderAngle,rudderAngle);
     rudderAngle = min(maxRudderAngle,rudderAngle);
     //nh.loginfo("envoie angle ...");
@@ -33,11 +33,11 @@ void controlSail(){
   delay(10);
 }
 
-
+//commande entre 0 et pi/2
 void sailCallBack(const std_msgs::Float32& cmd){
   if (watchRc == 0){
   //si la telecommande n'est pas allumee
-    sailAngle = cmd.data;
+    sailAngle = maxSailAngle*cmd.data/(PI/2);
     sailAngle = max(minSailAngle,sailAngle);
     sailAngle = min(maxSailAngle,sailAngle);
     //nh.loginfo("envoie angle sail...");

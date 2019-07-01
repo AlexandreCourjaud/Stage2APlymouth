@@ -24,8 +24,8 @@ float gxC,gyC,gzC;
 
 
 sensor_msgs::Imu imuCmpsMsg;
-ros::Publisher pubImuCmps("ImuSensor",&imuCmpsMsg);
+ros::Publisher pubImuCmps("ardu_send_imu",&imuCmpsMsg);
 
 
 geometry_msgs::Vector3 eulerMsg;
-ros::Publisher pubEuler("angleEuler", &eulerMsg);
+ros::Publisher pubEuler("ardu_send_euler", &eulerMsg);

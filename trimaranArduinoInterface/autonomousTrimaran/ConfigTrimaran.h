@@ -8,11 +8,11 @@
 
 /*******************************Suscriber*************************************/
 void rudderCallBack(const std_msgs::Float32& cmd);
-ros::Subscriber<std_msgs::Float32> rudderSub("cmdRudder", &rudderCallBack );
+ros::Subscriber<std_msgs::Float32> rudderSub("control_send_rudder", &rudderCallBack );
 
 
 void sailCallBack(const std_msgs::Float32& cmd);
-ros::Subscriber<std_msgs::Float32> sailSub("cmdSail", &sailCallBack );
+ros::Subscriber<std_msgs::Float32> sailSub("control_send_sail", &sailCallBack );
 
 
 

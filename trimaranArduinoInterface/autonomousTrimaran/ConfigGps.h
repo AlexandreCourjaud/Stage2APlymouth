@@ -10,4 +10,4 @@ TinyGPSPlus gps;
 
 
 gps_common::GPSFix gpsMsg;
-ros::Publisher pubGps("gpsBrut",&gpsMsg);
+ros::Publisher pubGps("ardu_send_gps",&gpsMsg);

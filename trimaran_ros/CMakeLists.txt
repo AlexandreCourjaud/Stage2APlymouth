@@ -133,6 +133,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(gps src/gps.cpp)
+add_executable(capFollow src/CapFollow.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -146,6 +147,7 @@ add_executable(gps src/gps.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(gps  ${catkin_LIBRARIES})
+target_link_libraries(capFollow  ${catkin_LIBRARIES})
 
 #############
 ## Install ##
