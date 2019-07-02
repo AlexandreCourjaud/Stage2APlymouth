@@ -23,6 +23,7 @@ float u[2];
 
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
+    //ROS_INFO("wind : %f",wind);
 }
 
 void magCB(const geometry_msgs::Vector3 msgMag)
@@ -30,6 +31,7 @@ void magCB(const geometry_msgs::Vector3 msgMag)
     yaw = msgMag.x;
     pitch = msgMag.y;
     roll = msgMag.z;
+    //ROS_INFO("cap : %f",yaw);
 }
 
 void imuCB(const sensor_msgs::Imu msgImu)
@@ -54,7 +56,7 @@ void gpsCB(const geometry_msgs::Pose2D msgGps)
 
 
 void capControl(){
-    float deltar = 0.5*atan(tan(0.5*(yaw-capCible)));
+    float deltar = -0.5*atan(tan(0.5*(yaw-capCible)));
     float deltamax = (M_PI/4)*(cos(wind-capCible)+1);
 
 
@@ -72,8 +74,8 @@ int main(int argc, char **argv)
   ros::Publisher  pub_Rudder = nh.advertise<std_msgs::Float32>("control_send_u_rudder",0);
   ros::Publisher  pub_Sail   = nh.advertise<std_msgs::Float32>("control_send_u_sail",0);
 
-  ros::Subscriber sub_Wind = nh.subscribe("ardu_send_windDirection",0,windCB);
-  ros::Subscriber sub_Mag  = nh.subscribe("imu_send_euler_angles",0,magCB);
+  ros::Subscriber sub_Wind = nh.subscribe("filter_send_wind_direction",0,windCB);
+  ros::Subscriber sub_Mag  = nh.subscribe("filter_send_euler_angles",0,magCB);
   //ros::Subscriber sub_Imu  = nh.subscribe("imuSensor",0,imuCB);
   //ros::Subscriber sub_gps  = nh.subscribe("gpsPos",0,gpsCB);
 

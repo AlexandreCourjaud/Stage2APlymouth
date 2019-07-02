@@ -14,9 +14,9 @@ void controlRudder(){
 void rudderCallBack(const std_msgs::Float32& cmd){
   if (watchRc == 0){
     //si la telecommande n'est pas allumee
-    rudderAngle = 155*(cmd.data+PI/4)/(PI/2);
-    rudderAngle = max(minRudderAngle,rudderAngle);
-    rudderAngle = min(maxRudderAngle,rudderAngle);
+    rudderAngle = 155*(cmd.data+PI/2)/PI;
+    rudderAngle = max(minRudderAngle+maxRudderAngle/4,rudderAngle);
+    rudderAngle = min(maxRudderAngle*3/4,rudderAngle);
     //nh.loginfo("envoie angle ...");
     }
 }
