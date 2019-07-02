@@ -9,6 +9,8 @@
 </node>
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind">
 </node>
+<node pkg="WRSC_plymouth_JEGAT" type="display_boat.py" name="display_boat">
+</node>
 <node pkg="trimaran_ros" type="capFollow" name="capFollow">
 </node>
 
