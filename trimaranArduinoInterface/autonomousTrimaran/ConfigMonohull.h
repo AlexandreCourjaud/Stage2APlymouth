@@ -30,9 +30,9 @@ ros::Subscriber<std_msgs::Float32> sailSub("control_send_u_sail", &sailCallBack 
 #define FREQUENCY             50
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-float rudderAngle =77.5;
-float maxRudderAngle = 155*3/4;
-float minRudderAngle = 155*1/4;
+float rudderAngle =70;
+float maxRudderAngle = 115;
+float minRudderAngle = 25;
 
 float sailAngle = 0;
 float maxSailAngle = 140;
