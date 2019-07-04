@@ -28,8 +28,8 @@ double xdot[5] = {0,0,0,0,0};
 
 double t0;
 
-vec2 cubeA[2] = {0,5};
-vec2 cubeB[2] = {30,30};
+vec2 cubeA = {0,5};
+vec2 cubeB = {30,30};
 
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
@@ -122,20 +122,20 @@ void set_marker_boat(ros::Publisher vis_pub, visualization_msgs::Marker marker, 
        marker.type = visualization_msgs::Marker::MESH_RESOURCE;
        marker.action = visualization_msgs::Marker::ADD;
        marker.pose.position.x = 0;
-       marker.pose.position.y = 0;
-       marker.pose.position.z = 0;
+       marker.pose.position.y = -1.2;
+       marker.pose.position.z = -1;
        tf::Quaternion q;
-       q.setRPY(0, 0, 0);
+       q.setRPY(M_PI/2, 0, M_PI/2);
        tf::quaternionTFToMsg(q, marker.pose.orientation);
-       marker.scale.x = 1;
-       marker.scale.y = 1;
-       marker.scale.z = 1;
+       marker.scale.x = 0.001;
+       marker.scale.y = 0.001;
+       marker.scale.z = 0.001;
        marker.color.a = 1.0; // Don't forget to set the alpha!
        marker.color.r = 1.0;
        marker.color.g = 1.0;
        marker.color.b = 1.0;
        //only if using a MESH_RESOURCE marker type:
-       marker.mesh_resource = "package://trimaran_ros/meshs/boat.dae";
+       marker.mesh_resource = "package://trimaran_ros/meshs/boat.STL";
        vis_pub.publish( marker );
 }
 
@@ -146,23 +146,23 @@ void set_marker_rudder(visualization_msgs::Marker marker, ros::Publisher vis_pub
     marker.header.stamp = ros::Time();
     marker.ns = "rudder";
     marker.id = 0;
-    marker.type = visualization_msgs::Marker::ARROW;
+    marker.type = visualization_msgs::Marker::MESH_RESOURCE;
     marker.action = visualization_msgs::Marker::ADD;
     marker.pose.position.x = 0;
     marker.pose.position.y = 0;
-    marker.pose.position.z = 0;
+    marker.pose.position.z = -2;
     tf::Quaternion q;
-    q.setRPY(0, 0, 0);
+    q.setRPY(M_PI/2, 0, -M_PI/2);
     tf::quaternionTFToMsg(q, marker.pose.orientation);
-    marker.scale.x = 3;
-    marker.scale.y = 0.5;
-    marker.scale.z = 0.5;
+    marker.scale.x = 0.003;
+    marker.scale.y = 0.003;
+    marker.scale.z = 0.003;
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 1.0;
     marker.color.g = 0;
     marker.color.b = 0;
     //only if using a MESH_RESOURCE marker type:
-    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
+    marker.mesh_resource = "package://trimaran_ros/meshs/rudder.STL";
     vis_pub.publish( marker );
 }
 
@@ -189,7 +189,7 @@ void set_marker_sail(visualization_msgs::Marker marker, ros::Publisher vis_pub)
     marker.color.g = 0;
     marker.color.b = 1.0;
     //only if using a MESH_RESOURCE marker type:
-    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
+    //marker.mesh_resource = "package://trimaran_ros/meshs/turret.dae";
     vis_pub.publish( marker );
 }
 
@@ -249,6 +249,7 @@ int main(int argc, char **argv)
     transformStamped.child_frame_id = "bateau1";
     transformStamped.header.frame_id = "map";
 
+
     ros::Publisher vis_pub_rudder = nh.advertise<visualization_msgs::Marker>("visualization_marker_rudder", 0 );
     tf2_ros::TransformBroadcaster br_rudder;
     geometry_msgs::TransformStamped transformStamped_rudder;
@@ -269,6 +270,7 @@ int main(int argc, char **argv)
     visualization_msgs::Marker marker_wind;
     transformStamped_wind.child_frame_id = "wind";
     transformStamped_wind.header.frame_id = "map";
+
 
     t0 = ros::Time::now().toSec();
     x[0] = 0;
@@ -315,7 +317,7 @@ int main(int argc, char **argv)
         transformStamped_rudder.transform.translation.y = 0;
         tf::quaternionTFToMsg(q, transformStamped_rudder.transform.rotation);
         br_rudder.sendTransform(transformStamped_rudder);
-
+        /*
         q.setRPY(0, 0, delta_s+M_PI);
         set_marker_sail(marker_sail, vis_pub_sail);
         transformStamped_sail.header.stamp = ros::Time::now();
@@ -334,6 +336,7 @@ int main(int argc, char **argv)
         transformStamped_wind.transform.translation.z = 2;
         tf::quaternionTFToMsg(q, transformStamped_wind.transform.rotation);
         br_wind.sendTransform(transformStamped_wind);
+        */
 
         /*************************************/
 
