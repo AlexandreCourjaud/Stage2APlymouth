@@ -74,15 +74,15 @@ int main(int argc, char **argv)
   ros::Publisher  pub_Rudder = nh.advertise<std_msgs::Float32>("control_send_u_rudder",0);
   ros::Publisher  pub_Sail   = nh.advertise<std_msgs::Float32>("control_send_u_sail",0);
 
-  ros::Subscriber sub_Wind = nh.subscribe("filter_send_wind_direction",0,windCB);
-  ros::Subscriber sub_Mag  = nh.subscribe("filter_send_euler_angles",0,magCB);
+  //ros::Subscriber sub_Wind = nh.subscribe("filter_send_wind_direction",0,windCB);
+  //ros::Subscriber sub_Mag  = nh.subscribe("filter_send_euler_angles",0,magCB);
   //ros::Subscriber sub_Imu  = nh.subscribe("imuSensor",0,imuCB);
   //ros::Subscriber sub_gps  = nh.subscribe("gpsPos",0,gpsCB);
 
-  //ros::Subscriber sub_Wind = nh.subscribe("Simu_send_wind",0,windCB);
-  //ros::Subscriber sub_Mag  = nh.subscribe("Simu_send_angleEuler",0,magCB);
-  //ros::Subscriber sub_Imu  = nh.subscribe("Simu_send_imuSensor",0,imuCB);
-  //ros::Subscriber sub_gps  = nh.subscribe("Simu_send_gpsPos",0,gpsCB);
+  ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind",0,windCB);
+  ros::Subscriber sub_Mag  = nh.subscribe("simu_send_angleEuler",0,magCB);
+  ros::Subscriber sub_Imu  = nh.subscribe("simu_send_imuSensor",0,imuCB);
+  ros::Subscriber sub_gps  = nh.subscribe("simu_send_gpsPos",0,gpsCB);
   u[0] = 0;
   u[1] = 0;
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
   std_msgs::Float32 cmdsail;
 
   ros::Rate loop_rate(25);
-  while (ros::ok){
+  while (ros::ok()){
       ros::spinOnce();
 
       capControl();

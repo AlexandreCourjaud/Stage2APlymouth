@@ -122,7 +122,7 @@ int main(int argc, char **argv)
   std_msgs::Float32 cmdsail;
 
   ros::Rate loop_rate(25);
-  while (ros::ok){
+  while (ros::ok()){
       ros::spinOnce();
 
       capControl();

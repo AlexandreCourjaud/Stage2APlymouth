@@ -108,10 +108,12 @@ void set_Euler(ros::Publisher pub_Euler, geometry_msgs::Vector3 msgEuler, double
     msgEuler.x = x[2];
     msgEuler.y = 0;
     msgEuler.z = 0;
+    pub_Euler.publish(msgEuler);
 }
 
 void set_wind(ros::Publisher pub_wind, std_msgs::Float32 msgWind){
     msgWind.data = wind;
+    pub_wind.publish(msgWind);
 }
 
 void set_marker_boat(ros::Publisher vis_pub, visualization_msgs::Marker marker, double x[5]){
@@ -148,8 +150,8 @@ void set_marker_rudder(visualization_msgs::Marker marker, ros::Publisher vis_pub
     marker.id = 0;
     marker.type = visualization_msgs::Marker::MESH_RESOURCE;
     marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = 0;
-    marker.pose.position.y = 0;
+    marker.pose.position.x = 1;
+    marker.pose.position.y = 0.1;
     marker.pose.position.z = -2;
     tf::Quaternion q;
     q.setRPY(M_PI/2, 0, -M_PI/2);
@@ -173,23 +175,23 @@ void set_marker_sail(visualization_msgs::Marker marker, ros::Publisher vis_pub)
     marker.header.stamp = ros::Time();
     marker.ns = "sail";
     marker.id = 0;
-    marker.type = visualization_msgs::Marker::ARROW;
+    marker.type = visualization_msgs::Marker::MESH_RESOURCE;
     marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = 0;
+    marker.pose.position.x = 2.7;
     marker.pose.position.y = 0;
     marker.pose.position.z = 0;
     tf::Quaternion q;
-    q.setRPY(0, 0, 0);
+    q.setRPY(M_PI/2, 0, -M_PI/2);
     tf::quaternionTFToMsg(q, marker.pose.orientation);
-    marker.scale.x = 3.0;
-    marker.scale.y = 0.5;
-    marker.scale.z = 0.5;
+    marker.scale.x = 0.001;
+    marker.scale.y = 0.001;
+    marker.scale.z = 0.001;
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 0;
     marker.color.g = 0;
     marker.color.b = 1.0;
     //only if using a MESH_RESOURCE marker type:
-    //marker.mesh_resource = "package://trimaran_ros/meshs/turret.dae";
+    marker.mesh_resource = "package://trimaran_ros/meshs/sail.STL";
     vis_pub.publish( marker );
 }
 
@@ -283,7 +285,7 @@ int main(int argc, char **argv)
     cmdRudder = -0.1;
     cmdSail = 1;
     ros::Rate loop_rate(25);
-    while (ros::ok){
+    while (ros::ok()){
         ros::spinOnce();
         f();
         euler();
@@ -313,11 +315,11 @@ int main(int argc, char **argv)
         q.setRPY(0, 0, cmdRudder+M_PI);
         set_marker_rudder(marker_rudder, vis_pub_rudder);
         transformStamped_rudder.header.stamp = ros::Time::now();
-        transformStamped_rudder.transform.translation.x = -1;
+        transformStamped_rudder.transform.translation.x = 0;
         transformStamped_rudder.transform.translation.y = 0;
         tf::quaternionTFToMsg(q, transformStamped_rudder.transform.rotation);
         br_rudder.sendTransform(transformStamped_rudder);
-        /*
+
         q.setRPY(0, 0, delta_s+M_PI);
         set_marker_sail(marker_sail, vis_pub_sail);
         transformStamped_sail.header.stamp = ros::Time::now();
@@ -336,7 +338,7 @@ int main(int argc, char **argv)
         transformStamped_wind.transform.translation.z = 2;
         tf::quaternionTFToMsg(q, transformStamped_wind.transform.rotation);
         br_wind.sendTransform(transformStamped_wind);
-        */
+
 
         /*************************************/
 
@@ -344,5 +346,6 @@ int main(int argc, char **argv)
         loop_rate.sleep();
     }
     //sleep(1);
+    ROS_INFO("FIN");
     return 0;
 }
