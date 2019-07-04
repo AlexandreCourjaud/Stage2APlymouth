@@ -34,9 +34,9 @@ float rudderAngle =70;
 float maxRudderAngle = 115;
 float minRudderAngle = 25;
 
-float sailAngle = 0;
-float maxSailAngle = 140;
-float minSailAngle = 10;
+float sailAngle = 22;
+float maxSailAngle = 55;
+float minSailAngle = 0;
 
 /************** PIN******************************/
 
