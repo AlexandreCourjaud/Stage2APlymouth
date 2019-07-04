@@ -8,8 +8,15 @@ project(trimaran_ros)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
+    geometry_msgs
+    message_generation
+    message_runtime
+    roscpp
+    rospy
+    std_msgs
+    tf
+    tf2
+    tf2_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -102,7 +109,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+    INCLUDE_DIRS include
 #  LIBRARIES trimaran_ros
 #  CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
@@ -115,7 +122,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -135,6 +142,8 @@ include_directories(
 add_executable(gps src/filtre/gps.cpp)
 add_executable(capFollow src/controlleur/CapFollow.cpp)
 add_executable(filtreWind src/filtre/windFiltre.cpp)
+add_executable(lineFollow src/controlleur/lineFollow.cpp)
+add_executable(simuBoat src/Simulation/simuBoat.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -150,6 +159,8 @@ add_executable(filtreWind src/filtre/windFiltre.cpp)
 target_link_libraries(gps  ${catkin_LIBRARIES})
 target_link_libraries(capFollow  ${catkin_LIBRARIES})
 target_link_libraries(filtreWind  ${catkin_LIBRARIES})
+target_link_libraries(lineFollow ${catkin_LIBRARIES})
+target_link_libraries(simuBoat ${catkin_LIBRARIES})
 
 #############
 ## Install ##
