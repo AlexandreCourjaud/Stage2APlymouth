@@ -5,9 +5,9 @@ void setupRC(){
 }
 
 void updateRC(){
- chSail = pulseIn (chPinSail,HIGH,duration);
+ chRudder = pulseIn (chPinRudder,HIGH,duration);
  //Serial.println(ch1);
- if (chSail !=0){
+ if (chRudder !=0){
    chRudder = pulseIn (chPinRudder,HIGH);
    chSail = pulseIn (chPinSail,HIGH);
    if (chRudder > 500){

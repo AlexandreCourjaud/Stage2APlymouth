@@ -49,10 +49,10 @@ float minSailAngle = 0;
 // sail ch2 : 980 -> 1980
 // rudder ch1 : 890 -> 1800
 
-#define MAX_CHRUDDER 1800
-#define MIN_CHRUDDER 890
+#define MAX_CHRUDDER 1980
+#define MIN_CHRUDDER 990
 
-#define MAX_CHSAIL 1980
+#define MAX_CHSAIL 1950
 #define MIN_CHSAIL 980
 
 
