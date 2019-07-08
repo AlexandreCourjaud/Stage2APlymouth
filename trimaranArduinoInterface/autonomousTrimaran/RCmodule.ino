@@ -13,7 +13,7 @@ void updateRC(){
    if (chRudder > 500){
       //Serial.print(chRudder);
       //Serial.print("  ");
-      rudderAngle = 155*(chRudder-MIN_CHRUDDER)/(MAX_CHRUDDER-MIN_CHRUDDER);
+      rudderAngle = minRudderAngle + maxRudderAngle*(chRudder-MIN_CHRUDDER)/(MAX_CHRUDDER-MIN_CHRUDDER);
       rudderAngle = max(minRudderAngle,rudderAngle);
       rudderAngle = min(maxRudderAngle,rudderAngle);
       watchRc = 1;
