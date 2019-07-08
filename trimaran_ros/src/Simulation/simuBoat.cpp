@@ -10,6 +10,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_ros/transform_broadcaster.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <geometry_msgs/Point.h>
 
 
 using namespace std;
@@ -22,14 +23,15 @@ double cmdRudder, cmdSail;
 double delta_s;
 double p[10] = {0.1,1,6000,1000,2000,1,1,2,300,10000};
 
-//x,y,cap,v,vitesse rotation,
+//x,y,cap,v,w: vitesse rotation
 double x[5] = {0,0,0,0,0};
 double xdot[5] = {0,0,0,0,0};
 
+
 double t0;
 
-vec2 cubeA = {0,5};
-vec2 cubeB = {30,30};
+vec2 cubeA = {-10,0};
+vec2 cubeB = {10,0};
 
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
@@ -41,6 +43,16 @@ void rudderCB(const std_msgs::Float32 msgRudder){
 
 void sailCB(const std_msgs::Float32 msgSail){
     cmdSail = msgSail.data;
+}
+
+void cubeACB(const geometry_msgs::Point msgA){
+    cubeA[0] = msgA.x;
+    cubeA[1] = msgA.y;
+}
+
+void cubeBCB(const geometry_msgs::Point msgB){
+    cubeB[0] = msgB.x;
+    cubeB[1] = msgB.y;
 }
 /***********************************************************************************************/
 
@@ -69,7 +81,6 @@ void f(){
     xdot[4] = (fs*(p[5]-p[6]*cos(delta_s))- p[7]*fr*cos(cmdRudder)-p[2]*w*v)/p[9];
 
 }
-
 
 
 void euler(){
@@ -221,6 +232,58 @@ void set_marker_wind(visualization_msgs::Marker marker, ros::Publisher vis_pub)
     vis_pub.publish( marker );
 }
 
+void set_marker_A(visualization_msgs::Marker marker, ros::Publisher vis_pub)
+{
+    marker.header.frame_id = "A";
+    marker.header.stamp = ros::Time();
+    marker.ns = "A";
+    marker.id = 0;
+    marker.type = visualization_msgs::Marker::CUBE;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = 0;
+    marker.pose.position.y = 0;
+    marker.pose.position.z = 0;
+    tf::Quaternion q;
+    q.setRPY(0, 0, 0);
+    tf::quaternionTFToMsg(q, marker.pose.orientation);
+    marker.scale.x = 1.0;
+    marker.scale.y = 1.0;
+    marker.scale.z = 1.0;
+    marker.color.a = 1.0; // Don't forget to set the alpha!
+    marker.color.r = 1.0;
+    marker.color.g = 1.0;
+    marker.color.b = 0;
+    //only if using a MESH_RESOURCE marker type:
+    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
+    vis_pub.publish( marker );
+}
+
+void set_marker_B(visualization_msgs::Marker marker, ros::Publisher vis_pub)
+{
+    marker.header.frame_id = "B";
+    marker.header.stamp = ros::Time();
+    marker.ns = "B";
+    marker.id = 0;
+    marker.type = visualization_msgs::Marker::CUBE;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = 0;
+    marker.pose.position.y = 0;
+    marker.pose.position.z = 0;
+    tf::Quaternion q;
+    q.setRPY(0, 0, 0);
+    tf::quaternionTFToMsg(q, marker.pose.orientation);
+    marker.scale.x = 1.0;
+    marker.scale.y = 1.0;
+    marker.scale.z = 1.0;
+    marker.color.a = 1.0; // Don't forget to set the alpha!
+    marker.color.r = 1.0;
+    marker.color.g = 0;
+    marker.color.b = 1.0;
+    //only if using a MESH_RESOURCE marker type:
+    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
+    vis_pub.publish( marker );
+}
+
 
 int main(int argc, char **argv)
 {
@@ -243,8 +306,6 @@ int main(int argc, char **argv)
 
 
     ros::Publisher vis_pub = nh.advertise<visualization_msgs::Marker>("visualization_marker", 0 );
-    ros::Publisher chatter_pub = nh.advertise<geometry_msgs::PoseStamped>("send_boat", 0);
-    geometry_msgs::PoseStamped msg;
     visualization_msgs::Marker marker;
     tf2_ros::TransformBroadcaster br;
     geometry_msgs::TransformStamped transformStamped;
@@ -273,14 +334,30 @@ int main(int argc, char **argv)
     transformStamped_wind.child_frame_id = "wind";
     transformStamped_wind.header.frame_id = "map";
 
+    ros::Publisher vis_pub_A = nh.advertise<visualization_msgs::Marker>("visualization_marker_A", 0 );
+    tf2_ros::TransformBroadcaster br_A;
+    geometry_msgs::TransformStamped transformStamped_A;
+    visualization_msgs::Marker marker_A;
+    transformStamped_A.child_frame_id = "A";
+    transformStamped_A.header.frame_id = "map";
+
+    ros::Publisher vis_pub_B = nh.advertise<visualization_msgs::Marker>("visualization_marker_B", 0 );
+    tf2_ros::TransformBroadcaster br_B;
+    geometry_msgs::TransformStamped transformStamped_B;
+    visualization_msgs::Marker marker_B;
+    transformStamped_B.child_frame_id = "B";
+    transformStamped_B.header.frame_id = "map";
+
+    ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
+    ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
 
     t0 = ros::Time::now().toSec();
-    x[0] = 0;
+    x[0] = -20;
     x[1] = 0;
-    x[2] = 0;
+    x[2] = -M_PI;
     x[3] = 1;
     x[4] = 0;
-    wind = 0;
+    wind = -M_PI/2;
     awind = 2;
     cmdRudder = -0.1;
     cmdSail = 1;
@@ -297,14 +374,8 @@ int main(int argc, char **argv)
         //cout << x[0] << " "<< x[1] << " "<< x[2] << endl;
         /***************** Visualisation ***************/
 
-        msg.pose.position.x = x[0];
-        msg.pose.position.y = x[1];
-        msg.header.stamp = ros::Time::now();
         tf::Quaternion q;
         q.setRPY(0, 0, x[2]);
-        tf::quaternionTFToMsg(q, msg.pose.orientation);
-        chatter_pub.publish(msg);
-
         set_marker_boat( vis_pub,marker,x);
         transformStamped.header.stamp = ros::Time::now();
         transformStamped.transform.translation.x = x[0];
@@ -339,6 +410,23 @@ int main(int argc, char **argv)
         tf::quaternionTFToMsg(q, transformStamped_wind.transform.rotation);
         br_wind.sendTransform(transformStamped_wind);
 
+        q.setRPY(0, 0, 0);
+        set_marker_A(marker_A, vis_pub_A);
+        transformStamped_A.header.stamp = ros::Time::now();
+        transformStamped_A.transform.translation.x = cubeA[0];
+        transformStamped_A.transform.translation.y = cubeA[1];
+        transformStamped_A.transform.translation.z = 0;
+        tf::quaternionTFToMsg(q, transformStamped_A.transform.rotation);
+        br_A.sendTransform(transformStamped_A);
+
+        q.setRPY(0, 0, 0);
+        set_marker_B(marker_B, vis_pub_B);
+        transformStamped_B.header.stamp = ros::Time::now();
+        transformStamped_B.transform.translation.x = cubeB[0];
+        transformStamped_B.transform.translation.y = cubeB[1];
+        transformStamped_B.transform.translation.z = 0;
+        tf::quaternionTFToMsg(q, transformStamped_B.transform.rotation);
+        br_B.sendTransform(transformStamped_B);
 
         /*************************************/
 
