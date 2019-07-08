@@ -5,9 +5,9 @@ void setupRC(){
 }
 
 void updateRC(){
- chRudder = pulseIn (chPinRudder,HIGH,duration);
+ chSail = pulseIn (chPinSail,HIGH,duration);
  //Serial.println(ch1);
- if (chRudder !=0){
+ if (chSail !=0){
    chRudder = pulseIn (chPinRudder,HIGH);
    chSail = pulseIn (chPinSail,HIGH);
    if (chRudder > 500){
@@ -17,6 +17,9 @@ void updateRC(){
       rudderAngle = max(minRudderAngle+maxRudderAngle/4,rudderAngle);
       rudderAngle = min(maxRudderAngle-maxRudderAngle/4,rudderAngle);
       watchRc = 1;
+      Serial.print("rudder : ");
+      Serial.print(chRudder);
+      Serial.print(" ");
       Serial.println(rudderAngle);
    }
    if (chSail > 500){
@@ -26,6 +29,9 @@ void updateRC(){
       sailAngle = max(minSailAngle,sailAngle);
       sailAngle = min(maxSailAngle,sailAngle);
       watchRc = 1;
+      Serial.print("sail : ");
+      Serial.print(chSail);
+      Serial.print(" ");
       Serial.println(sailAngle);
   }
    
