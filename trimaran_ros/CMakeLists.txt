@@ -139,12 +139,12 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(gps src/filtre/gps.cpp)
 add_executable(capFollow src/controlleur/CapFollow.cpp)
 add_executable(filtreWind src/filtre/windFiltre.cpp)
 add_executable(lineFollow src/controlleur/lineFollow.cpp)
 add_executable(simuBoat src/Simulation/simuBoat.cpp)
 add_executable(VirtualBuoy src/controlleur/VirtualBuoy.cpp)
+add_executable(checkPointFollow src/controlleur/checkPointFollow.cpp)
 
 
 ## Rename C++ executable without prefix
@@ -158,12 +158,13 @@ add_executable(VirtualBuoy src/controlleur/VirtualBuoy.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(gps  ${catkin_LIBRARIES})
 target_link_libraries(capFollow  ${catkin_LIBRARIES})
 target_link_libraries(filtreWind  ${catkin_LIBRARIES})
 target_link_libraries(lineFollow ${catkin_LIBRARIES})
 target_link_libraries(simuBoat ${catkin_LIBRARIES})
 target_link_libraries(VirtualBuoy ${catkin_LIBRARIES})
+target_link_libraries(checkPointFollow ${catkin_LIBRARIES})
+
 
 #############
 ## Install ##
