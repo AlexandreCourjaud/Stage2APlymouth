@@ -68,8 +68,9 @@ void gpsCB(const geometry_msgs::Pose2D msgGps)
 void control(){
   char chaine[10];
   FILE* file = NULL;
-  file = fopen("test.txt","r");
+  file = fopen("package://trimaran_ros/test.txt","w");
   if (file != NULL){
+    cout << "hey " << endl;
     fgets(chaine,10,file);
     cout << chaine << endl;
   }
@@ -108,7 +109,7 @@ int main(int argc, char **argv)
       ros::spinOnce();
 
 
-      //control();
+      control();
       msgA.x = a[0];
       msgA.y = a[1];
 
