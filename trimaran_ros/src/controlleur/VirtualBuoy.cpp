@@ -84,7 +84,7 @@ int main(int argc, char **argv)
   //ros::Subscriber sub_Imu  = nh.subscribe("filter_send_imu",0,imuCB);
   //ros::Subscriber sub_gps  = nh.subscribe("filter_send_gps",0,gpsCB);
 
-  ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind",0,windCB);
+  ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind_direction",0,windCB);
   ros::Subscriber sub_Mag  = nh.subscribe("simu_send_euler_angle",0,magCB);
   ros::Subscriber sub_Imu  = nh.subscribe("simu_send_imuSensor",0,imuCB);
   ros::Subscriber sub_gps  = nh.subscribe("simu_send_gps",0,gpsCB);

@@ -4,7 +4,8 @@
 
 ros::NodeHandle nh;
 
-#include "ConfigMonohull.h"
+//#include "ConfigMonohull.h"
+#include "ConfigTrimaran.h"
 #include "ConfigIMU.h"
 #include "ConfigImuCmps12.h"
 #include "ConfigGps.h"

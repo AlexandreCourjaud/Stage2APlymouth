@@ -56,8 +56,8 @@ float minSailAngle = 10;
 
 
 /* pin */ 
-const int chPinRudder = 2; // channel 2 sur le pin 2
-const int chPinSail = 3; // channel 1 sur le pin 3
+const int chPinRudder = 4; // channel 1 sur le pin 4
+const int chPinSail = 5; // channel 3 sur le pin 5
 
 float chRudder;
 float chSail;

@@ -46,8 +46,7 @@ float minSailAngle = 0;
 
 // rc module 
 
-// sail ch2 : 980 -> 1980
-// rudder ch1 : 890 -> 1800
+
 
 #define MAX_CHRUDDER 1980
 #define MIN_CHRUDDER 990
@@ -57,8 +56,8 @@ float minSailAngle = 0;
 
 
 /* pin */ 
-const int chPinRudder = 2; // channel 2 sur le pin 2
-const int chPinSail = 3; // channel 1 sur le pin 3
+const int chPinRudder = 2; // channel 1 sur le pin 2
+const int chPinSail = 3; // channel 2 sur le pin 3
 
 float chRudder;
 float chSail;

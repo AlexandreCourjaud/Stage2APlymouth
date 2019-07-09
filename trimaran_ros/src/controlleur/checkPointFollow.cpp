@@ -12,7 +12,8 @@
 #include <fstream>
 
 #include <fcntl.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 
 
 using namespace std;
@@ -63,17 +64,18 @@ void gpsCB(const geometry_msgs::Pose2D msgGps)
     x[2] = msgGps.theta;
 }
 
-/*
+
 void control(){
-  char *filename = (char*)"/checkpoint/test.txt";
-  int file;
-  if ((file = open(filename, O_RDWR)) < 0)
-  {
-          //ERROR HANDLING: you can check errno to see what went wrong
-          ROS_INFO("Failed to open");
+  char chaine[10];
+  FILE* file = NULL;
+  file = fopen("test.txt","r");
+  if (file != NULL){
+    fgets(chaine,10,file);
+    cout << chaine << endl;
   }
+  fclose(file);
 }
-*/
+
 
 
 
@@ -94,7 +96,7 @@ int main(int argc, char **argv)
   //ros::Subscriber sub_Imu  = nh.subscribe("filter_send_imu",0,imuCB);
   //ros::Subscriber sub_gps  = nh.subscribe("filter_send_gps",0,gpsCB);
 
-  ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind",0,windCB);
+  ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind_direction",0,windCB);
   ros::Subscriber sub_Mag  = nh.subscribe("simu_send_euler_angle",0,magCB);
   ros::Subscriber sub_Imu  = nh.subscribe("simu_send_imuSensor",0,imuCB);
   ros::Subscriber sub_gps  = nh.subscribe("simu_send_gps",0,gpsCB);
