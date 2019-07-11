@@ -28,4 +28,4 @@ ros::Publisher pubImuCmps("ardu_send_imu",&imuCmpsMsg);
 
 
 geometry_msgs::Vector3 eulerMsg;
-ros::Publisher pubEuler("ardu_send_euler", &eulerMsg);
+ros::Publisher pubEuler("ardu_send_euler_angle", &eulerMsg);

@@ -73,13 +73,16 @@ void gpsCB(const geometry_msgs::Pose2D msgGps)
 
 
 void capControl(){
-    double r = 10.0;
+    double r = 5.0;
     double zeta = M_PI/4;
     double q = 1;
 
     vec2 m = {x[0],x[1]};
 
     double norm = glm::length(b-a);
+    if (b==a){
+      norm = 1;
+    }
     mat2x2 mat;
     mat[0][0] = (b[0] - a[0]);
     mat[1][0] = (b[1] - a[1]);
@@ -88,7 +91,7 @@ void capControl(){
 
     double e = glm::determinant(mat)/norm;
     double phi = atan2(b[1]-a[1],b[0]-a[0]);
-    ROS_INFO("phi %f",phi);
+    ROS_INFO("phi %f e : %f",phi,e);
     if (abs(e)>r){
         q = sign(e);
     }
@@ -117,15 +120,21 @@ int main(int argc, char **argv)
   ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
   ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
 
-  //ros::Subscriber sub_Wind = nh.subscribe("filter_send_wind_direction",0,windCB);
-  //ros::Subscriber sub_Mag  = nh.subscribe("filter_send_euler_angles",0,magCB);
-  //ros::Subscriber sub_Imu  = nh.subscribe("filter_send_imu",0,imuCB);
-  //ros::Subscriber sub_gps  = nh.subscribe("filter_send_gps",0,gpsCB);
+  int mode;
+  nh.param<int>("mode", mode,0);
 
-  ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind_direction",0,windCB);
-  ros::Subscriber sub_Mag  = nh.subscribe("simu_send_euler_angle",0,magCB);
-  ros::Subscriber sub_Imu  = nh.subscribe("simu_send_imuSensor",0,imuCB);
-  ros::Subscriber sub_gps  = nh.subscribe("simu_send_gps",0,gpsCB);
+  if (mode == 0){
+    ros::Subscriber sub_Wind = nh.subscribe("filter_send_wind_direction",0,windCB);
+    ros::Subscriber sub_Mag  = nh.subscribe("filter_send_euler_angles",0,magCB);
+    ros::Subscriber sub_Imu  = nh.subscribe("filter_send_imu",0,imuCB);
+    ros::Subscriber sub_gps  = nh.subscribe("filter_send_gps",0,gpsCB);
+  }
+  else{
+    ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind_direction",0,windCB);
+    ros::Subscriber sub_Mag  = nh.subscribe("simu_send_euler_angle",0,magCB);
+    ros::Subscriber sub_Imu  = nh.subscribe("simu_send_imu",0,imuCB);
+    ros::Subscriber sub_gps  = nh.subscribe("simu_send_gps",0,gpsCB);
+  }
   u[0] = 0;
   u[1] = 0;
 
@@ -139,7 +148,7 @@ int main(int argc, char **argv)
       capControl();
       cmdrudder.data = u[0];
       cmdsail.data = u[1];
-      //ROS_INFO("x : %f , y : %f",x[0],x[1]);
+      ROS_INFO("x : %f , y : %f",x[0],x[1]);
       pub_Rudder.publish(cmdrudder);
       pub_Sail.publish(cmdsail);
 
