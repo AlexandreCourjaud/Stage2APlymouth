@@ -40,7 +40,7 @@ void cubeBCB(const geometry_msgs::Point msgB){
 
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
-    //ROS_INFO("wind : %f",wind);
+    ROS_INFO("wind : %f",wind);
 }
 
 void magCB(const geometry_msgs::Vector3 msgMag)
@@ -91,7 +91,7 @@ void capControl(){
 
     double e = glm::determinant(mat)/norm;
     double phi = atan2(b[1]-a[1],b[0]-a[0]);
-    ROS_INFO("phi %f e : %f",phi,e);
+    //ROS_INFO("phi %f e : %f",phi,e);
     if (abs(e)>r){
         q = sign(e);
     }
@@ -123,6 +123,32 @@ int main(int argc, char **argv)
   int mode;
   nh.param<int>("mode", mode,0);
 
+
+  ROS_INFO("mode : %d", mode);
+
+  string topicWind;
+  string topicEuler;
+  string topicImu;
+  string topicGps;
+
+  if (mode == 0){
+    topicWind = "filter_send_wind_direction";
+    topicEuler = "filter_send_euler_angles";
+    topicImu = "filter_send_imu";
+    topicGps = "filter_send_gps";
+  }
+  else{
+    topicWind = "simu_send_wind_direction";
+    topicEuler = "simu_send_euler_angles";
+    topicImu = "simu_send_imu";
+    topicGps = "simu_send_gps";
+  }
+  ros::Subscriber sub_Wind = nh.subscribe(topicWind,0,windCB);
+  ros::Subscriber sub_Mag  = nh.subscribe(topicEuler,0,magCB);
+  ros::Subscriber sub_Imu  = nh.subscribe(topicImu,0,imuCB);
+  ros::Subscriber sub_gps  = nh.subscribe(topicGps,0,gpsCB);
+
+  /*
   if (mode == 0){
     ros::Subscriber sub_Wind = nh.subscribe("filter_send_wind_direction",0,windCB);
     ros::Subscriber sub_Mag  = nh.subscribe("filter_send_euler_angles",0,magCB);
@@ -135,6 +161,7 @@ int main(int argc, char **argv)
     ros::Subscriber sub_Imu  = nh.subscribe("simu_send_imu",0,imuCB);
     ros::Subscriber sub_gps  = nh.subscribe("simu_send_gps",0,gpsCB);
   }
+  */
   u[0] = 0;
   u[1] = 0;
 
@@ -148,7 +175,7 @@ int main(int argc, char **argv)
       capControl();
       cmdrudder.data = u[0];
       cmdsail.data = u[1];
-      ROS_INFO("x : %f , y : %f",x[0],x[1]);
+      //ROS_INFO("x : %f , y : %f",x[0],x[1]);
       pub_Rudder.publish(cmdrudder);
       pub_Sail.publish(cmdsail);
 

@@ -1,0 +1,11 @@
+<launch>
+
+    <node type="rviz" name="rviz" pkg="rviz" />
+    <param name="mode" type="int" value="1" />
+    <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
+    <param name="mode" type="int" value="1" />
+    <node pkg="trimaran_ros" type="lineFollow" name="lineFollow"/>
+    <param name="mode" type="int" value="1" />
+    <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow"/>
+
+</launch>

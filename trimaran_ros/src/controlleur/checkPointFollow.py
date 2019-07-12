@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
 
     rospy.Subscriber("simu_send_gps",Pose2D,sub_gps)
-    rospy.Subscriber("simu_send_euler_angle",Vector3,sub_euler)
+    rospy.Subscriber("simu_send_euler_angles",Vector3,sub_euler)
     rospy.Subscriber("simu_send_wind",Float32,sub_wind)
     rospy.Subscriber("simu_send_imu",Imu,sub_imu)
 

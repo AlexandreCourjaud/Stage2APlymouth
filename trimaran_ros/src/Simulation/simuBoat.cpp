@@ -301,7 +301,7 @@ int main(int argc, char **argv)
     geometry_msgs::Pose2D msgGps;
     ros::Publisher pub_wind = nh.advertise<std_msgs::Float32>("simu_send_wind_direction",0);
     std_msgs::Float32 msgWind;
-    ros::Publisher pub_Euler = nh.advertise<geometry_msgs::Vector3>("simu_send_euler_angle",0);
+    ros::Publisher pub_Euler = nh.advertise<geometry_msgs::Vector3>("simu_send_euler_angles",0);
     geometry_msgs::Vector3 msgEuler;
 
 
