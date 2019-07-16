@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 
 
   ros::Rate loop_rate(25);
-  while (ros::ok){
+  while (ros::ok()){
       ros::spinOnce();
       if (newVal == 1){
         positionMsg.x = x[0];

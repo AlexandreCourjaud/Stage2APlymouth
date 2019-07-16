@@ -8,11 +8,11 @@
 
 /*******************************Suscriber*************************************/
 void rudderCallBack(const std_msgs::Float32& cmd);
-ros::Subscriber<std_msgs::Float32> rudderSub("control_send_u_rudder", &rudderCallBack );
+ros::Subscriber<std_msgs::Float32> rudderSub("mode_send_u_rudder", &rudderCallBack );
 
 
 void sailCallBack(const std_msgs::Float32& cmd);
-ros::Subscriber<std_msgs::Float32> sailSub("control_send_u_sail", &sailCallBack );
+ros::Subscriber<std_msgs::Float32> sailSub("mode_send_u_sail", &sailCallBack );
 
 
 
@@ -56,8 +56,8 @@ float minSailAngle = 0;
 
 
 /* pin */ 
-const int chPinRudder = 2; // channel 1 sur le pin 2
-const int chPinSail = 3; // channel 2 sur le pin 3
+const int chPinRudder = 4; // channel 1 sur le pin 4
+const int chPinSail = 5; // channel 2 sur le pin 5
 
 float chRudder;
 float chSail;

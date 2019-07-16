@@ -26,18 +26,38 @@ float ax,ay,az;
 float gx,gy,gz;
 float x,y,z,w;
 
+unsigned long t0;
+int calib;
+
 void setup()
 {
   Serial.begin(9600);              // Start serial ports
   //Serial1.begin(9600);
   Serial1.begin(9600);
+  t0 = millis();
+  calib = 0;
   
 }
 
 void loop()
 {
+
+  /*if (millis()-t0 > 60000 and calib == 0){
+    calib = 1;
+    Serial.println("calibration Store");
+    Serial1.write(0xF0);
+    while(Serial1.available()<1);
+    Serial.println(Serial1.read());
+    Serial1.write(0xF5);
+    while(Serial1.available()<1);
+    Serial.println(Serial1.read());
+    Serial1.write(0xF6);
+    while(Serial1.available()<1);
+    Serial.println(Serial1.read());
+    
+  }*/
   
-  /*
+  if (calib == 0){
   heading = getheading();
   Serial.print("heading : ");
   Serial.print(heading);
@@ -49,7 +69,7 @@ void loop()
   roll = getRoll();
   Serial.print("   Roll : ");
   Serial.println(float(roll));
-  */
+  /*
   
   getAccel();
   Serial.print("accel: x: ");
@@ -58,7 +78,7 @@ void loop()
   Serial.print(ay);
   Serial.print("  z : ");
   Serial.println(az);
-  
+  */
   
   /*
   getGyro();
@@ -69,7 +89,8 @@ void loop()
   Serial.print("    z : ");
   Serial.println(gz);
   */
-  delay(100);                           // Short delay before next loop
+  }
+  delay(100);       // Short delay before next loop
 }
 
 
@@ -79,7 +100,7 @@ float getheading(){
   high_byte = Serial1.read();
   low_byte = Serial1.read();
   float val = float((high_byte<<8)+low_byte)/10;
-  val = PI/2+PI*val/180;
+  val = PI*val/180;
   val = 2*atan(tan(val/2));
   return val;
 }

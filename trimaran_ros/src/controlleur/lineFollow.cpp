@@ -8,13 +8,15 @@
 #include <math.h>
 #include <glm/glm.hpp>
 #include <geometry_msgs/Point.h>
-
+#include <gps_common/GPSFix.h>
 
 using namespace std;
 using namespace glm;
 
 // x,y,cap
+int mode = 0;
 double x[3] = {0,0,0};
+double xRef[3] = {0,0,0};
 double wind = 0;
 double yaw,pitch,roll;
 double ax,ay,az;
@@ -64,11 +66,19 @@ void imuCB(const sensor_msgs::Imu msgImu)
     timeImu = msgImu.header.stamp.nsec;
 }
 
-void gpsCB(const geometry_msgs::Pose2D msgGps)
+/*
+void gpsCB(const gps_common::GPSFix msgGps)
 {
-    x[0] = msgGps.x;
-    x[1] = msgGps.y;
-    x[2] = msgGps.theta;
+    x[0] = 111.11*1000*(msgGps.latitude-xRef[0]);
+    x[1] = 111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
+    x[2] = msgGps.track;
+}
+*/
+
+void gpsCB(const geometry_msgs::Pose2D msgGps){
+  x[0] = msgGps.x;
+  x[1] = msgGps.y;
+  x[2] = msgGps.theta;
 }
 
 
@@ -119,8 +129,6 @@ int main(int argc, char **argv)
 
   ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
   ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
-
-  int mode;
   nh.param<int>("mode", mode,0);
 
 
@@ -147,21 +155,6 @@ int main(int argc, char **argv)
   ros::Subscriber sub_Mag  = nh.subscribe(topicEuler,0,magCB);
   ros::Subscriber sub_Imu  = nh.subscribe(topicImu,0,imuCB);
   ros::Subscriber sub_gps  = nh.subscribe(topicGps,0,gpsCB);
-
-  /*
-  if (mode == 0){
-    ros::Subscriber sub_Wind = nh.subscribe("filter_send_wind_direction",0,windCB);
-    ros::Subscriber sub_Mag  = nh.subscribe("filter_send_euler_angles",0,magCB);
-    ros::Subscriber sub_Imu  = nh.subscribe("filter_send_imu",0,imuCB);
-    ros::Subscriber sub_gps  = nh.subscribe("filter_send_gps",0,gpsCB);
-  }
-  else{
-    ros::Subscriber sub_Wind = nh.subscribe("simu_send_wind_direction",0,windCB);
-    ros::Subscriber sub_Mag  = nh.subscribe("simu_send_euler_angle",0,magCB);
-    ros::Subscriber sub_Imu  = nh.subscribe("simu_send_imu",0,imuCB);
-    ros::Subscriber sub_gps  = nh.subscribe("simu_send_gps",0,gpsCB);
-  }
-  */
   u[0] = 0;
   u[1] = 0;
 

@@ -9,7 +9,7 @@ void anemoInterrupt(){
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(9600);
   pinMode(pinAnemo,INPUT);
   attachInterrupt(digitalPinToInterrupt(pinAnemo), anemoInterrupt,FALLING);
 }
