@@ -22,8 +22,6 @@ int16_t ax, ay, az;
 int16_t gx, gy, gz;
 int16_t   mx, my, mz;
 
-float heading;
-float tiltheading;
 
 float Axyz[3];
 float Gxyz[3];
@@ -31,10 +29,6 @@ float Mxyz[3];
 
 
 #define sample_num_mdate  5000      
-
-volatile float mx_sample[3];
-volatile float my_sample[3];
-volatile float mz_sample[3];
 
 // pour charger une calibration il faut changer les valeurs des centres ici 
 static float mx_centre = 0;

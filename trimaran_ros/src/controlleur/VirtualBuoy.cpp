@@ -14,7 +14,7 @@ using namespace std;
 using namespace glm;
 
 double x[3] = {0,0,0};
-double xRef[3] = {0,0,0};
+double xRef[2] = {0,0};
 float wind = 0;
 double yaw,pitch,roll;
 double ax,ay,az;
@@ -52,19 +52,15 @@ void imuCB(const sensor_msgs::Imu msgImu)
     timeImu = msgImu.header.stamp.nsec;
 }
 
-/*
-void gpsCB(const gps_common::GPSFix msgGps)
-{
-    x[0] = 111.11*1000*(msgGps.latitude-xRef[0]);
-    x[1] = 111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
-    x[2] = msgGps.track;
+
+
+
+void gpsCB(const gps_common::GPSFix msgGps){
+  x[0] = msgGps.latitude;
+  x[1] = msgGps.longitude;
+  x[2] = msgGps.track;
 }
-*/
-void gpsCB(const geometry_msgs::Pose2D msgGps){
-  x[0] = msgGps.x;
-  x[1] = msgGps.y;
-  x[2] = msgGps.theta;
-}
+
 
 
 void control(){
@@ -83,9 +79,14 @@ int main(int argc, char **argv)
 
   ros::Publisher  pub_A = nh.advertise<geometry_msgs::Point>("control_send_A",0);
   ros::Publisher  pub_B = nh.advertise<geometry_msgs::Point>("control_send_B",0);
+  ros::Publisher  pub_Ref = nh.advertise<geometry_msgs::Point>("control_send_ref",0);
 
   geometry_msgs::Point msgA;
   geometry_msgs::Point msgB;
+  geometry_msgs::Point msgRef;
+
+  msgRef.x = xRef[0];
+  msgRef.y = xRef[1];
 
   int mode;
   nh.param<int>("mode", mode,0);
@@ -121,6 +122,12 @@ int main(int argc, char **argv)
       msgA.x = a[0];
       msgA.y = a[1];
       pub_A.publish(msgA);
+
+      msgB.x = xRef[0];
+      msgB.y = xRef[1];
+      pub_B.publish(msgB);
+
+      pub_Ref.publish(msgRef);
       loop_rate.sleep();
   }
     //sleep(1);

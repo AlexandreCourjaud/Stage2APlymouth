@@ -17,6 +17,7 @@
 using namespace std;
 using namespace glm;
 
+double xRef[2] = {0,0};
 
 double wind,awind;
 double cmdRudder, cmdSail;
@@ -34,6 +35,7 @@ double t0;
 vec2 cubeA = {-10,0};
 vec2 cubeB = {10,0};
 
+
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
 }
@@ -47,14 +49,24 @@ void sailCB(const std_msgs::Float32 msgSail){
 }
 
 void cubeACB(const geometry_msgs::Point msgA){
-    cubeA[0] = msgA.x;
-    cubeA[1] = msgA.y;
+
+    cubeA[0] = 111.11*1000*(msgA.x-xRef[0]);
+    cubeA[1] = -111.11*1000*(msgA.y-xRef[1])*cos(xRef[0]*M_PI/180);
+    ROS_INFO("A : %f, %f",cubeA[0],cubeA[1]);
 }
 
 void cubeBCB(const geometry_msgs::Point msgB){
-    cubeB[0] = msgB.x;
-    cubeB[1] = msgB.y;
+
+    cubeB[0] = 111.11*1000*(msgB.x-xRef[0]);
+    cubeB[1] = -111.11*1000*(msgB.y-xRef[1])*cos(xRef[0]*M_PI/180);
+    ROS_INFO("B : %f, %f",cubeB[0],cubeB[1]);
 }
+
+void refCB(const geometry_msgs::Point msgRef){
+  xRef[0] = msgRef.x;
+  xRef[1] = msgRef.y;
+}
+
 /***********************************************************************************************/
 
 void f(){
@@ -109,12 +121,21 @@ void set_imu(ros::Publisher pub_imu, sensor_msgs::Imu msgImu, double x[5]){
     pub_imu.publish(msgImu);
 }
 
+/*
 void set_gps(ros::Publisher pub_gps, geometry_msgs::Pose2D msgGps, double x[5]){
     msgGps.x = x[0];
     msgGps.y = x[1];
     msgGps.theta = x[2];
     pub_gps.publish(msgGps);
 }
+*/
+void set_gps(ros::Publisher pub_gps, gps_common::GPSFix msgGps, double x[5]){
+  msgGps.latitude = x[0]/(111.11*1000)+ xRef[0];
+  msgGps.longitude = -x[1]/(111.11*1000*cos(xRef[0]*M_PI/180))+xRef[1];
+  msgGps.track = x[2];
+  pub_gps.publish(msgGps);
+}
+
 
 void set_Euler(ros::Publisher pub_Euler, geometry_msgs::Vector3 msgEuler, double x[5]){
     msgEuler.x = x[2];
@@ -294,12 +315,12 @@ int main(int argc, char **argv)
     ros::Subscriber sub_sail = nh.subscribe("control_send_u_sail",0,sailCB);
     ros::Subscriber sub_rudder = nh.subscribe("control_send_u_rudder",0,rudderCB);
     ros::Subscriber sub_wind = nh.subscribe("filter_send_wind_direction",0,windCB);
-
+    ros::Subscriber sub_ref = nh.subscribe("control_send_ref",0,refCB);
 
     ros::Publisher  pub_imu = nh.advertise<sensor_msgs::Imu>("simu_send_imu",0);
     sensor_msgs::Imu msgImu;
-    ros::Publisher pubGps = nh.advertise<geometry_msgs::Pose2D>("simu_send_gps",0);
-    geometry_msgs::Pose2D msgGps;
+    ros::Publisher pubGps = nh.advertise<gps_common::GPSFix>("simu_send_gps",0);
+    gps_common::GPSFix msgGps;
     ros::Publisher pub_wind = nh.advertise<std_msgs::Float32>("simu_send_wind_direction",0);
     std_msgs::Float32 msgWind;
     ros::Publisher pub_Euler = nh.advertise<geometry_msgs::Vector3>("simu_send_euler_angles",0);
@@ -358,7 +379,7 @@ int main(int argc, char **argv)
     x[2] = 0;
     x[3] = 1;
     x[4] = 0;
-    wind = -M_PI/2;
+    wind = -M_PI;
     awind = 2;
     cmdRudder = -0.1;
     cmdSail = 1;

@@ -16,7 +16,7 @@ using namespace glm;
 // x,y,cap
 int mode = 0;
 double x[3] = {0,0,0};
-double xRef[3] = {0,0,0};
+double xRef[2] = {0,0};
 double wind = 0;
 double yaw,pitch,roll;
 double ax,ay,az;
@@ -28,17 +28,26 @@ vec2 b = {10,0};
 
 float u[2];
 
+void refCB(const geometry_msgs::Point msgRef){
+  xRef[0] = msgRef.x;
+  xRef[1] = msgRef.y;
+}
 
 void cubeACB(const geometry_msgs::Point msgA){
-    a[0] = msgA.x;
-    a[1] = msgA.y;
+
+    a[0] = 111.11*1000*(msgA.x-xRef[0]);
+    a[1] = -111.11*1000*(msgA.y-xRef[1])*cos(xRef[0]*M_PI/180);
+    ROS_INFO("A : %f, %f",a[0],a[1]);
+
 }
 
 void cubeBCB(const geometry_msgs::Point msgB){
-    b[0] = msgB.x;
-    b[1] = msgB.y;
-}
 
+    b[0] = 111.11*1000*(msgB.x-xRef[0]);
+    b[1] = -111.11*1000*(msgB.y-xRef[1])*cos(xRef[0]*M_PI/180);
+    ROS_INFO("B : %f, %f",b[0],b[1]);
+
+}
 
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
@@ -66,21 +75,13 @@ void imuCB(const sensor_msgs::Imu msgImu)
     timeImu = msgImu.header.stamp.nsec;
 }
 
-/*
+
 void gpsCB(const gps_common::GPSFix msgGps)
 {
     x[0] = 111.11*1000*(msgGps.latitude-xRef[0]);
-    x[1] = 111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
+    x[1] = -111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
     x[2] = msgGps.track;
 }
-*/
-
-void gpsCB(const geometry_msgs::Pose2D msgGps){
-  x[0] = msgGps.x;
-  x[1] = msgGps.y;
-  x[2] = msgGps.theta;
-}
-
 
 void capControl(){
     double r = 5.0;
@@ -101,7 +102,10 @@ void capControl(){
 
     double e = glm::determinant(mat)/norm;
     double phi = atan2(b[1]-a[1],b[0]-a[0]);
-    //ROS_INFO("phi %f e : %f",phi,e);
+    ROS_INFO("phi %f e : %f",phi,e);
+    ROS_INFO("m : %f,%f",m[0],m[1]);
+    ROS_INFO("mat : %f,%f",mat[0][0],mat[0][1]);
+    ROS_INFO("mat : %f,%f",mat[1][0],mat[1][1]);
     if (abs(e)>r){
         q = sign(e);
     }
@@ -129,6 +133,8 @@ int main(int argc, char **argv)
 
   ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
   ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
+  ros::Subscriber sub_ref = nh.subscribe("control_send_ref",0,refCB);
+
   nh.param<int>("mode", mode,0);
 
 

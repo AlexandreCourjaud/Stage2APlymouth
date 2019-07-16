@@ -49,19 +49,14 @@ void imuCB(const sensor_msgs::Imu msgImu)
     timeImu = msgImu.header.stamp.nsec;
 }
 
-/*
+
 void gpsCB(const gps_common::GPSFix msgGps)
 {
     x[0] = 111.11*1000*(msgGps.latitude-xRef[0]);
-    x[1] = 111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
+    x[1] = -111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
     x[2] = msgGps.track;
 }
-*/
-void gpsCB(const geometry_msgs::Pose2D msgGps){
-  x[0] = msgGps.x;
-  x[1] = msgGps.y;
-  x[2] = msgGps.theta;
-}
+
 
 
 void capControl(){
