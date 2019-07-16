@@ -40,5 +40,5 @@ void loop()
   Actuator();
   updateSensor();
   
-  delay(10);
+  delay(1);
 }

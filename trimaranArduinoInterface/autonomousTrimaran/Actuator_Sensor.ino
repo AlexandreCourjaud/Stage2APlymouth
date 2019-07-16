@@ -19,8 +19,8 @@ void Actuator(){
 /*************************************************************************************/
 
 void setupSensor(){
-  //setupImu();
-  setupImuCmps();
+  setupImu();
+  //setupImuCmps();
   setupRC();
   setupWind();
   //setupGps();
@@ -29,8 +29,8 @@ void setupSensor(){
 
 void updateSensor(){
   //updateGps();
-  //updateImu();
-  updateImuCmps();
+  updateImu();
+  //updateImuCmps();
   updateRC();
   updateWind();
   
