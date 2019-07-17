@@ -145,6 +145,7 @@ add_executable(lineFollow src/controlleur/lineFollow.cpp)
 add_executable(simuBoat src/Simulation/simuBoat.cpp)
 add_executable(VirtualBuoy src/controlleur/VirtualBuoy.cpp)
 add_executable(gps src/filtre/gps.cpp)
+add_executable(mode src/controlleur/mode.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -163,6 +164,7 @@ target_link_libraries(lineFollow ${catkin_LIBRARIES})
 target_link_libraries(simuBoat ${catkin_LIBRARIES})
 target_link_libraries(VirtualBuoy ${catkin_LIBRARIES})
 target_link_libraries(gps ${catkin_LIBRARIES})
+target_link_libraries(mode ${catkin_LIBRARIES})
 
 
 

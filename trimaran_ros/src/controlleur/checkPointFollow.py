@@ -13,15 +13,8 @@ from gps_common.msg import GPSFix
 import time
 import os
 
-xRef = [50.425265,-4.204743]
+xRef = [0,0]
 
-'''
-def sub_gps(msg):
-    global x
-    x[0] = msg.x
-    x[1] = msg.y
-    x[2] = msg.theta
-'''
 
 def sub_gps(msg):
     global x,xgps
@@ -62,18 +55,26 @@ def lectureCheckpoint(filename):
     my_file = os.path.join(THIS_FOLDER, 'checkpoint/'+filename)
     file  = open(my_file,'r')
     lines = file.readlines()
-    for i in lines:
-        l = (i.rstrip('\n')).split(',')
+
+    l = lines[1].rstrip('\n').split(',')
+    xRef[0] = float(l[0])
+    xRef[1] = float(l[1])
+
+    print (lines)
+    for i in range(3,len(lines)):
+        l = (lines[i].rstrip('\n')).split(',')
         listPoint[0].append(float(l[0]))
         listPoint[1].append(float(l[1]))
-    return np.array(listPoint)
+
+    print(listPoint,xRef)
+    return np.array(listPoint),xRef
 
 def control(listPoint,index):
     newPoint = 0
     if index == 0:
         A = listPoint[:,index].reshape((2,1))
         B = listPoint[:,index+1].reshape((2,1))
-        print(A,B)
+        #print(A,B)
         index = index +1
         newPoint = 1
     elif index < len(listPoint[0]):
@@ -118,7 +119,7 @@ if __name__ == "__main__":
 
     x = np.array([0.0,0.0,0.0])
     xgps = np.array([0.0,0.0,0.0])
-    listPoint = lectureCheckpoint("testLatLong.txt")
+    listPoint,xRef = lectureCheckpoint("testLatLong.txt")
     index = 0
     cubeA = Point()
     cubeB = Point()
