@@ -20,6 +20,7 @@ These instructions will get you a copy of the project up and running on your loc
 (https://github.com/AlexandreCourjaud/Stage2APlymouth
 https://github.com/Matthix7/plymouth_internship_2019
 https://github.com/corentin-j/WRSC_plymouth_JEGAT)
+- Install gps-common (sudo apt-get install ros-melodic-gps-common)
 
 
 
