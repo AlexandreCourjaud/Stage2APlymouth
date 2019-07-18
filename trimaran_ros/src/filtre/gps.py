@@ -4,7 +4,7 @@ import serial
 import rospy
 from gps_common.msg import GPSFix
 from std_msgs.msg import String
-
+import pyudev
 
 status = 0
 
@@ -111,7 +111,16 @@ def publishGps(pub_gps,frame):
 
 if __name__ == "__main__":
 
-    ser = serial.Serial('/dev/ttyUSB0', 4800)
+
+    context = pyudev.Context()
+    usbPort = 'no gps found'
+    for device in context.list_devices(subsystem = 'tty'):
+        #print(device.get('ID_VENDOR'))
+        if (device.get('ID_VENDOR') == 'Prolific_Technology_Inc.'):
+            print("Gps Found")
+            usbPort = device.get('DEVNAME')
+
+    ser = serial.Serial(usbPort, 4800)
     rospy.init_node("gps")
 
     pub_trame = rospy.Publisher('filter_send_trame_gps',String,queue_size = 10)
@@ -119,14 +128,14 @@ if __name__ == "__main__":
 
     while not rospy.is_shutdown():
         trame = ser.readline()
-        #print(trame)
+        print(trame)
         if trameGpsIsValide(trame):
            data = trame.split(',')
-           print(data)
+           #print(data)
            if (data[0] == '$GPGGA'):
                status,time,latitude,longitude,type,nbSat,hdop,altitude = parseGPGGA(data)
                publishGps(pub_gps,'GPGGA')
-               print(latitude)
+               #print(latitude)
            elif (data[0] == '$GPRMC'):
                status,time,latitude,longitude,valid,speed,route,date,mode = parseGPRMC(data)
                publishGps(pub_gps,'GPRMC')
