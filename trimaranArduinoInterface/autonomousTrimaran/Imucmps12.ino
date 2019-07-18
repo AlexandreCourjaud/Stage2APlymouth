@@ -73,8 +73,11 @@ float getheading(){
   low_byte = Serial1.read();
   float val = float((high_byte<<8)+low_byte)/10;
   //Serial.println(val);
+
+  //tranforme the heading 0,360° -> -pi,pi with the North = 0, O = pi/2, E = -pi/2
   val = refImu + PI*val/180;
   val = -2*atan(tan(val/2));
+  ////////////////
   return val;
 }
 
