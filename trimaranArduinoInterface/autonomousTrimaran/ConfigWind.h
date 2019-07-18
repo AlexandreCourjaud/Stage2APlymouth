@@ -2,7 +2,7 @@
 
 
 #define PIN_WIND A1
-#define MAX_WIND 923
+#define MAX_WIND 1023
 #define MIN_WIND 0
 float sensorValue =0;
 float angleWind =0;
