@@ -6,9 +6,10 @@ void setup() {
 }
 void loop() {
   float sensorValue = analogRead(A1);
-  Serial.println(sensorValue);
-  float angle = ((sensorValue-ref-45)/(975-40))*2*PI;
+  Serial.print(sensorValue);
+  float angle = ((sensorValue-ref-0)/(1023-0))*2*PI;
   angle = atan(tan(angle/2));
-  //Serial.println(angle);
+  Serial.print("Angle : ");
+  Serial.println(angle);
   delay(100);
 }
