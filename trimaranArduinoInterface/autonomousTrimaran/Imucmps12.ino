@@ -74,8 +74,7 @@ float getheading(){
   float val = float((high_byte<<8)+low_byte)/10;
   //Serial.println(val);
   val = refImu + PI*val/180;
-  val = 2*atan(tan(val/2));
-  Serial.println(val);
+  val = -2*atan(tan(val/2));
   return val;
 }
 
