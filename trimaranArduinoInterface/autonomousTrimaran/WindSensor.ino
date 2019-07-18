@@ -15,7 +15,7 @@ void setupWind(){
 void updateWind(){
   sensorValue = analogRead(A1);
   angleWind = ((sensorValue-ref-MIN_WIND)/(MAX_WIND-MIN_WIND))*2*PI;
-  angleWind = 2*atan(tan(angleWind/2));
+  angleWind = -2*atan(tan(angleWind/2));
   
   publishWind();
 }

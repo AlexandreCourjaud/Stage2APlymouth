@@ -374,12 +374,12 @@ int main(int argc, char **argv)
     ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
 
     t0 = ros::Time::now().toSec();
-    x[0] = -20;
+    x[0] = 0;
     x[1] = 0;
-    x[2] = -M_PI/2;
-    x[3] = 1;
+    x[2] = 0;
+    x[3] = 0;
     x[4] = 0;
-    wind = -M_PI;
+    wind = -M_PI/2;
     awind = 2;
     cmdRudder = -0.1;
     cmdSail = 1;
