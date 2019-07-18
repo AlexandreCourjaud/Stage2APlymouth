@@ -50,7 +50,7 @@ def sub_imu(msg):
 
 
 def lectureCheckpoint(filename):
-    listPoint = [[],[]]
+    listPoint = [[],[],[]]
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     my_file = os.path.join(THIS_FOLDER, 'checkpoint/'+filename)
     file  = open(my_file,'r')
@@ -65,21 +65,26 @@ def lectureCheckpoint(filename):
         l = (lines[i].rstrip('\n')).split(',')
         listPoint[0].append(float(l[0]))
         listPoint[1].append(float(l[1]))
+        if len(l) > 2:
+            listPoint[2].append(float(l[2]))
+        else:
+            listPoint[2].append(0)
 
     print(listPoint,xRef)
     return np.array(listPoint),xRef
 
+'''
 def control(listPoint,index):
     newPoint = 0
     if index == 0:
-        A = listPoint[:,index].reshape((2,1))
-        B = listPoint[:,index+1].reshape((2,1))
-        #print(A,B)
+        A = listPoint[:2,index].reshape((2,1))
+        B = listPoint[:2,index+1].reshape((2,1))
+        print(A,B)
         index = index +1
         newPoint = 1
     elif index < len(listPoint[0]):
-        A = listPoint[:,index-1].reshape((2,1))
-        B = listPoint[:,index].reshape((2,1))
+        A = listPoint[:2,index-1].reshape((2,1))
+        B = listPoint[:2,index].reshape((2,1))
         Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
         m = x[0:2].reshape((2,1))
         if np.linalg.norm(Bcart-m) < 5:
@@ -87,9 +92,47 @@ def control(listPoint,index):
             newPoint = 1
     else:
         A = xgps[0:2].reshape((2,1))
-        B = listPoint[:,-1]
+        B = listPoint[:2,-1]
         newPoint =1
     return A,B,index,newPoint
+
+'''
+
+def setPoint(listPoint,index):
+    if index < len(listPoint[0]):
+        A = listPoint[:2,index-1].reshape((2,1))
+        B = listPoint[:2,index].reshape((2,1))
+    else:
+        A = xgps[0:2].reshape((2,1))
+        B = listPoint[:2,-1]
+    return A,B
+
+def setPointBuoy(listPoint,index):
+    A = xgps[0:2].reshape((2,1))
+    B = listPoint[:2,index]
+    return A,B
+
+
+def control(listPoint,index,timeBuoy):
+    A,B = setPoint(listPoint,index)
+    if index < len(listPoint[0]) and timeBuoy == 0:
+        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        m = x[0:2].reshape((2,1))
+        if np.linalg.norm(Bcart-m) < 5:
+            if listPoint[2,index] == 0:
+                index = index +1
+                #print(index,len(listPoint[0]))
+                timeBuoy = 0
+            else:
+                timeBuoy = time.time()
+    if (timeBuoy > 0):
+        A,B = setPointBuoy(listPoint,index)
+        if (time.time() - timeBuoy > listPoint[2,index]):
+            timeBuoy = 0
+            index = index+1
+
+
+    return A,B,index,timeBuoy
 
 
 
@@ -120,7 +163,8 @@ if __name__ == "__main__":
     x = np.array([0.0,0.0,0.0])
     xgps = np.array([0.0,0.0,0.0])
     listPoint,xRef = lectureCheckpoint("testLatLong.txt")
-    index = 0
+    index = 1
+    buoy = 0
     cubeA = Point()
     cubeB = Point()
     refmsgs = Point()
@@ -129,7 +173,8 @@ if __name__ == "__main__":
     rate = rospy.Rate(25)
     while not rospy.is_shutdown():
 
-        A,B,index,newPoint = control(listPoint,index)
+        #A,B,index,newPoint = control(listPoint,index)
+        A,B,index,buoy = control(listPoint,index,buoy)
         cubeA.x = A[0]
         cubeA.y = A[1]
         cubeB.x = B[0]
