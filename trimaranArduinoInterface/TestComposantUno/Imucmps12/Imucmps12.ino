@@ -100,8 +100,8 @@ float getheading(){
   high_byte = Serial1.read();
   low_byte = Serial1.read();
   float val = float((high_byte<<8)+low_byte)/10;
-  val = PI*val/180;
-  val = 2*atan(tan(val/2));
+  val = PI+PI*val/180;
+  val = -2*atan(tan(val/2));
   return val;
 }
 
