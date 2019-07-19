@@ -60,7 +60,7 @@ void gpsCB(const gps_common::GPSFix msgGps)
 
 
 void capControl(){
-    float deltar = 0.5*atan(tan(0.5*(yaw-capCible)));
+    float deltar = atan(tan(0.5*(yaw-capCible)));
     float deltamax = (M_PI/4)*(cos(wind-capCible)+1);
 
 
