@@ -154,9 +154,9 @@ if __name__ == "__main__":
 
     else:
         rospy.Subscriber("filter_send_gps",GPSFix,sub_gps)
-        rospy.Subscriber("filter_send_euler_angle",Vector3,sub_euler)
+        rospy.Subscriber("ardu_send_euler_angles",Vector3,sub_euler)
         rospy.Subscriber("filter_send_wind",Float32,sub_wind)
-        rospy.Subscriber("filter_send_imu",Imu,sub_imu)
+        rospy.Subscriber("ardu_send_imu",Imu,sub_imu)
 
 
 

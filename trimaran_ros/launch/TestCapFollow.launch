@@ -5,13 +5,13 @@
     <param name="baud" value="115200"/>
   </node>
 
-<node pkg="WRSC_plymouth_JEGAT" type="filtre_IMU.py" name="filtre_IMU">
-</node>
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind">
 </node>
-<node pkg="WRSC_plymouth_JEGAT" type="display_boat.py" name="display_boat">
-</node>
+
+
 <node pkg="trimaran_ros" type="capFollow" name="capFollow">
 </node>
+
+<node pkg="trimaran_ros" type="mode" name="mode" />
 
 </launch>
