@@ -9,7 +9,7 @@ float angleWind =0;
 float ref = 0;
 
 std_msgs::Float32 windMsg;
-ros::Publisher pubWind("ardu_send_wind",&windMsg);
+ros::Publisher pubWind("ardu_send_wind_direction",&windMsg);
 
 std_msgs::Float32 windSpeedMsg;
 ros::Publisher pubWindSpeed("ardu_send_wind_speed",&windSpeedMsg);
