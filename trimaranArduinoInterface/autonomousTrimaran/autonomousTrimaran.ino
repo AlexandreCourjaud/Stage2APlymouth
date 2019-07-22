@@ -9,7 +9,6 @@ ros::NodeHandle nh;
 #include "ConfigIMU.h"
 #include "ConfigImuCmps12.h"
 #include "ConfigGps.h"
-//#include "ConfigRC.h"
 #include "ConfigWind.h"
 
 

@@ -48,6 +48,9 @@ float minSailAngle = 10;
 // sail ch2 : 980 -> 1980
 // rudder ch1 : 890 -> 1800
 
+unsigned long timerRc;
+
+
 #define MAX_CHRUDDER 1900
 #define MIN_CHRUDDER 1030
 

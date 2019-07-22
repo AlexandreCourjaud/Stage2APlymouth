@@ -4,6 +4,7 @@
 <node type="rviz" name="rviz" pkg="rviz" />
 
 <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
+<node pkg="trimaran_ros" type="displayBoat" name="displayBoat" />
 <node pkg="trimaran_ros" type="lineFollow" name="lineFollow" />
 <node pkg="trimaran_ros" type="VirtualBuoy" name="VirtualBuoy"/>
 </launch>

@@ -48,12 +48,14 @@ float minSailAngle = 0;
 
 
 
+
 #define MAX_CHRUDDER 1980
 #define MIN_CHRUDDER 990
 
 #define MAX_CHSAIL 1950
 #define MIN_CHSAIL 980
 
+unsigned long timerRc;
 
 /* pin */ 
 const int chPinRudder = 4; // channel 1 sur le pin 4

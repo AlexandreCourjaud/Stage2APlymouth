@@ -48,20 +48,6 @@ void sailCB(const std_msgs::Float32 msgSail){
     cmdSail = msgSail.data;
 }
 
-void cubeACB(const geometry_msgs::Point msgA){
-
-    cubeA[0] = 111.11*1000*(msgA.x-xRef[0]);
-    cubeA[1] = -111.11*1000*(msgA.y-xRef[1])*cos(xRef[0]*M_PI/180);
-    ROS_INFO("A : %f, %f",cubeA[0],cubeA[1]);
-}
-
-void cubeBCB(const geometry_msgs::Point msgB){
-
-    cubeB[0] = 111.11*1000*(msgB.x-xRef[0]);
-    cubeB[1] = -111.11*1000*(msgB.y-xRef[1])*cos(xRef[0]*M_PI/180);
-    ROS_INFO("B : %f, %f",cubeB[0],cubeB[1]);
-}
-
 void refCB(const geometry_msgs::Point msgRef){
   xRef[0] = msgRef.x;
   xRef[1] = msgRef.y;
@@ -121,14 +107,6 @@ void set_imu(ros::Publisher pub_imu, sensor_msgs::Imu msgImu, double x[5]){
     pub_imu.publish(msgImu);
 }
 
-/*
-void set_gps(ros::Publisher pub_gps, geometry_msgs::Pose2D msgGps, double x[5]){
-    msgGps.x = x[0];
-    msgGps.y = x[1];
-    msgGps.theta = x[2];
-    pub_gps.publish(msgGps);
-}
-*/
 void set_gps(ros::Publisher pub_gps, gps_common::GPSFix msgGps, double x[5]){
   msgGps.latitude = x[0]/(111.11*1000)+ xRef[0];
   msgGps.longitude = -x[1]/(111.11*1000*cos(xRef[0]*M_PI/180))+xRef[1];
@@ -147,163 +125,6 @@ void set_Euler(ros::Publisher pub_Euler, geometry_msgs::Vector3 msgEuler, double
 void set_wind(ros::Publisher pub_wind, std_msgs::Float32 msgWind){
     msgWind.data = wind;
     pub_wind.publish(msgWind);
-}
-
-void set_marker_boat(ros::Publisher vis_pub, visualization_msgs::Marker marker, double x[5]){
-       marker.header.frame_id = "bateau1";
-       marker.header.stamp = ros::Time();
-       marker.ns = "simuBoat";
-       marker.id = 0;
-       marker.type = visualization_msgs::Marker::MESH_RESOURCE;
-       marker.action = visualization_msgs::Marker::ADD;
-       marker.pose.position.x = 0;
-       marker.pose.position.y = -1.2;
-       marker.pose.position.z = -1;
-       tf::Quaternion q;
-       q.setRPY(M_PI/2, 0, M_PI/2);
-       tf::quaternionTFToMsg(q, marker.pose.orientation);
-       marker.scale.x = 0.001;
-       marker.scale.y = 0.001;
-       marker.scale.z = 0.001;
-       marker.color.a = 1.0; // Don't forget to set the alpha!
-       marker.color.r = 1.0;
-       marker.color.g = 1.0;
-       marker.color.b = 1.0;
-       //only if using a MESH_RESOURCE marker type:
-       marker.mesh_resource = "package://trimaran_ros/meshs/boat.STL";
-       vis_pub.publish( marker );
-}
-
-
-void set_marker_rudder(visualization_msgs::Marker marker, ros::Publisher vis_pub)
-{
-    marker.header.frame_id = "rudder";
-    marker.header.stamp = ros::Time();
-    marker.ns = "rudder";
-    marker.id = 0;
-    marker.type = visualization_msgs::Marker::MESH_RESOURCE;
-    marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = 1;
-    marker.pose.position.y = 0.1;
-    marker.pose.position.z = -2;
-    tf::Quaternion q;
-    q.setRPY(M_PI/2, 0, -M_PI/2);
-    tf::quaternionTFToMsg(q, marker.pose.orientation);
-    marker.scale.x = 0.003;
-    marker.scale.y = 0.003;
-    marker.scale.z = 0.003;
-    marker.color.a = 1.0; // Don't forget to set the alpha!
-    marker.color.r = 1.0;
-    marker.color.g = 0;
-    marker.color.b = 0;
-    //only if using a MESH_RESOURCE marker type:
-    marker.mesh_resource = "package://trimaran_ros/meshs/rudder.STL";
-    vis_pub.publish( marker );
-}
-
-
-void set_marker_sail(visualization_msgs::Marker marker, ros::Publisher vis_pub)
-{
-    marker.header.frame_id = "sail";
-    marker.header.stamp = ros::Time();
-    marker.ns = "sail";
-    marker.id = 0;
-    marker.type = visualization_msgs::Marker::MESH_RESOURCE;
-    marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = 2.7;
-    marker.pose.position.y = 0;
-    marker.pose.position.z = 0;
-    tf::Quaternion q;
-    q.setRPY(M_PI/2, 0, -M_PI/2);
-    tf::quaternionTFToMsg(q, marker.pose.orientation);
-    marker.scale.x = 0.001;
-    marker.scale.y = 0.001;
-    marker.scale.z = 0.001;
-    marker.color.a = 1.0; // Don't forget to set the alpha!
-    marker.color.r = 0;
-    marker.color.g = 0;
-    marker.color.b = 1.0;
-    //only if using a MESH_RESOURCE marker type:
-    marker.mesh_resource = "package://trimaran_ros/meshs/sail.STL";
-    vis_pub.publish( marker );
-}
-
-void set_marker_wind(visualization_msgs::Marker marker, ros::Publisher vis_pub)
-{
-    marker.header.frame_id = "wind";
-    marker.header.stamp = ros::Time();
-    marker.ns = "wind";
-    marker.id = 0;
-    marker.type = visualization_msgs::Marker::ARROW;
-    marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = 0;
-    marker.pose.position.y = 0;
-    marker.pose.position.z = 0;
-    tf::Quaternion q;
-    q.setRPY(0, 0, 0);
-    tf::quaternionTFToMsg(q, marker.pose.orientation);
-    marker.scale.x = 3.0;
-    marker.scale.y = 0.5;
-    marker.scale.z = 0.5;
-    marker.color.a = 1.0; // Don't forget to set the alpha!
-    marker.color.r = 0;
-    marker.color.g = 1.0;
-    marker.color.b = 0;
-    //only if using a MESH_RESOURCE marker type:
-    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
-    vis_pub.publish( marker );
-}
-
-void set_marker_A(visualization_msgs::Marker marker, ros::Publisher vis_pub)
-{
-    marker.header.frame_id = "A";
-    marker.header.stamp = ros::Time();
-    marker.ns = "A";
-    marker.id = 0;
-    marker.type = visualization_msgs::Marker::CUBE;
-    marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = 0;
-    marker.pose.position.y = 0;
-    marker.pose.position.z = 0;
-    tf::Quaternion q;
-    q.setRPY(0, 0, 0);
-    tf::quaternionTFToMsg(q, marker.pose.orientation);
-    marker.scale.x = 1.0;
-    marker.scale.y = 1.0;
-    marker.scale.z = 1.0;
-    marker.color.a = 1.0; // Don't forget to set the alpha!
-    marker.color.r = 1.0;
-    marker.color.g = 1.0;
-    marker.color.b = 0;
-    //only if using a MESH_RESOURCE marker type:
-    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
-    vis_pub.publish( marker );
-}
-
-void set_marker_B(visualization_msgs::Marker marker, ros::Publisher vis_pub)
-{
-    marker.header.frame_id = "B";
-    marker.header.stamp = ros::Time();
-    marker.ns = "B";
-    marker.id = 0;
-    marker.type = visualization_msgs::Marker::CUBE;
-    marker.action = visualization_msgs::Marker::ADD;
-    marker.pose.position.x = 0;
-    marker.pose.position.y = 0;
-    marker.pose.position.z = 0;
-    tf::Quaternion q;
-    q.setRPY(0, 0, 0);
-    tf::quaternionTFToMsg(q, marker.pose.orientation);
-    marker.scale.x = 1.0;
-    marker.scale.y = 1.0;
-    marker.scale.z = 1.0;
-    marker.color.a = 1.0; // Don't forget to set the alpha!
-    marker.color.r = 1.0;
-    marker.color.g = 0;
-    marker.color.b = 1.0;
-    //only if using a MESH_RESOURCE marker type:
-    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
-    vis_pub.publish( marker );
 }
 
 
@@ -326,53 +147,6 @@ int main(int argc, char **argv)
     ros::Publisher pub_Euler = nh.advertise<geometry_msgs::Vector3>("simu_send_euler_angles",0);
     geometry_msgs::Vector3 msgEuler;
 
-
-    ros::Publisher vis_pub = nh.advertise<visualization_msgs::Marker>("visualization_marker", 0 );
-    visualization_msgs::Marker marker;
-    tf2_ros::TransformBroadcaster br;
-    geometry_msgs::TransformStamped transformStamped;
-    transformStamped.child_frame_id = "bateau1";
-    transformStamped.header.frame_id = "map";
-
-
-    ros::Publisher vis_pub_rudder = nh.advertise<visualization_msgs::Marker>("visualization_marker_rudder", 0 );
-    tf2_ros::TransformBroadcaster br_rudder;
-    geometry_msgs::TransformStamped transformStamped_rudder;
-    visualization_msgs::Marker marker_rudder;
-    transformStamped_rudder.child_frame_id = "rudder";
-    transformStamped_rudder.header.frame_id = "bateau1";
-
-    ros::Publisher vis_pub_sail = nh.advertise<visualization_msgs::Marker>("visualization_marker_sail", 0 );
-    tf2_ros::TransformBroadcaster br_sail;
-    geometry_msgs::TransformStamped transformStamped_sail;
-    visualization_msgs::Marker marker_sail;
-    transformStamped_sail.child_frame_id = "sail";
-    transformStamped_sail.header.frame_id = "bateau1";
-
-    ros::Publisher vis_pub_wind = nh.advertise<visualization_msgs::Marker>("visualization_marker_wind", 0 );
-    tf2_ros::TransformBroadcaster br_wind;
-    geometry_msgs::TransformStamped transformStamped_wind;
-    visualization_msgs::Marker marker_wind;
-    transformStamped_wind.child_frame_id = "wind";
-    transformStamped_wind.header.frame_id = "map";
-
-    ros::Publisher vis_pub_A = nh.advertise<visualization_msgs::Marker>("visualization_marker_A", 0 );
-    tf2_ros::TransformBroadcaster br_A;
-    geometry_msgs::TransformStamped transformStamped_A;
-    visualization_msgs::Marker marker_A;
-    transformStamped_A.child_frame_id = "A";
-    transformStamped_A.header.frame_id = "map";
-
-    ros::Publisher vis_pub_B = nh.advertise<visualization_msgs::Marker>("visualization_marker_B", 0 );
-    tf2_ros::TransformBroadcaster br_B;
-    geometry_msgs::TransformStamped transformStamped_B;
-    visualization_msgs::Marker marker_B;
-    transformStamped_B.child_frame_id = "B";
-    transformStamped_B.header.frame_id = "map";
-
-    ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
-    ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
-
     t0 = ros::Time::now().toSec();
     x[0] = 0;
     x[1] = 0;
@@ -392,66 +166,6 @@ int main(int argc, char **argv)
         set_imu(pub_imu, msgImu,x);
         set_Euler(pub_Euler,msgEuler,x);
         set_wind(pub_wind,msgWind);
-
-        //cout << x[0] << " "<< x[1] << " "<< x[2] << endl;
-        /***************** Visualisation ***************/
-
-        tf::Quaternion q;
-        q.setRPY(0, 0, x[2]);
-        set_marker_boat( vis_pub,marker,x);
-        transformStamped.header.stamp = ros::Time::now();
-        transformStamped.transform.translation.x = x[0];
-        transformStamped.transform.translation.y = x[1];
-        tf::quaternionTFToMsg(q, transformStamped.transform.rotation);
-        br.sendTransform(transformStamped);
-
-        q.setRPY(0, 0, cmdRudder+M_PI);
-        set_marker_rudder(marker_rudder, vis_pub_rudder);
-        transformStamped_rudder.header.stamp = ros::Time::now();
-        transformStamped_rudder.transform.translation.x = 0;
-        transformStamped_rudder.transform.translation.y = 0;
-        tf::quaternionTFToMsg(q, transformStamped_rudder.transform.rotation);
-        br_rudder.sendTransform(transformStamped_rudder);
-
-        q.setRPY(0, 0, delta_s+M_PI);
-        set_marker_sail(marker_sail, vis_pub_sail);
-        transformStamped_sail.header.stamp = ros::Time::now();
-        transformStamped_sail.transform.translation.x = 3;
-        transformStamped_sail.transform.translation.y = 0;
-        transformStamped_sail.transform.translation.z = 2;
-        tf::quaternionTFToMsg(q, transformStamped_sail.transform.rotation);
-        br_sail.sendTransform(transformStamped_sail);
-
-
-        q.setRPY(0, 0, wind);
-        set_marker_wind(marker_wind, vis_pub_wind);
-        transformStamped_wind.header.stamp = ros::Time::now();
-        transformStamped_wind.transform.translation.x = x[0]+10;
-        transformStamped_wind.transform.translation.y = x[1];
-        transformStamped_wind.transform.translation.z = 2;
-        tf::quaternionTFToMsg(q, transformStamped_wind.transform.rotation);
-        br_wind.sendTransform(transformStamped_wind);
-
-        q.setRPY(0, 0, 0);
-        set_marker_A(marker_A, vis_pub_A);
-        transformStamped_A.header.stamp = ros::Time::now();
-        transformStamped_A.transform.translation.x = cubeA[0];
-        transformStamped_A.transform.translation.y = cubeA[1];
-        transformStamped_A.transform.translation.z = 0;
-        tf::quaternionTFToMsg(q, transformStamped_A.transform.rotation);
-        br_A.sendTransform(transformStamped_A);
-
-        q.setRPY(0, 0, 0);
-        set_marker_B(marker_B, vis_pub_B);
-        transformStamped_B.header.stamp = ros::Time::now();
-        transformStamped_B.transform.translation.x = cubeB[0];
-        transformStamped_B.transform.translation.y = cubeB[1];
-        transformStamped_B.transform.translation.z = 0;
-        tf::quaternionTFToMsg(q, transformStamped_B.transform.rotation);
-        br_B.sendTransform(transformStamped_B);
-
-        /*************************************/
-
 
         loop_rate.sleep();
     }

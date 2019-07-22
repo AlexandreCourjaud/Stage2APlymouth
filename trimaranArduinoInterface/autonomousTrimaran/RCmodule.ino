@@ -2,6 +2,7 @@
 void setupRC(){
   pinMode(chPinRudder, INPUT);
   pinMode(chPinSail,INPUT);
+  timerRc = 0;
 }
 
 void updateRC(){
@@ -10,6 +11,7 @@ void updateRC(){
  if (chRudder !=0){
    chRudder = pulseIn (chPinRudder,HIGH);
    chSail = pulseIn (chPinSail,HIGH);
+   timerRc = millis();
    if (chRudder > 500){
       //Serial.print(chRudder);
       //Serial.print("  ");
@@ -36,8 +38,8 @@ void updateRC(){
   }
    
  }
- else{
-  watchRc = 0;
+ if (millis()-timerRc > 1000){
+    watchRc = 0;
  }
 }
  
