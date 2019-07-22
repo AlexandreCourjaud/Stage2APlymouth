@@ -144,7 +144,6 @@ add_executable(filtreWind src/filtre/windFiltre.cpp)
 add_executable(lineFollow src/controlleur/lineFollow.cpp)
 add_executable(simuBoat src/Simulation/simuBoat.cpp)
 add_executable(VirtualBuoy src/controlleur/VirtualBuoy.cpp)
-add_executable(gps src/filtre/gps.cpp)
 add_executable(mode src/controlleur/mode.cpp)
 
 ## Rename C++ executable without prefix
@@ -163,7 +162,6 @@ target_link_libraries(filtreWind  ${catkin_LIBRARIES})
 target_link_libraries(lineFollow ${catkin_LIBRARIES})
 target_link_libraries(simuBoat ${catkin_LIBRARIES})
 target_link_libraries(VirtualBuoy ${catkin_LIBRARIES})
-target_link_libraries(gps ${catkin_LIBRARIES})
 target_link_libraries(mode ${catkin_LIBRARIES})
 
 

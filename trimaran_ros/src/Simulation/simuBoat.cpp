@@ -376,7 +376,7 @@ int main(int argc, char **argv)
     t0 = ros::Time::now().toSec();
     x[0] = 0;
     x[1] = 0;
-    x[2] = -M_PI/2;
+    x[2] = -M_PI/4;
     x[3] = 0;
     x[4] = 0;
     wind = -M_PI/2;

@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
     x = np.array([0.0,0.0,0.0])
     xgps = np.array([0.0,0.0,0.0])
-    listPoint,xRef = lectureCheckpoint("testLatLong.txt")
+    listPoint,xRef = lectureCheckpoint("TestBatiment.txt")
     index = 1
     buoy = 0
     cubeA = Point()

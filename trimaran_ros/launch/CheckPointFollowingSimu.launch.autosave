@@ -7,5 +7,4 @@
     <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
     <node pkg="trimaran_ros" type="lineFollow" name="lineFollow" />
     <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow"/>
-    <node name="record" pkg="rosbag" type="record" args="record -a -o $(find trimaran_ros)/test" />
 </launch>
