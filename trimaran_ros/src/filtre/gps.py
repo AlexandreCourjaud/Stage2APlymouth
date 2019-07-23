@@ -62,7 +62,7 @@ def parseGPRMC(data):
     if data[4] == 'S':
         latitude = -latitude
     longitude = float(data[5][0:(len(data[5])-7)])+float(data[5][(len(data[5])-7):])/60
-    if data[6] == 'E':
+    if data[6] == 'W':
         longitude = -longitude
     valid = data[2]
     speed = float(data[7])*0.514444
