@@ -109,7 +109,7 @@ int main(int argc, char **argv)
   ros::Subscriber sub_Mag  = nh.subscribe(topicEuler,0,magCB);
   ros::Subscriber sub_Imu  = nh.subscribe(topicImu,0,imuCB);
   ros::Subscriber sub_gps  = nh.subscribe(topicGps,0,gpsCB);
-  ros::Subscriber sub_capcible = nh.subscribe("camera_send_headings_aruco",0,capCB);
+  ros::Subscriber sub_capcible = nh.subscribe("camera_send_headings_arucos",0,capCB);
 
   u[0] = 0;
   u[1] = 0;
