@@ -59,7 +59,7 @@ void gpsCB(const gps_common::GPSFix msgGps)
 
 void capCB(const std_msgs::Float32 msgCap){
   if (msgCap.data != -999){
-    capCible = msgCap.data;
+    capCible = msgCap.data+yaw;
   }
 }
 
