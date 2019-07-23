@@ -3,8 +3,8 @@ void setupImu(){
  accelgyro.initialize();
  nh.advertise(pubImu);
  nh.advertise(pubMag);
- Serial.println("Testing device connections...");
- Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+ //Serial.println("Testing device connections...");
+ //Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
  delay(1000);
 }
 

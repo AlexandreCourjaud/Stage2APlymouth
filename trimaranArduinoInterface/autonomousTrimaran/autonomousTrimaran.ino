@@ -22,7 +22,7 @@ void setup()
   nh.initNode();
   Serial.begin(115200);
   Wire.begin();
-  Serial.println("Initializing I2C devices...");
+  //Serial.println("Initializing I2C devices...");
   setupActuator();
   setupSensor();
  
