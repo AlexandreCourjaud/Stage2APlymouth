@@ -45,7 +45,7 @@ def parseGPGGA(data):
     if data[3] == 'S':
         latitude = -latitude
     longitude = float(data[4][0:(len(data[4])-7)])+float(data[4][(len(data[4])-7):])/60
-    if data[5] == 'E':
+    if data[5] == 'W':
         longitude = -longitude
     type = float(data[6])
     nbSat = float(data[7])
