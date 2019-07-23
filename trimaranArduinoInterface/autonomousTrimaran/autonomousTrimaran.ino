@@ -5,6 +5,7 @@
 ros::NodeHandle nh;
 
 #include "ConfigMonohull.h"
+//#include "ConfigCatamaran.h"
 //#include "ConfigTrimaran.h"
 #include "ConfigIMU.h"
 #include "ConfigImuCmps12.h"

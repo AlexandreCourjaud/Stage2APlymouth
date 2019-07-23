@@ -1,0 +1,6 @@
+<launch>
+
+<node type="rviz" name="rviz" pkg="rviz" />
+<node pkg="trimaran_ros" type="displayBoat" name="displayBoat" />
+
+</launch>

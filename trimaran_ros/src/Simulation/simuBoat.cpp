@@ -153,10 +153,10 @@ int main(int argc, char **argv)
     x[2] = -M_PI/4;
     x[3] = 0;
     x[4] = 0;
-    wind = -M_PI/2;
+    wind = 0.1;
     awind = 2;
-    cmdRudder = -0.1;
-    cmdSail = 1;
+    cmdRudder = 0;
+    cmdSail = 0;
     ros::Rate loop_rate(25);
     while (ros::ok()){
         ros::spinOnce();
