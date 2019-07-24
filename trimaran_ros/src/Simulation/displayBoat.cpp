@@ -17,7 +17,7 @@
 using namespace std;
 using namespace glm;
 
-double xRef[2] = {0,0};
+double xRef[2] = {50.375471,-4.138836};
 
 double wind,awind;
 double cmdRudder, cmdSail;
@@ -279,8 +279,8 @@ int main(int argc, char **argv)
     ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
     ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
 
-    ros::Subscriber sub_gps_xBee = nh.subscribe("xbee_send_gps1",0,gpsCB);
-    ros::Subscriber sub_euler_xbee = nh.subscribe("xbee_send_euler_angles",0,eulerCB);
+    ros::Subscriber sub_gps_xBee = nh.subscribe("xbee_send_gps_1",0,gpsCB);
+    ros::Subscriber sub_euler_xbee = nh.subscribe("xbee_send_euler_angles_1",0,eulerCB);
 
 
     ros::Publisher vis_pub = nh.advertise<visualization_msgs::Marker>("visualization_marker", 0 );
