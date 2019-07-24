@@ -7,6 +7,7 @@
 
 <node name="fleetSailboat" pkg="plymouth_internship_2019" type="fleetSailboat" />
 <node name="imageProcessing" pkg="plymouth_internship_2019" type="imageProcessing"/>
+<node pkg="trimaran_ros" type="gps.py" name="gps" />
 <node pkg="trimaran_ros" type="mode" name="mode" />
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>
 <node pkg="trimaran_ros" type="capFollow" name="capFollow"/>

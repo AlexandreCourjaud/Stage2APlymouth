@@ -111,6 +111,7 @@ void set_gps(ros::Publisher pub_gps, gps_common::GPSFix msgGps, double x[5]){
   msgGps.latitude = x[0]/(111.11*1000)+ xRef[0];
   msgGps.longitude = -x[1]/(111.11*1000*cos(xRef[0]*M_PI/180))+xRef[1];
   msgGps.track = x[2];
+  msgGps.speed = x[3];
   pub_gps.publish(msgGps);
 }
 
@@ -126,6 +127,12 @@ void set_wind(ros::Publisher pub_wind, std_msgs::Float32 msgWind){
     msgWind.data = wind;
     pub_wind.publish(msgWind);
 }
+
+void set_awind(ros::Publisher pub_awind, std_msgs::Float32 msgaWind){
+    msgaWind.data = awind;
+    pub_awind.publish(msgaWind);
+}
+
 
 
 int main(int argc, char **argv)
@@ -144,8 +151,11 @@ int main(int argc, char **argv)
     gps_common::GPSFix msgGps;
     ros::Publisher pub_wind = nh.advertise<std_msgs::Float32>("simu_send_wind_direction",0);
     std_msgs::Float32 msgWind;
+    ros::Publisher pub_awind = nh.advertise<std_msgs::Float32>("simu_send_wind_speed",0);
+    std_msgs::Float32 msgaWind;
     ros::Publisher pub_Euler = nh.advertise<geometry_msgs::Vector3>("simu_send_euler_angles",0);
     geometry_msgs::Vector3 msgEuler;
+
 
     t0 = ros::Time::now().toSec();
     x[0] = 0;
@@ -166,6 +176,7 @@ int main(int argc, char **argv)
         set_imu(pub_imu, msgImu,x);
         set_Euler(pub_Euler,msgEuler,x);
         set_wind(pub_wind,msgWind);
+        set_awind(pub_awind,msgaWind);
 
         loop_rate.sleep();
     }

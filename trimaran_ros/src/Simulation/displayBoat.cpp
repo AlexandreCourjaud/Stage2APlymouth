@@ -35,6 +35,10 @@ vec2 cubeA = {-10,0};
 vec2 cubeB = {10,0};
 
 /**********************************************************************/
+void awindCB(const std_msgs::Float32 msgaWind){
+  awind = msgaWind.data;
+}
+
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
 }
@@ -45,6 +49,21 @@ void rudderCB(const std_msgs::Float32 msgRudder){
 
 void sailCB(const std_msgs::Float32 msgSail){
     cmdSail = msgSail.data;
+
+    double theta = yaw;
+    double v = x[3];
+    vec2 w_ap;
+    w_ap[0] = awind*cos(wind-theta)-v;
+    w_ap[1] = awind*sin(wind-theta);
+    double psi_ap = atan2(w_ap[1],w_ap[0]);
+    double a_ap = glm::length(w_ap);
+    double sigma = cos(psi_ap)+cos(cmdSail);
+    if (sigma<0){
+        delta_s = M_PI + psi_ap;
+    }
+    else{
+        delta_s = -sign(sin(psi_ap))*cmdSail;
+    }
 }
 
 void cubeACB(const geometry_msgs::Point msgA){
@@ -76,6 +95,7 @@ void gpsCB(const gps_common::GPSFix msgGps){
   x[0] = 111.11*1000*(msgGps.latitude-xRef[0]);
   x[1] = -111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
   x[2] = msgGps.track;
+  x[3] = msgGps.speed;
 }
 /***************************************************************************/
 
@@ -248,13 +268,19 @@ int main(int argc, char **argv)
     ros::Subscriber sub_ref = nh.subscribe("control_send_ref",0,refCB);
     ros::Subscriber sub_euler = nh.subscribe("ardu_send_euler_angles",0,eulerCB);
     ros::Subscriber sub_gps = nh.subscribe("filter_send_gps",0,gpsCB);
+    ros::Subscriber sub_awind = nh.subscribe("ardu_send_wind_speed",0,awindCB);
 
     ros::Subscriber sub_euler_simu = nh.subscribe("simu_send_euler_angles",0,eulerCB);
     ros::Subscriber sub_gps_sime = nh.subscribe("simu_send_gps",0,gpsCB);
     ros::Subscriber sub_wind_simu = nh.subscribe("simu_send_wind_direction",0,windCB);
+    ros::Subscriber wub_awind_simu = nh.subscribe("simu_send_wind_speed",0,awindCB);
+
 
     ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
     ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
+
+    ros::Subscriber sub_gps_xBee = nh.subscribe("xbee_send_gps1",0,gpsCB);
+    ros::Subscriber sub_euler_xbee = nh.subscribe("xbee_send_euler_angles",0,eulerCB);
 
 
     ros::Publisher vis_pub = nh.advertise<visualization_msgs::Marker>("visualization_marker", 0 );
