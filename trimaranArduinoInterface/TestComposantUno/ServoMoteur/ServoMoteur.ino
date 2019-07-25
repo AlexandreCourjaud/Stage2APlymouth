@@ -46,8 +46,6 @@ if (Serial.available()) {
     //Serial.write(inByte);
     apply(inByte);
   }
-pwm.setPWM(1, 0, pulseWidth(70));
-delay(10);
 }
 
 void servo(){

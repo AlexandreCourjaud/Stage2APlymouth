@@ -37,9 +37,16 @@ void controlSail(){
 void sailCallBack(const std_msgs::Float32& cmd){
   if (watchRc == 0){
   //si la telecommande n'est pas allumee
-    sailAngle = maxSailAngle*cmd.data/(PI/2);
-    sailAngle = max(minSailAngle,sailAngle);
-    sailAngle = min(maxSailAngle,sailAngle);
+    
+    //sailAngle = maxSailAngle*cmd.data/(PI/2);
+    //sailAngle = max(minSailAngle,sailAngle);
+    //sailAngle = min(maxSailAngle,sailAngle);
+
+    sailAngle = max(0,cmd.data);
+    sailAngle = min(PI/2,cmd.data);
+    sailAngle = map(sailAngle,0,PI/2,minSailAngle,maxSailAngle);
+    
+    
     //nh.loginfo("envoie angle sail...");
     }
 }
