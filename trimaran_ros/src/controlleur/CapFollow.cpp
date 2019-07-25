@@ -20,7 +20,7 @@ double ax,ay,az;
 double gx,gy,gz;
 double timeImu;
 
-float capCible = M_PI/2;
+float capCible =0;
 float u[2];
 
 void windCB(const std_msgs::Float32 msgWind){
