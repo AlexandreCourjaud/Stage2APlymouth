@@ -35,8 +35,8 @@ float maxRudderAngle = 115;
 float minRudderAngle = 25;
 
 float sailAngle = 22;
-float maxSailAngle = 55;
-float minSailAngle = 0;
+float maxSailAngle = 30;
+float minSailAngle = 93;
 
 /************** PIN******************************/
 
@@ -49,11 +49,11 @@ float minSailAngle = 0;
 
 
 
-#define MAX_CHRUDDER 1980
-#define MIN_CHRUDDER 990
+#define MAX_CHRUDDER 1950
+#define MIN_CHRUDDER 1080
 
 #define MAX_CHSAIL 1950
-#define MIN_CHSAIL 980
+#define MIN_CHSAIL 1300
 
 unsigned long timerRc;
 
