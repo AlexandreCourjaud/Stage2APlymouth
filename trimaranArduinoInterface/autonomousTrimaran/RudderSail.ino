@@ -43,8 +43,8 @@ void sailCallBack(const std_msgs::Float32& cmd){
     //sailAngle = min(maxSailAngle,sailAngle);
 
     sailAngle = max(0,cmd.data);
-    sailAngle = min(PI/2,cmd.data);
-    sailAngle = map(sailAngle,0,PI/2,minSailAngle,maxSailAngle);
+    sailAngle = min(PI/2,sailAngle);
+    sailAngle = (sailAngle-0)*(maxSailAngle-minSailAngle)/(PI/2 - 0)+minSailAngle;
     
     
     //nh.loginfo("envoie angle sail...");
