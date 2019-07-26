@@ -49,6 +49,7 @@ def parseGPGGA(data):
         longitude = -longitude
     type = float(data[6])
     nbSat = float(data[7])
+    hdop = 0
     if (data[8] != ''):
         hdop = float(data[8])
     altitude = float(data[9].split(',')[0])
