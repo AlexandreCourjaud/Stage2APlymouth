@@ -6,6 +6,7 @@
     <param name="baud" value="115200"/>
   </node>
 
+
 <node pkg="trimaran_ros" type="mode" name="mode" />
 
 
