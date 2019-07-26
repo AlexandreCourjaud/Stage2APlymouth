@@ -15,5 +15,6 @@
 </node>
 
 <node pkg="trimaran_ros" type="mode" name="mode" />
+<node name="record" pkg="rosbag" type="record" args="record -a -o $(find trimaran_ros)/rosbag/checkPointFollow" />
 
 </launch>
