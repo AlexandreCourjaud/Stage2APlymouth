@@ -11,6 +11,7 @@
 <node pkg="trimaran_ros" type="mode" name="mode" />
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>
 <node pkg="trimaran_ros" type="capFollow" name="capFollow"/>
+<node name="record" pkg="rosbag" type="record" args="record -a -o $(find trimaran_ros)/rosbag/Aruco" />
 
 
 </launch>
