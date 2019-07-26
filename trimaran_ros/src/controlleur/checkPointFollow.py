@@ -118,7 +118,7 @@ def control(listPoint,index,timeBuoy):
     if index < len(listPoint[0]) and timeBuoy == 0:
         Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
         m = x[0:2].reshape((2,1))
-        if np.linalg.norm(Bcart-m) < 5:
+        if np.linalg.norm(Bcart-m) < 15:
             if listPoint[2,index] == 0:
                 index = index +1
                 #print(index,len(listPoint[0]))

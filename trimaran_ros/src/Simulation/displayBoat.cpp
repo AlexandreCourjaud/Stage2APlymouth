@@ -17,7 +17,7 @@
 using namespace std;
 using namespace glm;
 
-double xRef[2] = {50.695326,-4236554};
+double xRef[2] = {50.695326,-4.236554};
 
 double wind,awind;
 double cmdRudder, cmdSail;
