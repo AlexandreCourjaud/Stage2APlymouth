@@ -33,7 +33,7 @@ void controlSail(){
   delay(10);
 }
 
-//commande entre 0 et pi/2
+//commande between 0 et pi/2
 void sailCallBack(const std_msgs::Float32& cmd){
   if (watchRc == 0){
   //if rc is off
