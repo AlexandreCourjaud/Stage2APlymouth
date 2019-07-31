@@ -145,24 +145,28 @@ if __name__ == "__main__":
     pub_ref = rospy.Publisher('control_send_ref',Point,queue_size = 10)
 
     mode = rospy.get_param('mode',0)
+    file = rospy.get_param('file',"error.txt")
+
+
+    print file
     print(mode)
     if (mode ==1):
         rospy.Subscriber("simu_send_gps",GPSFix,sub_gps)
         rospy.Subscriber("simu_send_euler_angles",Vector3,sub_euler)
-        rospy.Subscriber("simu_send_wind",Float32,sub_wind)
+        rospy.Subscriber("simu_send_wind_direction",Float32,sub_wind)
         rospy.Subscriber("simu_send_imu",Imu,sub_imu)
 
     else:
         rospy.Subscriber("filter_send_gps",GPSFix,sub_gps)
         rospy.Subscriber("ardu_send_euler_angles",Vector3,sub_euler)
-        rospy.Subscriber("filter_send_wind",Float32,sub_wind)
+        rospy.Subscriber("filter_send_wind_direction",Float32,sub_wind)
         rospy.Subscriber("ardu_send_imu",Imu,sub_imu)
 
 
 
     x = np.array([0.0,0.0,0.0])
     xgps = np.array([0.0,0.0,0.0])
-    listPoint,xRef = lectureCheckpoint("lineLake.txt")
+    listPoint,xRef = lectureCheckpoint(file)
     index = 1
     buoy = 0
     cubeA = Point()

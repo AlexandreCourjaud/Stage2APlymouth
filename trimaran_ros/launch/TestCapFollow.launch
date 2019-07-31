@@ -5,6 +5,10 @@
     <param name="baud" value="115200"/>
   </node>
 
+
+
+<param name="cap" type="float" value="$(arg cap)" />
+
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind">
 </node>
 

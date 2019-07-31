@@ -2,6 +2,7 @@
 
 void setupRudder(){
   nh.subscribe(rudderSub);
+  
 }
 
 
@@ -10,16 +11,13 @@ void controlRudder(){
   delay(10);
 }
 
-// commande entre -pi/4 et pi/4
+// commande between -pi/4 et pi/4
 void rudderCallBack(const std_msgs::Float32& cmd){
   if (watchRc == 0){
-    //si la telecommande n'est pas allumee
+    //if rc is off
     rudderAngle = min(PI/4,cmd.data);
     rudderAngle = max(-PI/4,rudderAngle);
     rudderAngle = minRudderAngle + (maxRudderAngle-minRudderAngle)*(rudderAngle+PI/4)/(PI/2);
-    //rudderAngle = max(minRudderAngle,rudderAngle);
-    //rudderAngle = min(maxRudderAngle,rudderAngle);
-    //nh.loginfo("envoie angle ...");
     }
 }
 /*--------------------------------------------------------------*/
@@ -38,12 +36,7 @@ void controlSail(){
 //commande entre 0 et pi/2
 void sailCallBack(const std_msgs::Float32& cmd){
   if (watchRc == 0){
-  //si la telecommande n'est pas allumee
-    
-    //sailAngle = maxSailAngle*cmd.data/(PI/2);
-    //sailAngle = max(minSailAngle,sailAngle);
-    //sailAngle = min(maxSailAngle,sailAngle);
-
+  //if rc is off
     sailAngle = max(0,cmd.data);
     sailAngle = min(PI/2,sailAngle);
     sailAngle = (sailAngle-0)*(maxSailAngle-minSailAngle)/(PI/2 - 0)+minSailAngle;

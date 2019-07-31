@@ -1,5 +1,4 @@
 
-//regroupe les setup et action des actionneurs 
 
 void setupActuator(){
   pwm.begin();
@@ -19,8 +18,8 @@ void Actuator(){
 /*************************************************************************************/
 
 void setupSensor(){
-  //setupImu();
-  setupImuCmps();
+  setupImu();
+  //setupImuCmps();
   setupRC();
   setupWind();
   //setupGps();
@@ -29,8 +28,8 @@ void setupSensor(){
 
 void updateSensor(){
   //updateGps();
-  //updateImu();
-  updateImuCmps();
+  updateImu();
+  //updateImuCmps();
   updateRC();
   updateWind();
   

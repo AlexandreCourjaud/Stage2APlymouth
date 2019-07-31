@@ -5,6 +5,8 @@ void setupImuCmps(){
   nh.advertise(pubImuCmps);
   nh.advertise(pubEuler);
 
+  
+  // delete the calibration 
   /*
   Serial1.write(0xE0);
   while(Serial1.available()<1);
@@ -22,7 +24,6 @@ void setupImuCmps(){
   /*Serial1.write(0xA1);
   while(Serial1.available()<1);
   Serial1.read();
-  Serial.println("ooook");
 
   */
   

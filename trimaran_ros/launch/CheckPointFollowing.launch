@@ -7,6 +7,9 @@
   </node>
 
 <param name="mode" type="int" value="0" />
+<param name="file" type="string" value="$(arg file)" />
+
+
 <node pkg="trimaran_ros" type="mode" name="mode" />
 <node pkg="trimaran_ros" type="gps.py" name="gps" />
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>

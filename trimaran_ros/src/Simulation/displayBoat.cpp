@@ -17,7 +17,7 @@
 using namespace std;
 using namespace glm;
 
-double xRef[2] = {50.695326,-4.236554};
+double xRef[2] = {0,0};
 
 double wind,awind;
 double cmdRudder, cmdSail;
@@ -33,6 +33,8 @@ double roll =0;
 
 vec2 cubeA = {-10,0};
 vec2 cubeB = {10,0};
+
+double watchRc = 0;
 
 /**********************************************************************/
 void awindCB(const std_msgs::Float32 msgaWind){
@@ -96,6 +98,29 @@ void gpsCB(const gps_common::GPSFix msgGps){
   x[1] = -111.11*1000*(msgGps.longitude-xRef[1])*cos(xRef[0]*M_PI/180);
   x[2] = msgGps.track;
   x[3] = msgGps.speed;
+}
+
+
+void rcCB(const geometry_msgs::Vector3 msgRc){
+  watchRc = msgRc.z;
+  if (watchRc == 1){
+    cmdRudder = msgRc.x;
+    cmdSail = msgRc.y;
+    double theta = yaw;
+    double v = x[3];
+    vec2 w_ap;
+    w_ap[0] = awind*cos(wind-theta)-v;
+    w_ap[1] = awind*sin(wind-theta);
+    double psi_ap = atan2(w_ap[1],w_ap[0]);
+    double a_ap = glm::length(w_ap);
+    double sigma = cos(psi_ap)+cos(cmdSail);
+    if (sigma<0){
+        delta_s = M_PI + psi_ap;
+    }
+    else{
+        delta_s = -sign(sin(psi_ap))*cmdSail;
+    }
+  }
 }
 /***************************************************************************/
 
@@ -256,6 +281,32 @@ void set_marker_B(visualization_msgs::Marker marker, ros::Publisher vis_pub)
     vis_pub.publish( marker );
 }
 
+void set_marker_line(visualization_msgs::Marker marker, ros::Publisher vis_pub){
+  marker.header.frame_id = "line";
+  marker.header.stamp = ros::Time();
+  marker.ns = "line";
+  marker.id = 0;
+  marker.type = visualization_msgs::Marker::LINE_STRIP;
+  marker.action = visualization_msgs::Marker::ADD;
+  geometry_msgs::Point cA;
+  geometry_msgs::Point cB;
+  cA.x = cubeA[0];
+  cA.y = cubeA[1];
+  cA.z = 0;
+  cB.x = cubeB[0];
+  cB.y = cubeB[1];
+  cB.z = 0;
+  marker.points = {cA,cB};
+  marker.scale.x = 0.5;
+  marker.color.a = 1.0; // Don't forget to set the alpha!
+  marker.color.r = 0;
+  marker.color.g = 1;
+  marker.color.b = 0;
+  //only if using a MESH_RESOURCE marker type:
+  //marker.mesh_resource = "package://tp2/meshs/turret.dae";
+  vis_pub.publish( marker );
+}
+
 
 int main(int argc, char **argv)
 {
@@ -327,6 +378,15 @@ int main(int argc, char **argv)
     transformStamped_B.child_frame_id = "B";
     transformStamped_B.header.frame_id = "map";
 
+
+    ros::Publisher vis_pub_line = nh.advertise<visualization_msgs::Marker>("visualization_marker_line", 0 );
+    visualization_msgs::Marker marker_line;
+    tf2_ros::TransformBroadcaster br_line;
+    geometry_msgs::TransformStamped transformStamped_line;
+    transformStamped_line.child_frame_id = "line";
+    transformStamped_line.header.frame_id = "map";
+
+
     ros::Rate loop_rate(25);
     while (ros::ok()){
         ros::spinOnce();
@@ -387,6 +447,16 @@ int main(int argc, char **argv)
         transformStamped_B.transform.translation.z = 0;
         tf::quaternionTFToMsg(q, transformStamped_B.transform.rotation);
         br_B.sendTransform(transformStamped_B);
+
+
+        transformStamped_line.header.stamp = ros::Time::now();
+        transformStamped_line.transform.translation.x = 0;
+        transformStamped_line.transform.translation.y = 0;
+        transformStamped_line.transform.translation.z = 0;
+        tf::quaternionTFToMsg(q, transformStamped_line.transform.rotation);
+        br_line.sendTransform(transformStamped_line);
+        set_marker_line(marker_line,vis_pub_line);
+
 
         loop_rate.sleep();
     }

@@ -14,6 +14,8 @@ void setupWind(){
 
 void updateWind(){
   sensorValue = analogRead(A1);
+
+  // conversion wind trigo [-pi,pi], 0 is the North 
   angleWind = ((sensorValue-ref-MIN_WIND)/(MAX_WIND-MIN_WIND))*2*PI;
   angleWind = -2*atan(tan(angleWind/2));
   
@@ -32,6 +34,7 @@ void publishWindSpeed(){
   pubWindSpeed.publish(&windSpeedMsg);
 }
 
+/*
 void anemoInterrupt(){
   if (validWind == 1){
     counterAnemo++;
@@ -39,7 +42,7 @@ void anemoInterrupt(){
     if (counterAnemo > 9) {
       counterAnemo = 0;
       t1 = millis();
-      windSpeed =  10*(2.25/(t1-t0)) * 1608.34/3600; 
+      windSpeed =  10*(2.25*1000/(t1-t0)) * 1608.34/3600; 
       //https://www.meteo-shopping.fr/Station-meteo/Anemometre-girouette-Vantage-Pro-6410-Davis-Instruments
       //Serial.print(" vitesse m/s : ");
       //Serial.println(windSpeed);
@@ -50,5 +53,19 @@ void anemoInterrupt(){
   else{
     validWind =1;
     t0= millis();
+  }
+}
+*/
+
+void anemoInterrupt(){
+  if (validWind == 1){
+    t1 = millis();
+    windSpeed =  2*3.14*(1000/(t1-t0))*0.055*3; 
+    t0 = t1;
+    publishWindSpeed();
+  }
+  else{
+    validWind = 1;
+    t0 = millis();
   }
 }

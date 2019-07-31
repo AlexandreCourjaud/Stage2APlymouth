@@ -1,6 +1,7 @@
 
 #include <Adafruit_PWMServoDriver.h>
 #include <std_msgs/Float32.h>
+#include <geometry_msgs/Vector3.h>
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -65,5 +66,7 @@ float chRudder;
 float chSail;
 
 unsigned long duration = 10000;
+geometry_msgs::Vector3 rcMsg;
+ros::Publisher pubRc("ardu_send_RC",&rcMsg);
 
 #endif

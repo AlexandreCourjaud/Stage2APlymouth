@@ -86,6 +86,7 @@ int main(int argc, char **argv)
 
   int mode;
   nh.param<int>("mode", mode,0);
+  nh.param<float>("cap",capCible,0);
   ROS_INFO("mode : %d", mode);
 
   string topicWind;

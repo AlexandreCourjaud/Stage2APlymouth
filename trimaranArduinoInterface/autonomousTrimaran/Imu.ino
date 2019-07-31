@@ -19,8 +19,7 @@ void publishImu(){
   long temps = millis();
   imuMsgs.header.stamp.sec = temps/1000;
   imuMsgs.header.stamp.nsec = temps;
-  magMsgs.header.stamp.sec = temps/1000;
-  magMsgs.header.stamp.nsec = temps;
+  
   imuMsgs.linear_acceleration.x = Axyz[0];
   imuMsgs.linear_acceleration.y = Axyz[1];
   imuMsgs.linear_acceleration.z = Axyz[2];
@@ -28,7 +27,9 @@ void publishImu(){
   imuMsgs.angular_velocity.x = Gxyz[0];
   imuMsgs.angular_velocity.y = Gxyz[1];
   imuMsgs.angular_velocity.z = Gxyz[2];
-  
+
+  magMsgs.header.stamp.sec = temps/1000;
+  magMsgs.header.stamp.nsec = temps;
   magMsgs.magnetic_field.x = Mxyz[0];
   magMsgs.magnetic_field.y = Mxyz[1];
   magMsgs.magnetic_field.z = Mxyz[2];

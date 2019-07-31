@@ -4,9 +4,14 @@
 
 ros::NodeHandle nh;
 
+// Include the right configuration for the motor and rc 
+
 #include "ConfigMonohull.h"
 //#include "ConfigCatamaran.h"
 //#include "ConfigTrimaran.h"
+
+// configuration for the sensors
+
 #include "ConfigIMU.h"
 #include "ConfigImuCmps12.h"
 #include "ConfigGps.h"
@@ -16,6 +21,7 @@ ros::NodeHandle nh;
 bool watchRc = 0;
 bool gp = 0;
 
+// init the ros node, actuator and sensor
 void setup()
 {
   nh.getHardware()->setBaud(115200);
@@ -30,8 +36,7 @@ void setup()
   
 }
 
-
-// la loop declenche verifie les publisher, lit les capteurs et actionne les servo
+// lood update sensor and publish it, then update actuator according to publisher
 void loop()
 {
   nh.spinOnce();
@@ -40,5 +45,5 @@ void loop()
   Actuator();
   updateSensor();
   
-  delay(1);
+  //delay(1);
 }

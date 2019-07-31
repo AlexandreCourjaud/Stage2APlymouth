@@ -2,11 +2,15 @@
 void setupRC(){
   pinMode(chPinRudder, INPUT);
   pinMode(chPinSail,INPUT);
+  nh.advertise(pubRc);
   timerRc = 0;
 }
 
 void updateRC(){
+ // check if rc is On
  chRudder = pulseIn (chPinRudder,HIGH,duration);
+
+ 
  //Serial.println(ch1);
  if (chRudder !=0){
    chRudder = pulseIn (chPinRudder,HIGH);
@@ -40,6 +44,12 @@ void updateRC(){
   }
    
  }
+ rcMsg.x = rudderAngle;
+ rcMsg.y = sailAngle;
+ rcMsg.z = watchRc;
+ pubRc.publish(&rcMsg);
+
+ // if rc off for 1 second : switch in autonomous mode 
  if (millis()-timerRc > 1000){
     watchRc = 0;
  }
