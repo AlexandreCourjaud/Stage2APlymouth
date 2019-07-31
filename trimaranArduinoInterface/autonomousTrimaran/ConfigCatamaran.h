@@ -57,7 +57,7 @@ float minSailAngle = 93;
 
 unsigned long timerRc;
 
-/* pin */ 
+/* pin rudder, sail*/ 
 const int chPinRudder = 4; // channel 1 sur le pin 4
 const int chPinSail = 5; // channel 3 sur le pin 5
 
