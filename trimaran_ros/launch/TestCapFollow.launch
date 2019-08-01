@@ -7,7 +7,7 @@
 
 
 
-<param name="cap" type="float" value="$(arg cap)" />
+<param name="cap" type="double" value="$(arg cap)" />
 
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>
 <node pkg="WRSC_plymouth_JEGAT" type="imu_9dof.py" name="imu_9dof"/>
