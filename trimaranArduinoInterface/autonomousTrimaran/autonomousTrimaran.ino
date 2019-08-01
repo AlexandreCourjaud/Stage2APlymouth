@@ -24,9 +24,9 @@ bool gp = 0;
 // init the ros node, actuator and sensor
 void setup()
 {
-  nh.getHardware()->setBaud(500000);
+  nh.getHardware()->setBaud(30000);
   nh.initNode();
-  Serial.begin(500000);
+  Serial.begin(300000);
   Wire.begin();
   //Serial.println("Initializing I2C devices...");
   setupActuator();
