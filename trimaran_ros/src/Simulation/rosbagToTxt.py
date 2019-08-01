@@ -64,7 +64,8 @@ if __name__ == "__main__":
 
 
     rospy.Subscriber("filter_send_gps",GPSFix,sub_gps)
-    rospy.Subscriber("ardu_send_euler_angles",Vector3,sub_euler)
+    #rospy.Subscriber("ardu_send_euler_angles",Vector3,sub_euler)
+    rospy.Subscriber("filter_send_euler_angles",Vector3,sub_euler)
     rospy.Subscriber("ardu_send_wind_direction",Float32,sub_wind)
     rospy.Subscriber("mode_send_u_rudder",Float32,sub_rudder)
     rospy.Subscriber("mode_send_u_sail",Float32,sub_sail)

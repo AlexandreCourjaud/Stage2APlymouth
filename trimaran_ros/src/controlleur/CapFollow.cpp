@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
   if (mode == 0){
     topicWind = "filter_send_wind_direction";
-    topicEuler = "ardu_send_euler_angles";
+    topicEuler = "filter_send_euler_angles";
     topicImu = "ardu_send_imu";
     topicGps = "filter_send_gps";
   }

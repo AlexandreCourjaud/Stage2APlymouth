@@ -12,7 +12,10 @@
 
 <node pkg="trimaran_ros" type="mode" name="mode" />
 <node pkg="trimaran_ros" type="gps.py" name="gps" />
+
 <node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>
+<node pkg="WRSC_plymouth_JEGAT" type="imu_9dof.py" name="imu_9dof"/>
+
 <node pkg="trimaran_ros" type="lineFollow" name="lineFollow"/>
 <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow" />
 <node name="record" pkg="rosbag" type="record" args="record -a -o $(find trimaran_ros)/rosbag/checkPointFollow" />

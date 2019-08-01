@@ -317,7 +317,8 @@ int main(int argc, char **argv)
     ros::Subscriber sub_rudder = nh.subscribe("control_send_u_rudder",0,rudderCB);
     ros::Subscriber sub_wind = nh.subscribe("filter_send_wind_direction",0,windCB);
     ros::Subscriber sub_ref = nh.subscribe("control_send_ref",0,refCB);
-    ros::Subscriber sub_euler = nh.subscribe("ardu_send_euler_angles",0,eulerCB);
+    ros::Subscriber sub_euler = nh.subscribe("filter_send_euler_angles",0,eulerCB);
+    //ros::Subscriber sub_euler = nh.subscribe("ardu_send_euler_angles",0,eulerCB);
     ros::Subscriber sub_gps = nh.subscribe("filter_send_gps",0,gpsCB);
     ros::Subscriber sub_awind = nh.subscribe("ardu_send_wind_speed",0,awindCB);
 
