@@ -8,7 +8,7 @@ void setupRudder(){
 
 void controlRudder(){
   pwm.setPWM(RUDDER_PIN,0,pulseWidth(rudderAngle));
-  delay(10);
+  //delay(10);
 }
 
 // commande between -pi/4 et pi/4
@@ -30,7 +30,7 @@ void setupSail(){
 
 void controlSail(){
   pwm.setPWM(SAIL_PIN,0,pulseWidth(sailAngle));
-  delay(10);
+  //delay(10);
 }
 
 //commande between 0 et pi/2
