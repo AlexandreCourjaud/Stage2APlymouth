@@ -65,7 +65,7 @@ const int chPinSail = 5; // channel 3 sur le pin 5
 float chRudder;
 float chSail;
 
-unsigned long duration = 10000;
+unsigned long duration = 3000;
 
 
 
