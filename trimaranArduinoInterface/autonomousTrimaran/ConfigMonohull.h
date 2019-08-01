@@ -65,7 +65,7 @@ const int chPinSail = 5; // channel 2 sur le pin 5
 float chRudder;
 float chSail;
 
-unsigned long duration = 10000;
+unsigned long duration = 30000;
 geometry_msgs::Vector3 rcMsg;
 ros::Publisher pubRc("ardu_send_RC",&rcMsg);
 
