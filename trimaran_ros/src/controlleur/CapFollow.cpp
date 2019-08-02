@@ -128,7 +128,6 @@ int main(int argc, char **argv)
       //ROS_INFO("rudder : %f , Sail : %f",u[0],u[1]);
       pub_Rudder.publish(cmdrudder);
       pub_Sail.publish(cmdsail);
-
       loop_rate.sleep();
   }
     //sleep(1);

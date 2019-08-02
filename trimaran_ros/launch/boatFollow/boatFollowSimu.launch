@@ -1,0 +1,26 @@
+<launch>
+
+<node type="rviz" name="rviz" pkg="rviz" />
+
+<group ns="boat1">
+    <param name="numberId" type="string" value="1" />
+    <param name="cap" type="double" value="0" />
+    <param name="mode" type="int" value="1" />
+    <node pkg="trimaran_ros" type="boatFollow" name="boatFollow"/>
+    <node pkg="trimaran_ros" type="lineFollow" name="lineFollow"/>
+    <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
+    <node pkg="trimaran_ros" type="displayBoat" name="displayBoat"/>
+</group>
+
+<group ns="boat2">
+    <param name="numberId" type="string" value="2" />
+    <param name="cap" type="double" value="1.57" />
+    <param name="mode" type="int" value="1" />
+    <node pkg="trimaran_ros" type="lineFollow" name="lineFollow" />
+    <param name="file" type="string" value="TestCorentin.txt" />
+    <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow"/>
+    <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
+    <node pkg="trimaran_ros" type="displayBoat" name="displayBoat"/>
+</group>
+
+</launch>

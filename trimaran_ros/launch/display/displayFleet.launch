@@ -1,0 +1,42 @@
+<launch>
+
+<node type="rviz" name="rviz" pkg="rviz" />
+
+<node name="operator" pkg="plymouth_internship_2019" type="operator" output='screen'/>
+<node name="fleetCoordinator" pkg="plymouth_internship_2019" type="fleetCoordinator" output='screen'/>
+
+<remap from="xbee_send_wind_direction_1" to="boat1/xbee_send_wind_direction_1"  />
+<remap from="xbee_send_gps_1" to="boat1/xbee_send_gps_1"  />
+<remap from="xbee_send_euler_1" to="boat1/xbee_send_euler_1"  />
+<remap from="xbee_send_line_begin_1" to="boat1/xbee_send_line_begin_1"  />
+<remap from="xbee_send_line_end_1" to="boat1/xbee_send_wind_line_end_1"  />
+
+<remap from="xbee_send_wind_direction_2" to="boat2/xbee_send_wind_direction_1"  />
+<remap from="xbee_send_gps_2" to="boat2/xbee_send_gps_1"  />
+<remap from="xbee_send_euler_2" to="boat2/xbee_send_euler_1"  />
+<remap from="xbee_send_line_begin_2" to="boat2/xbee_send_line_begin_1"  />
+<remap from="xbee_send_line_end_2" to="boat2/xbee_send_wind_line_end_1"  />
+
+<remap from="xbee_send_wind_direction_3" to="boat3/xbee_send_wind_direction_1"  />
+<remap from="xbee_send_gps_3" to="boat3/xbee_send_gps_1"  />
+<remap from="xbee_send_euler_3" to="boat3/xbee_send_euler_1"  />
+<remap from="xbee_send_line_begin_3" to="boat3/xbee_send_line_begin_1"  />
+<remap from="xbee_send_line_end_3" to="boat3/xbee_send_wind_line_end_1"  />
+
+<group ns="boat1">
+    <node pkg="rostopic" type="rostopic" name="gps_origin" args="pub /launch_send_gps_origin geometry_msgs/Vector3 -- 50.375471 -4.138836 0" output="screen"/>
+    <node pkg="trimaran_ros" type="displayBoat" name="displayBoat" />
+</group>
+
+<group ns="boat2">
+<   node pkg="rostopic" type="rostopic" name="gps_origin" args="pub /launch_send_gps_origin geometry_msgs/Vector3 -- 50.375471 -4.138836 0" output="screen"/>
+    <node pkg="trimaran_ros" type="displayBoat" name="displayBoat" />
+</group>
+
+
+<group ns="boat3">
+    <node pkg="rostopic" type="rostopic" name="gps_origin" args="pub /launch_send_gps_origin geometry_msgs/Vector3 -- 50.375471 -4.138836 0" output="screen"/>
+    <node pkg="trimaran_ros" type="displayBoat" name="displayBoat" />
+</group>
+
+</launch>

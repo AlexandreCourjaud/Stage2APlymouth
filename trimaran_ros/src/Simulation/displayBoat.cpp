@@ -36,6 +36,9 @@ vec2 cubeB = {10,0};
 
 double watchRc = 0;
 
+string numberId;
+string boatId, rudderId, sailId, windId, aId, bId, lineId;
+
 /**********************************************************************/
 void awindCB(const std_msgs::Float32 msgaWind){
   awind = msgaWind.data;
@@ -72,14 +75,12 @@ void cubeACB(const geometry_msgs::Point msgA){
 
     cubeA[0] = 111.11*1000*(msgA.x-xRef[0]);
     cubeA[1] = -111.11*1000*(msgA.y-xRef[1])*cos(xRef[0]*M_PI/180);
-    ROS_INFO("A : %f, %f",cubeA[0],cubeA[1]);
 }
 
 void cubeBCB(const geometry_msgs::Point msgB){
 
     cubeB[0] = 111.11*1000*(msgB.x-xRef[0]);
     cubeB[1] = -111.11*1000*(msgB.y-xRef[1])*cos(xRef[0]*M_PI/180);
-    ROS_INFO("B : %f, %f",cubeB[0],cubeB[1]);
 }
 
 void refCB(const geometry_msgs::Point msgRef){
@@ -125,9 +126,9 @@ void rcCB(const geometry_msgs::Vector3 msgRc){
 /***************************************************************************/
 
 void set_marker_boat(ros::Publisher vis_pub, visualization_msgs::Marker marker){
-       marker.header.frame_id = "bateau1";
+       marker.header.frame_id = boatId;
        marker.header.stamp = ros::Time();
-       marker.ns = "simuBoat";
+       marker.ns = boatId;
        marker.id = 0;
        marker.type = visualization_msgs::Marker::MESH_RESOURCE;
        marker.action = visualization_msgs::Marker::ADD;
@@ -152,9 +153,9 @@ void set_marker_boat(ros::Publisher vis_pub, visualization_msgs::Marker marker){
 
 void set_marker_rudder(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 {
-    marker.header.frame_id = "rudder";
+    marker.header.frame_id = rudderId;
     marker.header.stamp = ros::Time();
-    marker.ns = "rudder";
+    marker.ns = rudderId;
     marker.id = 0;
     marker.type = visualization_msgs::Marker::MESH_RESOURCE;
     marker.action = visualization_msgs::Marker::ADD;
@@ -179,9 +180,9 @@ void set_marker_rudder(visualization_msgs::Marker marker, ros::Publisher vis_pub
 
 void set_marker_sail(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 {
-    marker.header.frame_id = "sail";
+    marker.header.frame_id = sailId;
     marker.header.stamp = ros::Time();
-    marker.ns = "sail";
+    marker.ns = sailId;
     marker.id = 0;
     marker.type = visualization_msgs::Marker::MESH_RESOURCE;
     marker.action = visualization_msgs::Marker::ADD;
@@ -205,9 +206,9 @@ void set_marker_sail(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 
 void set_marker_wind(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 {
-    marker.header.frame_id = "wind";
+    marker.header.frame_id = windId;
     marker.header.stamp = ros::Time();
-    marker.ns = "wind";
+    marker.ns = windId;
     marker.id = 0;
     marker.type = visualization_msgs::Marker::ARROW;
     marker.action = visualization_msgs::Marker::ADD;
@@ -231,9 +232,9 @@ void set_marker_wind(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 
 void set_marker_A(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 {
-    marker.header.frame_id = "A";
+    marker.header.frame_id = aId;
     marker.header.stamp = ros::Time();
-    marker.ns = "A";
+    marker.ns = aId;
     marker.id = 0;
     marker.type = visualization_msgs::Marker::CUBE;
     marker.action = visualization_msgs::Marker::ADD;
@@ -257,9 +258,9 @@ void set_marker_A(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 
 void set_marker_B(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 {
-    marker.header.frame_id = "B";
+    marker.header.frame_id = bId;
     marker.header.stamp = ros::Time();
-    marker.ns = "B";
+    marker.ns = bId;
     marker.id = 0;
     marker.type = visualization_msgs::Marker::CUBE;
     marker.action = visualization_msgs::Marker::ADD;
@@ -282,9 +283,9 @@ void set_marker_B(visualization_msgs::Marker marker, ros::Publisher vis_pub)
 }
 
 void set_marker_line(visualization_msgs::Marker marker, ros::Publisher vis_pub){
-  marker.header.frame_id = "line";
+  marker.header.frame_id = lineId;
   marker.header.stamp = ros::Time();
-  marker.ns = "line";
+  marker.ns = lineId;
   marker.id = 0;
   marker.type = visualization_msgs::Marker::LINE_STRIP;
   marker.action = visualization_msgs::Marker::ADD;
@@ -308,10 +309,25 @@ void set_marker_line(visualization_msgs::Marker marker, ros::Publisher vis_pub){
 }
 
 
+void initname(){
+  boatId = "boat"+numberId;
+  rudderId = "rudder"+numberId;
+  sailId = "sail"+numberId;
+  windId = "wind"+numberId;
+  aId = "A"+numberId;
+  bId = "B"+numberId;
+  lineId = "line"+numberId;
+}
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "simuBoat");
     ros::NodeHandle nh;
+
+    nh.param<string>("numberId",numberId,"1");
+    initname();
+
+    cout << numberId << endl;
 
     ros::Subscriber sub_sail = nh.subscribe("control_send_u_sail",0,sailCB);
     ros::Subscriber sub_rudder = nh.subscribe("control_send_u_rudder",0,rudderCB);
@@ -332,14 +348,17 @@ int main(int argc, char **argv)
     ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
 
     ros::Subscriber sub_gps_xBee = nh.subscribe("xbee_send_gps_1",0,gpsCB);
-    ros::Subscriber sub_euler_xbee = nh.subscribe("xbee_send_euler_angles_1",0,eulerCB);
+    ros::Subscriber sub_wind_xBee = nh.subscribe("xbee_send_wind_direction_1",0,windCB);
+    ros::Subscriber sub_euler_xbee = nh.subscribe("xbee_send_euler_1",0,eulerCB);
+    ros::Subscriber sub_A_xbee = nh.subscribe("xbee_send_line_begin_1",0,cubeACB);
+    ros::Subscriber sub_B_xbee = nh.subscribe("xbee_send_line_end_1",0,cubeBCB);
 
 
     ros::Publisher vis_pub = nh.advertise<visualization_msgs::Marker>("visualization_marker", 0 );
     visualization_msgs::Marker marker;
     tf2_ros::TransformBroadcaster br;
     geometry_msgs::TransformStamped transformStamped;
-    transformStamped.child_frame_id = "bateau1";
+    transformStamped.child_frame_id = boatId;
     transformStamped.header.frame_id = "map";
 
 
@@ -347,21 +366,21 @@ int main(int argc, char **argv)
     tf2_ros::TransformBroadcaster br_rudder;
     geometry_msgs::TransformStamped transformStamped_rudder;
     visualization_msgs::Marker marker_rudder;
-    transformStamped_rudder.child_frame_id = "rudder";
-    transformStamped_rudder.header.frame_id = "bateau1";
+    transformStamped_rudder.child_frame_id = rudderId;
+    transformStamped_rudder.header.frame_id = boatId;
 
     ros::Publisher vis_pub_sail = nh.advertise<visualization_msgs::Marker>("visualization_marker_sail", 0 );
     tf2_ros::TransformBroadcaster br_sail;
     geometry_msgs::TransformStamped transformStamped_sail;
     visualization_msgs::Marker marker_sail;
-    transformStamped_sail.child_frame_id = "sail";
-    transformStamped_sail.header.frame_id = "bateau1";
+    transformStamped_sail.child_frame_id = sailId;
+    transformStamped_sail.header.frame_id = boatId;
 
     ros::Publisher vis_pub_wind = nh.advertise<visualization_msgs::Marker>("visualization_marker_wind", 0 );
     tf2_ros::TransformBroadcaster br_wind;
     geometry_msgs::TransformStamped transformStamped_wind;
     visualization_msgs::Marker marker_wind;
-    transformStamped_wind.child_frame_id = "wind";
+    transformStamped_wind.child_frame_id = windId;
     transformStamped_wind.header.frame_id = "map";
 
 
@@ -369,14 +388,14 @@ int main(int argc, char **argv)
     tf2_ros::TransformBroadcaster br_A;
     geometry_msgs::TransformStamped transformStamped_A;
     visualization_msgs::Marker marker_A;
-    transformStamped_A.child_frame_id = "A";
+    transformStamped_A.child_frame_id = aId;
     transformStamped_A.header.frame_id = "map";
 
     ros::Publisher vis_pub_B = nh.advertise<visualization_msgs::Marker>("visualization_marker_B", 0 );
     tf2_ros::TransformBroadcaster br_B;
     geometry_msgs::TransformStamped transformStamped_B;
     visualization_msgs::Marker marker_B;
-    transformStamped_B.child_frame_id = "B";
+    transformStamped_B.child_frame_id = bId;
     transformStamped_B.header.frame_id = "map";
 
 
@@ -384,7 +403,7 @@ int main(int argc, char **argv)
     visualization_msgs::Marker marker_line;
     tf2_ros::TransformBroadcaster br_line;
     geometry_msgs::TransformStamped transformStamped_line;
-    transformStamped_line.child_frame_id = "line";
+    transformStamped_line.child_frame_id = lineId;
     transformStamped_line.header.frame_id = "map";
 
 

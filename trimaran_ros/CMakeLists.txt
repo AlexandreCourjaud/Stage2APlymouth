@@ -146,6 +146,7 @@ add_executable(simuBoat src/Simulation/simuBoat.cpp)
 add_executable(VirtualBuoy src/controlleur/VirtualBuoy.cpp)
 add_executable(mode src/controlleur/mode.cpp)
 add_executable(displayBoat src/Simulation/displayBoat.cpp)
+add_executable(boatFollow src/controlleur/boatFollow.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -165,6 +166,8 @@ target_link_libraries(simuBoat ${catkin_LIBRARIES})
 target_link_libraries(VirtualBuoy ${catkin_LIBRARIES})
 target_link_libraries(mode ${catkin_LIBRARIES})
 target_link_libraries(displayBoat ${catkin_LIBRARIES})
+target_link_libraries(boatFollow ${catkin_LIBRARIES})
+
 
 
 #############

@@ -14,7 +14,8 @@ import time
 import os
 
 xRef = [0,0]
-
+ModeBuoy = 0
+direction = 0
 
 def sub_gps(msg):
     global x,xgps
@@ -108,8 +109,21 @@ def setPoint(listPoint,index):
     return A,B
 
 def setPointBuoy(listPoint,index):
-    A = xgps[0:2].reshape((2,1))
-    B = listPoint[:2,index]
+    global direction
+    if ModeBuoy == 0:
+        A = xgps[0:2].reshape((2,1))
+        B = listPoint[:2,index]
+
+    elif ModeBuoy == 1:
+        r = 15
+        A = np.array([  [  listPoint[0,index]+r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
+        B = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
+        if direction == 1:
+            A,B = B,A
+        m = x[0:2].reshape((2,1))
+        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        if np.linalg.norm(Bcart-m) < 5:
+            direction = (direction+1)%2
     return A,B
 
 
@@ -145,6 +159,7 @@ if __name__ == "__main__":
     pub_ref = rospy.Publisher('control_send_ref',Point,queue_size = 10)
 
     mode = rospy.get_param('mode',0)
+    ModeBuoy = rospy.get_param('modeBuoy',0)
     file = rospy.get_param('file',"error.txt")
 
 
@@ -161,7 +176,6 @@ if __name__ == "__main__":
         rospy.Subscriber("filter_send_euler_angles",Vector3,sub_euler)
         rospy.Subscriber("filter_send_wind_direction",Float32,sub_wind)
         rospy.Subscriber("ardu_send_imu",Imu,sub_imu)
-
 
 
     x = np.array([0.0,0.0,0.0])
