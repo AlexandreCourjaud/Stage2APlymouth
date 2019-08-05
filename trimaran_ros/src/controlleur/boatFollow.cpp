@@ -16,6 +16,7 @@ double x[3] = {0,0,0};
 double xRef[2] = {50.695251,-4.236975};
 
 double xCible[3] = {0,0,0};
+double yawCible = 0;
 
 double a[2] = {0,0};
 double b[2] = {0,0};
@@ -32,14 +33,18 @@ void cibleCB(const gps_common::GPSFix msgGps)
 {
     xCible[0] = msgGps.latitude;
     xCible[1] = msgGps.longitude;
-    xCible[2] = msgGps.track;
+    xCible[3] = msgGps.track;
+}
+
+void eulerCibleCB(const geometry_msgs::Vector3 msgEuler){
+  yawCible = msgEuler.x;
 }
 
 void Control(){
   a[0]= x[0];
   a[1]= x[1];
-  b[0]= xCible[0];
-  b[1]= xCible[1];
+  b[0]= xCible[0] - 10*cos(yawCible)/(111.11*1000);
+  b[1]= xCible[1] + 10*sin(yawCible)/(111.11*1000*cos(xRef[0]*M_PI/180));
 
 }
 
@@ -65,21 +70,26 @@ int main(int argc, char **argv)
 
   ROS_INFO("mode : %d", mode);
   string topicCible;
+  string topicEulerCible;
+
   string topicGps;
 
 
   if (mode == 0){
     topicGps = "filter_send_gps";
     topicCible = "xbee_send_gps_"+target;
+    topicEulerCible = "xbee_send_euler"+target;
 
   }
   else{
     topicGps = "simu_send_gps";
     topicCible = "/boat2/simu_send_gps";
+    topicEulerCible = "/boat2/simu_send_euler_angles";
   }
 
   ros::Subscriber sub_gps  = nh.subscribe(topicGps,0,gpsCB);
   ros::Subscriber sub_Cible = nh.subscribe(topicCible,0,cibleCB);
+  ros::Subscriber sub_euler_Cible = nh.subscribe(topicEulerCible,0,eulerCibleCB);
 
   ros::Rate loop_rate(25);
   while (ros::ok()){

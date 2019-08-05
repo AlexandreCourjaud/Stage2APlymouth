@@ -1,6 +1,6 @@
 <launch>
     <param name="mode" type="int" value="1" />
-    <param name="modeBuoy" type="int" value="1" />
+    <param name="modeBuoy" type="int" value="2" />
 
     <node type="rviz" name="rviz" pkg="rviz" />
     <param name="file" type="string" value="$(arg file)" />

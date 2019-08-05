@@ -6,6 +6,11 @@
     <param name="numberId" type="string" value="1" />
     <param name="cap" type="double" value="0" />
     <param name="mode" type="int" value="1" />
+
+    <param name="posx" type="double" value="-15" />
+    <param name="posy" type="double" value="0" />
+    <param name="theta" type="double" value="-1.57" />
+
     <node pkg="trimaran_ros" type="boatFollow" name="boatFollow"/>
     <node pkg="trimaran_ros" type="lineFollow" name="lineFollow"/>
     <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
@@ -16,6 +21,11 @@
     <param name="numberId" type="string" value="2" />
     <param name="cap" type="double" value="1.57" />
     <param name="mode" type="int" value="1" />
+
+    <param name="posx" type="double" value="0" />
+    <param name="posy" type="double" value="0" />
+    <param name="theta" type="double" value="-1.57" />
+
     <node pkg="trimaran_ros" type="lineFollow" name="lineFollow" />
     <param name="file" type="string" value="TestCorentin.txt" />
     <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow"/>

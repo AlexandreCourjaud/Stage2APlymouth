@@ -157,13 +157,14 @@ int main(int argc, char **argv)
     geometry_msgs::Vector3 msgEuler;
 
 
+
     t0 = ros::Time::now().toSec();
-    x[0] = 0;
-    x[1] = 0;
-    x[2] = -M_PI/4;
+    nh.param<double>("posx", x[0],0);
+    nh.param<double>("posy", x[1],0);
+    nh.param<double>("theta", x[2],0);
     x[3] = 0;
     x[4] = 0;
-    wind = 0.1;
+    wind = -M_PI/2;
     awind = 2;
     cmdRudder = 0;
     cmdSail = 0;

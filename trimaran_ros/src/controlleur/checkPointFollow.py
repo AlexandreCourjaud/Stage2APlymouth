@@ -118,12 +118,27 @@ def setPointBuoy(listPoint,index):
         r = 15
         A = np.array([  [  listPoint[0,index]+r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
         B = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
+
         if direction == 1:
             A,B = B,A
         m = x[0:2].reshape((2,1))
         Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
         if np.linalg.norm(Bcart-m) < 5:
             direction = (direction+1)%2
+
+    elif ModeBuoy == 2:
+        r = 15
+        point = np.array([  [  listPoint[0,index]+r*np.sin(wind+np.pi/2)/(111.11*1000),listPoint[0,index]-r*np.sin(wind)/(111.11*1000), listPoint[0,index]+r*np.sin(wind)/(111.11*1000)] ,
+                            [  listPoint[1,index]+r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ) ,listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ), listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ) ]  ])
+
+        point[0] = point[0]-0.5*r*np.sin(wind+np.pi/2)/(111.11*1000)
+        point[1] = point[1]-0.5*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )
+        A = point[:,direction].reshape((2,1))
+        B = point[:,(direction+1)%3].reshape((2,1))
+        m = x[0:2].reshape((2,1))
+        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        if np.linalg.norm(Bcart-m) < 5:
+            direction = (direction+1)%3
     return A,B
 
 
