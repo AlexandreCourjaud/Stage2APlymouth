@@ -11,6 +11,7 @@
 #include <tf2_ros/transform_broadcaster.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/Point.h>
+#include <math.h>
 #include <gps_common/GPSFix.h>
 
 
@@ -35,6 +36,8 @@ double t0;
 vec2 cubeA = {-10,0};
 vec2 cubeB = {10,0};
 
+double buoy[2] = {50.691,-4.235};
+
 
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
@@ -42,6 +45,8 @@ void windCB(const std_msgs::Float32 msgWind){
 
 void rudderCB(const std_msgs::Float32 msgRudder){
     cmdRudder = msgRudder.data;
+    cmdRudder = std::max(cmdRudder,-M_PI/4);
+    cmdRudder = std::min(cmdRudder,M_PI/4);
 }
 
 void sailCB(const std_msgs::Float32 msgSail){
@@ -133,6 +138,19 @@ void set_awind(ros::Publisher pub_awind, std_msgs::Float32 msgaWind){
     pub_awind.publish(msgaWind);
 }
 
+void set_buoy(ros::Publisher pub_buoy, geometry_msgs::Vector3 msgBuoy){
+  double dx = 111.11*1000*(buoy[0]-x[0]);
+  double dy = -111.11*1000*(buoy[1]-x[1])*cos(x[0]*M_PI/180);
+  double distance = sqrt(dx*dx+dy*dy);
+  double angle  = acos(dx/(distance*1));
+  if (dy < 0){
+    angle = -angle;
+  }
+  msgBuoy.x = distance;
+  msgBuoy.y = angle-x[2];
+  pub_buoy.publish(msgBuoy);
+}
+
 
 
 int main(int argc, char **argv)
@@ -157,17 +175,23 @@ int main(int argc, char **argv)
     geometry_msgs::Vector3 msgEuler;
 
 
+    ros::Publisher pub_buoy = nh.advertise<geometry_msgs::Vector3>("simu_send_buoy",0);
+    geometry_msgs::Vector3 msgBuoy;
+
 
     t0 = ros::Time::now().toSec();
     nh.param<double>("posx", x[0],0);
     nh.param<double>("posy", x[1],0);
     nh.param<double>("theta", x[2],0);
-    x[3] = 0;
+    x[3] = 1;
     x[4] = 0;
-    wind = -M_PI/2;
+    wind = 0;
     awind = 2;
     cmdRudder = 0;
     cmdSail = 0;
+
+
+
     ros::Rate loop_rate(25);
     while (ros::ok()){
         ros::spinOnce();
@@ -178,6 +202,7 @@ int main(int argc, char **argv)
         set_Euler(pub_Euler,msgEuler,x);
         set_wind(pub_wind,msgWind);
         set_awind(pub_awind,msgaWind);
+        set_buoy(pub_buoy,msgBuoy);
 
         loop_rate.sleep();
     }

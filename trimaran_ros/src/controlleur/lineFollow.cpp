@@ -22,6 +22,7 @@ double yaw,pitch,roll;
 double ax,ay,az;
 double gx,gy,gz;
 double timeImu;
+double q = 1;
 
 vec2 a = {-10,0};
 vec2 b = {10,0};
@@ -37,7 +38,6 @@ void cubeACB(const geometry_msgs::Point msgA){
 
     a[0] = 111.11*1000*(msgA.x-xRef[0]);
     a[1] = -111.11*1000*(msgA.y-xRef[1])*cos(xRef[0]*M_PI/180);
-    ROS_INFO("A : %f, %f",a[0],a[1]);
 
 }
 
@@ -45,13 +45,11 @@ void cubeBCB(const geometry_msgs::Point msgB){
 
     b[0] = 111.11*1000*(msgB.x-xRef[0]);
     b[1] = -111.11*1000*(msgB.y-xRef[1])*cos(xRef[0]*M_PI/180);
-    ROS_INFO("B : %f, %f",b[0],b[1]);
 
 }
 
 void windCB(const std_msgs::Float32 msgWind){
     wind = msgWind.data;
-    ROS_INFO("wind : %f",wind);
 }
 
 void magCB(const geometry_msgs::Vector3 msgMag)
@@ -59,7 +57,6 @@ void magCB(const geometry_msgs::Vector3 msgMag)
     yaw = msgMag.x;
     pitch = msgMag.y;
     roll = msgMag.z;
-    ROS_INFO("cap : %f",yaw);
 }
 
 void imuCB(const sensor_msgs::Imu msgImu)
@@ -84,9 +81,9 @@ void gpsCB(const gps_common::GPSFix msgGps)
 }
 
 void capControl(){
-    double r = 5.0;
+    double r = 15.0;
     double zeta = M_PI/4;
-    double q = 1;
+
 
     vec2 m = {x[0],x[1]};
 
@@ -102,19 +99,14 @@ void capControl(){
 
     double e = glm::determinant(mat)/norm;
     double phi = atan2(b[1]-a[1],b[0]-a[0]);
-    ROS_INFO("phi %f e : %f",phi,e);
-    ROS_INFO("m : %f,%f",m[0],m[1]);
-    ROS_INFO("mat : %f,%f",mat[0][0],mat[0][1]);
-    ROS_INFO("mat : %f,%f",mat[1][0],mat[1][1]);
-    if (abs(e)>r){
+    if (abs(e)>r*0.8){
         q = sign(e);
     }
     double thetabar = phi-atan(e/r);
-    if ((cos(wind-thetabar)+cos(zeta))<0){
+    if ( ( cos(wind-thetabar) + cos(zeta) )<0){
         thetabar = M_PI+wind-zeta*q;
     }
-
-    double deltar = 0.5*atan(tan(0.5*(yaw-thetabar)));
+    double deltar = (2/M_PI)*atan(tan(0.5*(yaw-thetabar)));
     double deltamax = (M_PI/4)*(cos(wind-thetabar)+1);
 
     u[0] = deltar;

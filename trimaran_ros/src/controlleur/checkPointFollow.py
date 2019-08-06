@@ -22,7 +22,6 @@ def sub_gps(msg):
     xgps[0] = msg.latitude
     xgps[1] = msg.longitude
     xgps[2] = msg.track
-    print(xgps)
     x[0] = 111.11*1000*(msg.latitude-xRef[0])
     x[1] = -111.11*1000*(msg.longitude-xRef[1])*np.cos(xRef[0]*np.pi/180)
     x[2] = msg.track
@@ -123,31 +122,84 @@ def setPointBuoy(listPoint,index):
             A,B = B,A
         m = x[0:2].reshape((2,1))
         Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
-        if np.linalg.norm(Bcart-m) < 5:
+        Acart = np.array([ [111.11*1000*(A[0,0]-xRef[0])],[-111.11*1000*(A[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        BA = Acart-Bcart
+        BC = m-Bcart
+        scal = BA[0,0]*BC[0,0] + BA[1,0]*BC[1,0]
+        if scal < 0 :
             direction = (direction+1)%2
 
     elif ModeBuoy == 2:
-        r = 15
-        point = np.array([  [  listPoint[0,index]+r*np.sin(wind+np.pi/2)/(111.11*1000),listPoint[0,index]-r*np.sin(wind)/(111.11*1000), listPoint[0,index]+r*np.sin(wind)/(111.11*1000)] ,
-                            [  listPoint[1,index]+r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ) ,listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ), listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ) ]  ])
+        r = 8
+        point = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000), listPoint[0,index]+r*np.sin(wind)/(111.11*1000),listPoint[0,index]-0.6*r*np.sin(wind+np.pi/2)/(111.11*1000)] ,
+                            [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ), listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ),listPoint[1,index]-0.6*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )  ]  ])
 
-        point[0] = point[0]-0.5*r*np.sin(wind+np.pi/2)/(111.11*1000)
-        point[1] = point[1]-0.5*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )
+        point[0] = point[0]+0.3*r*np.sin(wind+np.pi/2)/(111.11*1000)
+        point[1] = point[1]+0.3*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )
         A = point[:,direction].reshape((2,1))
         B = point[:,(direction+1)%3].reshape((2,1))
         m = x[0:2].reshape((2,1))
         Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
-        if np.linalg.norm(Bcart-m) < 5:
+        Acart = np.array([ [111.11*1000*(A[0,0]-xRef[0])],[-111.11*1000*(A[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        BA = Acart-Bcart
+        BC = m-Bcart
+        scal = BA[0,0]*BC[0,0] + BA[1,0]*BC[1,0]
+        if scal < 0 :
             direction = (direction+1)%3
+
+    elif ModeBuoy == 3:
+        r = 15
+        point = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000),listPoint[0,index]-0.4*r*np.sin(wind+np.pi/2)/(111.11*1000), listPoint[0,index]+r*np.sin(wind)/(111.11*1000),listPoint[0,index]-0.6*r*np.sin(wind+np.pi/2)/(111.11*1000)] ,
+                            [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ),listPoint[1,index]-0.4*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ) , listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ),listPoint[1,index]-0.6*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )  ]  ])
+
+        point[0] = point[0]+0.3*r*np.sin(wind+np.pi/2)/(111.11*1000)
+        point[1] = point[1]+0.3*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )
+        A = point[:,direction].reshape((2,1))
+        B = point[:,(direction+1)%4].reshape((2,1))
+        m = x[0:2].reshape((2,1))
+        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        Acart = np.array([ [111.11*1000*(A[0,0]-xRef[0])],[-111.11*1000*(A[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        BA = Acart-Bcart
+        BC = m-Bcart
+        scal = BA[0,0]*BC[0,0] + BA[1,0]*BC[1,0]
+        if scal < 0 :
+            direction = (direction+1)%4
+
+    elif ModeBuoy == 4:
+        r = 15
+        h = 10
+        convLong = 1/(111.11*1000*np.cos(xRef[0]*np.pi/180) )
+        convLat  =1/(111.11*1000)
+        p1 = r*np.sin(wind)
+        p2 = r*np.cos(wind)
+        p3 = h*np.sin(wind +np.pi/2)
+        p4 = h*np.cos(wind +np.pi/2)
+        point = np.array([ [    listPoint[0,index] - (p1-p3)*convLat,    listPoint[0,index] + (p1-p3)*convLat,     listPoint[0,index] + (p1+p3)*convLat,    listPoint[0,index] - (p1+p3)*convLat ],
+                            [   listPoint[1,index] - (p2-p4)*convLong,   listPoint[1,index] + (p2-p4)*convLong,    listPoint[1,index] + (p2+p4)*convLong,   listPoint[1,index] - (p2+p4)*convLong] ])
+        A = point[:,direction].reshape((2,1))
+        B = point[:,(direction+1)%4].reshape((2,1))
+        m = x[0:2].reshape((2,1))
+        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        Acart = np.array([ [111.11*1000*(A[0,0]-xRef[0])],[-111.11*1000*(A[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        BA = Acart-Bcart
+        BC = m-Bcart
+        scal = BA[0,0]*BC[0,0] + BA[1,0]*BC[1,0]
+        if scal < 0 :
+            direction = (direction+1)%4
+
     return A,B
 
 
 def control(listPoint,index,timeBuoy):
     A,B = setPoint(listPoint,index)
     if index < len(listPoint[0]) and timeBuoy == 0:
-        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
         m = x[0:2].reshape((2,1))
-        if np.linalg.norm(Bcart-m) < 15:
+        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        Acart = np.array([ [111.11*1000*(A[0,0]-xRef[0])],[-111.11*1000*(A[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
+        BA = Acart-Bcart
+        BC = m-Bcart
+        scal = BA[0,0]*BC[0,0] + BA[1,0]*BC[1,0]
+        if scal < 0 :
             if listPoint[2,index] == 0:
                 index = index +1
                 #print(index,len(listPoint[0]))
@@ -205,14 +257,14 @@ if __name__ == "__main__":
     refmsgs.y = xRef[1]
     rate = rospy.Rate(25)
     while not rospy.is_shutdown():
-
-        #A,B,index,newPoint = control(listPoint,index)
-        A,B,index,buoy = control(listPoint,index,buoy)
-        cubeA.x = A[0]
-        cubeA.y = A[1]
-        cubeB.x = B[0]
-        cubeB.y = B[1]
-        pub_cubeA.publish(cubeA)
-        pub_cubeB.publish(cubeB)
+        print(xgps)
+        if abs(xgps[0])>0.01:
+            A,B,index,buoy = control(listPoint,index,buoy)
+            cubeA.x = A[0]
+            cubeA.y = A[1]
+            cubeB.x = B[0]
+            cubeB.y = B[1]
+            pub_cubeA.publish(cubeA)
+            pub_cubeB.publish(cubeB)
         pub_ref.publish(refmsgs)
         rate.sleep()

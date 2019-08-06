@@ -1,6 +1,6 @@
 <launch>
     <param name="mode" type="int" value="1" />
-    <param name="modeBuoy" type="int" value="2" />
+    <param name="modeBuoy" type="int" value="4" />
 
     <node type="rviz" name="rviz" pkg="rviz" />
     <param name="file" type="string" value="$(arg file)" />
@@ -8,7 +8,8 @@
 
     <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
     <node pkg="trimaran_ros" type="displayBoat" name="displayBoat" />
-    <node pkg="trimaran_ros" type="lineFollow" name="lineFollow" />
-    <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow"/>
+    <node pkg="trimaran_ros" type="lineFollow" name="lineFollow"  />
+    <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow" />
+    <node pkg="trimaran_ros" type="posBuoy.py" name="posBuoy" />
 
 </launch>
