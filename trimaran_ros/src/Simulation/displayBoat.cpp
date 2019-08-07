@@ -34,10 +34,12 @@ double roll =0;
 vec2 cubeA = {-10,0};
 vec2 cubeB = {10,0};
 
+double buoy[2] = {50.6955,-4.237};
+
 double watchRc = 0;
 
 string numberId;
-string boatId, rudderId, sailId, windId, aId, bId, lineId;
+string boatId, rudderId, sailId, windId, aId, bId, lineId, buoyId;
 
 /**********************************************************************/
 void awindCB(const std_msgs::Float32 msgaWind){
@@ -308,6 +310,34 @@ void set_marker_line(visualization_msgs::Marker marker, ros::Publisher vis_pub){
   vis_pub.publish( marker );
 }
 
+void set_marker_Buoy(visualization_msgs::Marker marker, ros::Publisher vis_pub)
+{
+    marker.header.frame_id = buoyId;
+    marker.header.stamp = ros::Time();
+    marker.ns = buoyId;
+    marker.id = 0;
+    marker.type = visualization_msgs::Marker::CUBE;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = 0;
+    marker.pose.position.y = 0;
+    marker.pose.position.z = 0;
+    tf::Quaternion q;
+    q.setRPY(0, 0, 0);
+    tf::quaternionTFToMsg(q, marker.pose.orientation);
+    marker.scale.x = 2.0;
+    marker.scale.y = 2.0;
+    marker.scale.z = 2.0;
+    marker.color.a = 1.0; // Don't forget to set the alpha!
+    marker.color.r = 1.0;
+    marker.color.g = 1.0;
+    marker.color.b = 1.0;
+    //only if using a MESH_RESOURCE marker type:
+    //marker.mesh_resource = "package://tp2/meshs/turret.dae";
+    vis_pub.publish( marker );
+}
+
+
+
 
 void initname(){
   boatId = "boat"+numberId;
@@ -317,6 +347,7 @@ void initname(){
   aId = "A"+numberId;
   bId = "B"+numberId;
   lineId = "line"+numberId;
+  buoyId = "buoy"+numberId;
 }
 
 int main(int argc, char **argv)
@@ -398,6 +429,14 @@ int main(int argc, char **argv)
     transformStamped_B.child_frame_id = bId;
     transformStamped_B.header.frame_id = "map";
 
+    ros::Publisher vis_pub_Buoy = nh.advertise<visualization_msgs::Marker>("visualization_marker_Buoy", 0 );
+    tf2_ros::TransformBroadcaster br_Buoy;
+    geometry_msgs::TransformStamped transformStamped_Buoy;
+    visualization_msgs::Marker marker_Buoy;
+    transformStamped_Buoy.child_frame_id = buoyId;
+    transformStamped_Buoy.header.frame_id = "map";
+
+
 
     ros::Publisher vis_pub_line = nh.advertise<visualization_msgs::Marker>("visualization_marker_line", 0 );
     visualization_msgs::Marker marker_line;
@@ -468,6 +507,14 @@ int main(int argc, char **argv)
         tf::quaternionTFToMsg(q, transformStamped_B.transform.rotation);
         br_B.sendTransform(transformStamped_B);
 
+        q.setRPY(0, 0, 0);
+        set_marker_Buoy(marker_Buoy, vis_pub_Buoy);
+        transformStamped_Buoy.header.stamp = ros::Time::now();
+        transformStamped_Buoy.transform.translation.x = 111.11*1000*(buoy[0]-xRef[0]);;
+        transformStamped_Buoy.transform.translation.y = -111.11*1000*(buoy[1]-xRef[1])*cos(xRef[0]*M_PI/180);;
+        transformStamped_Buoy.transform.translation.z = 0;
+        tf::quaternionTFToMsg(q, transformStamped_Buoy.transform.rotation);
+        br_Buoy.sendTransform(transformStamped_Buoy);
 
         transformStamped_line.header.stamp = ros::Time::now();
         transformStamped_line.transform.translation.x = 0;

@@ -36,7 +36,7 @@ double t0;
 vec2 cubeA = {-10,0};
 vec2 cubeB = {10,0};
 
-double buoy[2] = {50.691,-4.235};
+double buoy[2] = {50.6955,-4.237};
 
 
 void windCB(const std_msgs::Float32 msgWind){
@@ -139,8 +139,8 @@ void set_awind(ros::Publisher pub_awind, std_msgs::Float32 msgaWind){
 }
 
 void set_buoy(ros::Publisher pub_buoy, geometry_msgs::Vector3 msgBuoy){
-  double dx = 111.11*1000*(buoy[0]-x[0]);
-  double dy = -111.11*1000*(buoy[1]-x[1])*cos(x[0]*M_PI/180);
+  double dx = 111.11*1000*(buoy[0]-xRef[0]) - x[0];
+  double dy = -111.11*1000*(buoy[1]-xRef[1])*cos(x[0]*M_PI/180) - x[1];
   double distance = sqrt(dx*dx+dy*dy);
   double angle  = acos(dx/(distance*1));
   if (dy < 0){

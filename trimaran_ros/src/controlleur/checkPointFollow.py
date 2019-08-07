@@ -17,6 +17,9 @@ xRef = [0,0]
 ModeBuoy = 0
 direction = 0
 
+x = np.array([0.0,0.0,0.0])
+xgps = np.array([0.0,0.0,0.0])
+
 def sub_gps(msg):
     global x,xgps
     xgps[0] = msg.latitude
@@ -245,8 +248,7 @@ if __name__ == "__main__":
         rospy.Subscriber("ardu_send_imu",Imu,sub_imu)
 
 
-    x = np.array([0.0,0.0,0.0])
-    xgps = np.array([0.0,0.0,0.0])
+
     listPoint,xRef = lectureCheckpoint(file)
     index = 1
     buoy = 0
