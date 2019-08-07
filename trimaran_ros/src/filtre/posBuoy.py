@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
             z = np.array([[np.cos(vect_capBuoy[1])],[np.sin(vect_capBuoy[1])],[1]])
             [x,P] = EKF_yaw.EKF_step(vect_capBuoy[2],z)
-
+            capFilter = np.arctan2(x[1,0],x[0,0])
 
 
             time.append(t1.secs-t0.secs)

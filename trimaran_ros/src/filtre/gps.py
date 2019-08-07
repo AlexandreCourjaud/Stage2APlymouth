@@ -70,7 +70,9 @@ def parseGPRMC(data):
     speed = 0
     if data[7] != '':
         speed = float(data[7])*0.514444
-    route = float(data[8])
+    route = 0
+    if data[8] != '':
+        route = float(data[8])
     date = data[9]
     mode = data[-2]
     return 1,time,latitude,longitude,valid,speed,route,date,mode
