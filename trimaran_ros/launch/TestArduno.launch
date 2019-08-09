@@ -8,9 +8,11 @@
 
 
 <node pkg="trimaran_ros" type="mode" name="mode" />
-
-<node pkg="trimaran_ros" type="capFollow" name="capFollow"/>
 <node pkg="trimaran_ros" type="gps.py" name="gps" />
+
+<node pkg="trimaran_ros" type="lineFollow" name="lineFollow"/>
+<node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow" />
+
 
 
 </launch>
