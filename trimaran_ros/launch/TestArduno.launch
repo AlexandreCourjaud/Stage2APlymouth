@@ -8,8 +8,6 @@
 
 
 <node pkg="trimaran_ros" type="mode" name="mode" />
-<node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>
-<node pkg="WRSC_plymouth_JEGAT" type="imu_9dof.py" name="imu_9dof"/>
 
 
 
