@@ -12,6 +12,7 @@
 <node pkg="WRSC_plymouth_JEGAT" type="imu_9dof.py" name="imu_9dof"/>
 <node pkg="trimaran_ros" type="capFollow" name="capFollow"/>
 <node pkg="trimaran_ros" type="gps.py" name="gps" />
+<node name="imageProcessing" pkg="plymouth_internship_2019" type="imageProcessing"/>
 
 
 </launch>
