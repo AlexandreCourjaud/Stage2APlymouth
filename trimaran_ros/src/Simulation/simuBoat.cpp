@@ -139,13 +139,11 @@ void set_awind(ros::Publisher pub_awind, std_msgs::Float32 msgaWind){
 }
 
 void set_buoy(ros::Publisher pub_buoy, geometry_msgs::Vector3 msgBuoy){
-  double dx = 111.11*1000*(buoy[0]-xRef[0]) - x[0];
-  double dy = -111.11*1000*(buoy[1]-xRef[1])*cos(x[0]*M_PI/180) - x[1];
+  double buoyCart[2] = {111.11*1000*(buoy[0]-xRef[0]),  -111.11*1000*(buoy[1]-xRef[1])*cos(xRef[0]*M_PI/180)};
+  double dx =   buoyCart[0] - x[0];
+  double dy =   buoyCart[1] - x[1];
   double distance = sqrt(dx*dx+dy*dy);
-  double angle  = acos(dx/(distance*1));
-  if (dy < 0){
-    angle = -angle;
-  }
+  double angle = atan2(dy,dx);
   msgBuoy.x = distance;
   msgBuoy.y = angle-x[2];
   pub_buoy.publish(msgBuoy);

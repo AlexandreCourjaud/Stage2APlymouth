@@ -18,7 +18,7 @@ distance = 0
 capBuoy = 0
 newData = 0
 
-xRef = [0,0]
+xRef = [0.0,0.0]
 x = [0,0,0]
 xgps = [0,0,0]
 yaw,pitch,roll = 0,0,0
@@ -47,14 +47,10 @@ def sub_euler(msg):
     roll = msg.z
 
 def sub_buoy(msg):
-    global distance, capBuoy, newData, vect_capBuoy, vect_temps
-    distance = msg.x+ np.random.randn()*3
-    capBuoy = msg.y +np.random.randn()/3 +yaw
+    global distance, capBuoy, newData
+    distance = msg.x
+    capBuoy = msg.y
     newData = 1
-    t = time.time()
-    vect_capBuoy = np.array([vect_capBuoy[1],capBuoy,sawtooth(capBuoy-vect_capBuoy[1])])
-    vect_temps = np.array([vect_temps[1],t,t-vect_temps[1]])
-    vect_distanceBuoy = np.array([vect_distanceBuoy[1],distance,distance - vect_distanceBuoy[1]])
 
 
 def sub_ref(msg):
@@ -65,21 +61,29 @@ def sub_ref(msg):
 ############################################################
 ############################################################
 
-vect_temps = np.array([0,0,0])
-vect_capBuoy = np.array([0,0,0])
-vect_distanceBuoy = np.array([0,0,0])
 
 if __name__ == "__main__":
 
     rospy.init_node("poseBuoy")
 
+    fpbx = 0
+    fpby = 0
     posX = []
     posY = []
-    Lerror = []
-    time = []
+
+
     buoy = [50.6955,-4.237];
     buoyCart = [0,0]
 
+    '''
+    noFiltrelistTime = []
+    nbPoint = []
+    Error = []
+    medianError = []
+    meanError = []
+    fpbError= []
+    zero = []
+    '''
 
     mode = rospy.get_param('mode',0)
     print(mode)
@@ -94,18 +98,14 @@ if __name__ == "__main__":
         rospy.Subscriber("camera_send_buoy",Vector3,sub_buoy)
 
     rospy.Subscriber("control_send_ref",Point,sub_ref)
-
-    P0 = 10*np.eye(3)
-    Q = 0.028**2*np.eye(3)#0.028
-    R = 0.01*np.eye(3)
-    EKF_yaw   = Extended_kalman_filter(np.zeros((3,1)),P0,f,F,h,H,Q,R)
-
+    pub_buoy = rospy.Publisher('filter_send_buoy',Point,queue_size = 10)
+    msgBuoy = Point()
     t0 = rospy.get_rostime()
-
+    time.sleep(3)
     while not rospy.is_shutdown():
 
-        plt.xlim((-1,50))
-        plt.ylim((-10,10))
+        #plt.xlim((-1,100))
+        #plt.ylim((-1,15))
 
 
 
@@ -113,43 +113,88 @@ if __name__ == "__main__":
         if newData == 1:
             newData = 0
 
-
-            '''
-            filtre passe bas
-            '''
-            '''
-            posx = x[0] + np.cos(capBuoy)*distance
-            posy = x[1] + np.sin(capBuoy)*distance
+            #listTime.append(t1.secs-t0.secs)
+            #nbPoint.append(len(listTime))
+            angle = capBuoy + yaw
+            posx = x[0] + np.cos(angle)*distance
+            posy = x[1] + np.sin(angle)*distance
+            buoyCart[0] = 111.11*1000*(buoy[0]-xRef[0])
+            buoyCart[1] = -111.11*1000*(buoy[1]-xRef[1])*np.cos(xRef[0]*np.pi/180)
             posX.append(posx)
             posY.append(posy)
-            if len(posX)>100:
+            if len(posX)>10000:
                del(posX[0])
-            if len(posY)>100:
+            if len(posY)>10000:
                del(posY[0])
+
+
+
+
+            '''
+            no filtre
+            '''
+
+            '''
+            bx = posx
+            by = posy
+            error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
+            noFiltreError.append(error)
+            plt.plot(nbPoint,noFiltreError,'g')
+
+            zero.append(0)
+            plt.plot(nbPoint,zero,'black')
+            '''
+
+            '''
+            filtre median
+            '''
+
+
+            bx = np.median(posX)
+            by = np.median(posY)
+            #error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
+            #medianError.append(error)
+            #plt.plot(nbPoint,medianError,'b')
+
+
+
+            '''
+            Moyenne
+            '''
+
+            '''
             bx = np.mean(posX)
             by = np.mean(posY)
+            error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
+            meanError.append(error)
+            plt.plot(nbPoint,meanError,'r')
+            '''
+
+
+            ''' passe bas'''
+
+            '''
+            fpbx = 0.90*fpbx + 0.10*posx
+            fpby = 0.90*fpby + 0.10*posy
+            error = np.sqrt((fpbx-buoyCart[0])**2 + (fpby-buoyCart[1])**2)
+            fpbError.append(error)
+            plt.plot(nbPoint,fpbError,'y')
+            '''
+
+
             lat = bx/(111.11*1000)+ xRef[0]
             longi = -by/(111.11*1000*np.cos(xRef[0]*np.pi/180))+xRef[1]
 
-            buoyCart[0] = 111.11*1000*(buoy[0]-xRef[0])
-            buoyCart[1] = -111.11*1000*(buoy[1]-xRef[1])*np.cos(xRef[0]*np.pi/180)
-            error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
-            Lerror.append(error)
-            '''
-            '''
-            filtre kalmann
-            '''
 
-            z = np.array([[np.cos(vect_capBuoy[1])],[np.sin(vect_capBuoy[1])],[1]])
-            [x,P] = EKF_yaw.EKF_step(vect_capBuoy[2],z)
-            capFilter = np.arctan2(x[1,0],x[0,0])
+            msgBuoy.x = lat
+            msgBuoy.y = longi
+            pub_buoy.publish(msgBuoy)
 
 
-            time.append(t1.secs-t0.secs)
-            plt.plot(time,Lerror)
-            print(t1.secs-t0.secs,error)
-            plt.pause(0.000000001)
-            plt.cla()
+
+            #print(error)
+            #plt.pause(0.000000001)
+            #plt.cla()
 
 
 
