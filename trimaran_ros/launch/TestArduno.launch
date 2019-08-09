@@ -13,6 +13,7 @@
 <node pkg="trimaran_ros" type="capFollow" name="capFollow"/>
 <node pkg="trimaran_ros" type="gps.py" name="gps" />
 <node name="imageProcessing" pkg="plymouth_internship_2019" type="imageProcessing"/>
+<node name="fleetSailboat" pkg="plymouth_internship_2019" type="fleetSailboat" />
 
 
 </launch>
