@@ -1,6 +1,5 @@
 <launch>
 
-
 <include file="$(find plymouth_internship_2019)/Launch/imageProcessing.launch">
         <arg name="horizon" default="True" />
         <arg name="masts" default="True" />
@@ -13,10 +12,12 @@
 <include file="$(find trimaran_ros/launch/lowlevel.launch" />
 
 
+<param name="cap" type="double" value="$(arg cap)" />
 <node pkg="trimaran_ros" type="capFollow" name="capFollow"/>
 
 
 
 <node name="record" pkg="rosbag" type="record" args="record -a -o $(find trimaran_ros)/rosbag/TestCapFollow" />
+
 
 </launch>
