@@ -8,7 +8,12 @@
 
 
 <node pkg="trimaran_ros" type="mode" name="mode" />
+<node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>
+<node pkg="WRSC_plymouth_JEGAT" type="imu_9dof.py" name="imu_9dof"/>
 
+<node pkg="trimaran_ros" type="gps.py" name="gps" />
+
+<node name="fleetSailboat" pkg="plymouth_internship_2019" type="fleetSailboat" />
 
 <include file="$(find plymouth_internship_2019)/Launch/imageProcessing.launch">
         <arg name="horizon" default="True" />
