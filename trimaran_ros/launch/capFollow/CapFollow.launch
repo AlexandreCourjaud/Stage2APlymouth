@@ -1,6 +1,6 @@
 <launch>
 
-<include file="$(find plymouth_internship_2019)/Launch/imageProcessing.launch">
+<include file="$(find plymouth_internship_2019)/Launch/systemLaunch/imageProcessing.launch">
         <arg name="horizon" default="True" />
         <arg name="masts" default="True" />
         <arg name="buoy" default="True" />
