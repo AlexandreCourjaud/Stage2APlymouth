@@ -29,19 +29,19 @@ vec2 b = {10,0};
 
 float u[2];
 
-void refCB(const geometry_msgs::Point msgRef){
+void refCB(const geometry_msgs::Vector3 msgRef){
   xRef[0] = msgRef.x;
   xRef[1] = msgRef.y;
 }
 
-void cubeACB(const geometry_msgs::Point msgA){
+void cubeACB(const geometry_msgs::Pose2D msgA){
 
     a[0] = 111.11*1000*(msgA.x-xRef[0]);
     a[1] = -111.11*1000*(msgA.y-xRef[1])*cos(xRef[0]*M_PI/180);
 
 }
 
-void cubeBCB(const geometry_msgs::Point msgB){
+void cubeBCB(const geometry_msgs::Pose2D msgB){
 
     b[0] = 111.11*1000*(msgB.x-xRef[0]);
     b[1] = -111.11*1000*(msgB.y-xRef[1])*cos(xRef[0]*M_PI/180);

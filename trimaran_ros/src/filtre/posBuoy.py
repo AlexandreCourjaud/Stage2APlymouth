@@ -98,9 +98,9 @@ if __name__ == "__main__":
         rospy.Subscriber("filter_send_euler_angles",Vector3,sub_euler)
         rospy.Subscriber("camera_send_buoy",Vector3,sub_buoy)
 
-    rospy.Subscriber("control_send_ref",Point,sub_ref)
-    pub_buoy = rospy.Publisher('filter_send_buoy',Point,queue_size = 10)
-    msgBuoy = Point()
+    rospy.Subscriber("control_send_ref",Vector3,sub_ref)
+    pub_buoy = rospy.Publisher('filter_send_buoy',Pose2D,queue_size = 10)
+    msgBuoy = Pose2D()
     t0 = rospy.get_rostime()
     time.sleep(3)
     while not rospy.is_shutdown():

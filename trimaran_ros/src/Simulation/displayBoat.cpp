@@ -73,19 +73,19 @@ void sailCB(const std_msgs::Float32 msgSail){
     }
 }
 
-void cubeACB(const geometry_msgs::Point msgA){
+void cubeACB(const geometry_msgs::Pose2D msgA){
 
     cubeA[0] = 111.11*1000*(msgA.x-xRef[0]);
     cubeA[1] = -111.11*1000*(msgA.y-xRef[1])*cos(xRef[0]*M_PI/180);
 }
 
-void cubeBCB(const geometry_msgs::Point msgB){
+void cubeBCB(const geometry_msgs::Pose2D msgB){
 
     cubeB[0] = 111.11*1000*(msgB.x-xRef[0]);
     cubeB[1] = -111.11*1000*(msgB.y-xRef[1])*cos(xRef[0]*M_PI/180);
 }
 
-void refCB(const geometry_msgs::Point msgRef){
+void refCB(const geometry_msgs::Vector3 msgRef){
   xRef[0] = msgRef.x;
   xRef[1] = msgRef.y;
 }

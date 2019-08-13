@@ -57,9 +57,9 @@ int main(int argc, char **argv)
   ros::Publisher  pub_A = nh.advertise<geometry_msgs::Point>("control_send_A",0);
   ros::Publisher  pub_B = nh.advertise<geometry_msgs::Point>("control_send_B",0);
   ros::Publisher  pub_Ref = nh.advertise<geometry_msgs::Point>("control_send_ref",0);
-  geometry_msgs::Point msgA;
-  geometry_msgs::Point msgB;
-  geometry_msgs::Point msgRef;
+  geometry_msgs::Pose2D msgA;
+  geometry_msgs::Pose2D msgB;
+  geometry_msgs::Vector3 msgRef;
   msgRef.x = xRef[0];
   msgRef.y = xRef[1];
 

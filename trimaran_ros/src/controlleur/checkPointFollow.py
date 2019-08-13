@@ -224,9 +224,9 @@ def control(listPoint,index,timeBuoy):
 if __name__ == "__main__":
     rospy.init_node("checkPointFollow")
 
-    pub_cubeA = rospy.Publisher('control_send_A',Point,queue_size = 10)
-    pub_cubeB = rospy.Publisher('control_send_B',Point,queue_size = 10)
-    pub_ref = rospy.Publisher('control_send_ref',Point,queue_size = 10)
+    pub_cubeA = rospy.Publisher('control_send_A',Pose2D,queue_size = 10)
+    pub_cubeB = rospy.Publisher('control_send_B',Pose2D,queue_size = 10)
+    pub_ref = rospy.Publisher('control_send_ref',Vector3,queue_size = 10)
 
     mode = rospy.get_param('mode',0)
     ModeBuoy = rospy.get_param('modeBuoy',0)
@@ -252,9 +252,9 @@ if __name__ == "__main__":
     listPoint,xRef = lectureCheckpoint(file)
     index = 1
     buoy = 0
-    cubeA = Point()
-    cubeB = Point()
-    refmsgs = Point()
+    cubeA = Pose2D()
+    cubeB = Pose2D()
+    refmsgs = Vector3()
     refmsgs.x = xRef[0]
     refmsgs.y = xRef[1]
     rate = rospy.Rate(25)

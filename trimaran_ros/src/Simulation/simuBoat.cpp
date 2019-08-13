@@ -53,7 +53,7 @@ void sailCB(const std_msgs::Float32 msgSail){
     cmdSail = msgSail.data;
 }
 
-void refCB(const geometry_msgs::Point msgRef){
+void refCB(const geometry_msgs::Vector3 msgRef){
   xRef[0] = msgRef.x;
   xRef[1] = msgRef.y;
 }
