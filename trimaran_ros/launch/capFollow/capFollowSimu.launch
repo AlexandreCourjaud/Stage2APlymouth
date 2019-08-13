@@ -3,12 +3,13 @@
 
 
     <node type="rviz" name="rviz" pkg="rviz" />
-    <param name="cap" type="double" value="$(arg cap)" />
-
-
-
-    <node pkg="trimaran_ros" type="capFollow" name="capFollow" />
-    <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
     <node pkg="trimaran_ros" type="displayBoat" name="displayBoat" />
+    <node pkg="trimaran_ros" type="simuBoat" name="simuBoat"/>
+
+
+    <param name="cap" type="double" value="$(arg cap)" />
+    <node pkg="trimaran_ros" type="capFollow" name="capFollow" />
+
+
 
 </launch>

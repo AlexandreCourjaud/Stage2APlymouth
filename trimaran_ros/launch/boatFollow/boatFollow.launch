@@ -1,24 +1,22 @@
 <launch>
 
 
-<node pkg="rosserial_arduino" type="serial_node.py" name="serial_node">
-    <param name="port" value="/dev/ttyACM0"/>
-    <param name="baud" value="115200"/>
-  </node>
+<include file="$(find plymouth_internship_2019)/Launch/imageProcessing.launch">
+        <arg name="horizon" default="True" />
+        <arg name="masts" default="True" />
+        <arg name="buoy" default="True" />
+        <arg name="marker" default="True" />
+        <arg name="output" default="False" />
+        <arg name="size" default="1" />
+    </include>
+
+<include file="$(find trimaran_ros)/launch/lowlevel.launch" />
 
 <param name="target" type="string" value="$(arg target)" />
-
-
-<node pkg="trimaran_ros" type="gps.py" name="gps" />
-<node pkg="trimaran_ros" type="mode" name="mode" />
-<node pkg="WRSC_plymouth_JEGAT" type="filter_wind.py" name="filter_wind"/>
-<node pkg="WRSC_plymouth_JEGAT" type="imu_9dof.py" name="imu_9dof"/>
-
-<node name="fleetSailboat" pkg="plymouth_internship_2019" type="fleetSailboat" />
-<node name="imageProcessing" pkg="plymouth_internship_2019" type="imageProcessing"/>
-
 <node pkg="trimaran_ros" type="boatFollow" name="boatFollow"/>
 <node pkg="trimaran_ros" type="lineFollow" name="lineFollow"/>
+
+
 <node name="record" pkg="rosbag" type="record" args="record -a -o $(find trimaran_ros)/rosbag/boatFollow" />
 
 
