@@ -109,7 +109,7 @@ if __name__ == "__main__":
         #plt.ylim((-1,15))
 
 
-
+        time.sleep(0.1)
         t1 = rospy.get_rostime()
         if newData == 1 and newRef == 1:
             newData = 0
