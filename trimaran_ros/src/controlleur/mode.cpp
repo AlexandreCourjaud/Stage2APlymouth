@@ -62,7 +62,7 @@ int main(int argc, char **argv)
   std_msgs::Float32 uSail;
 
 
-  ros::Rate loop_rate(20);
+  ros::Rate loop_rate(15);
   while (ros::ok()){
     ros::spinOnce();
 
