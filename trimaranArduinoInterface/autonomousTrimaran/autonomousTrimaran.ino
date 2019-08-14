@@ -42,8 +42,9 @@ void loop()
   nh.spinOnce();
   //nh.loginfo("next");
   
-  Actuator();
+  
   updateSensor();
+  Actuator();
   
   //delay(1);
 }
