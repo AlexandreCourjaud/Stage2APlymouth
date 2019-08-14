@@ -2,7 +2,7 @@
 
 <include file="$(find plymouth_internship_2019)/Launch/systemLaunch/imageProcessing.launch">
         <arg name="horizon" default="True" />
-        <arg name="masts" default="True" />
+        <arg name="masts" default="False" />
         <arg name="buoy" default="True" />
         <arg name="marker" default="True" />
         <arg name="output" default="False" />
