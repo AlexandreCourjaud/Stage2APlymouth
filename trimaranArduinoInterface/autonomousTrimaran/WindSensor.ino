@@ -60,7 +60,7 @@ void anemoInterrupt(){
 void anemoInterrupt(){
   if (validWind == 1){
     t1 = millis();
-    windSpeed =  2*3.14*(1000/(t1-t0))*0.055*3; 
+    windSpeed =  2*3.14*(1000/(double(t1-t0)) )*0.055*3; 
     t0 = t1;
     publishWindSpeed();
   }
