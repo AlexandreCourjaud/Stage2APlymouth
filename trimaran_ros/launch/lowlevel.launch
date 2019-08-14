@@ -6,7 +6,7 @@
  </node>
 
 <node pkg="trimaran_ros" type="mode" name="mode" />
-<node pkg="wrsc_plymouth_jegat" type="filter_wind.py" name="filter_wind"/>
+<node pkg="wrsc_plymouth_jegat" type="filter_wind.py" name="filter_wind" output="screen"/>
 <node pkg="wrsc_plymouth_jegat" type="imu_9dof.py" name="imu_9dof"/>
 <node pkg="trimaran_ros" type="gps.py" name="gps" />
 <node pkg="trimaran_ros" type="posBuoy.py" name="posBuoy" />
