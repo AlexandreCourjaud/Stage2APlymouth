@@ -375,8 +375,8 @@ int main(int argc, char **argv)
     ros::Subscriber wub_awind_simu = nh.subscribe("simu_send_wind_speed",0,awindCB);
 
 
-    ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
-    ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
+    ros::Subscriber sub_A = nh.subscribe("control_send_line_begin",0,cubeACB);
+    ros::Subscriber sub_B = nh.subscribe("control_send_line_end",0,cubeBCB);
 
     ros::Subscriber sub_gps_xBee = nh.subscribe("xbee_send_gps_1",0,gpsCB);
     ros::Subscriber sub_wind_xBee = nh.subscribe("xbee_send_wind_direction_1",0,windCB);

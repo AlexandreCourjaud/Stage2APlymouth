@@ -123,8 +123,8 @@ int main(int argc, char **argv)
   ros::Publisher  pub_Rudder = nh.advertise<std_msgs::Float32>("control_send_u_rudder",0);
   ros::Publisher  pub_Sail   = nh.advertise<std_msgs::Float32>("control_send_u_sail",0);
 
-  ros::Subscriber sub_A = nh.subscribe("control_send_A",0,cubeACB);
-  ros::Subscriber sub_B = nh.subscribe("control_send_B",0,cubeBCB);
+  ros::Subscriber sub_A = nh.subscribe("control_send_line_begin",0,cubeACB);
+  ros::Subscriber sub_B = nh.subscribe("control_send_line_end",0,cubeBCB);
   ros::Subscriber sub_ref = nh.subscribe("control_send_ref",0,refCB);
 
   nh.param<int>("mode", mode,0);

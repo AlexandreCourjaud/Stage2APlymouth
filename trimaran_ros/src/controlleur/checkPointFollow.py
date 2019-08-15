@@ -224,8 +224,8 @@ def control(listPoint,index,timeBuoy):
 if __name__ == "__main__":
     rospy.init_node("checkPointFollow")
 
-    pub_cubeA = rospy.Publisher('control_send_A',Pose2D,queue_size = 10)
-    pub_cubeB = rospy.Publisher('control_send_B',Pose2D,queue_size = 10)
+    pub_cubeA = rospy.Publisher('control_send_line_begin',Pose2D,queue_size = 10)
+    pub_cubeB = rospy.Publisher('control_send_line_end',Pose2D,queue_size = 10)
     pub_ref = rospy.Publisher('control_send_ref',Vector3,queue_size = 10)
 
     mode = rospy.get_param('mode',0)
