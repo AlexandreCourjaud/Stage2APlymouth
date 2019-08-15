@@ -117,7 +117,7 @@ def setPointBuoy(listPoint,index):
         B = listPoint[:2,index]
 
     elif ModeBuoy == 1:
-        r = 15
+        r = 5
         A = np.array([  [  listPoint[0,index]+r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
         B = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
 
@@ -133,7 +133,7 @@ def setPointBuoy(listPoint,index):
             direction = (direction+1)%2
 
     elif ModeBuoy == 2:
-        r = 8
+        r = 5
         point = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000), listPoint[0,index]+r*np.sin(wind)/(111.11*1000),listPoint[0,index]-0.6*r*np.sin(wind+np.pi/2)/(111.11*1000)] ,
                             [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ), listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ),listPoint[1,index]-0.6*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )  ]  ])
 
@@ -151,7 +151,7 @@ def setPointBuoy(listPoint,index):
             direction = (direction+1)%3
 
     elif ModeBuoy == 3:
-        r = 15
+        r = 4
         point = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000),listPoint[0,index]-0.4*r*np.sin(wind+np.pi/2)/(111.11*1000), listPoint[0,index]+r*np.sin(wind)/(111.11*1000),listPoint[0,index]-0.6*r*np.sin(wind+np.pi/2)/(111.11*1000)] ,
                             [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ),listPoint[1,index]-0.4*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ) , listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) ),listPoint[1,index]-0.6*r*np.cos(wind+np.pi/2)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )  ]  ])
 
@@ -169,8 +169,8 @@ def setPointBuoy(listPoint,index):
             direction = (direction+1)%4
 
     elif ModeBuoy == 4:
-        r = 15
-        h = 10
+        r = 5
+        h = 3
         convLong = 1/(111.11*1000*np.cos(xRef[0]*np.pi/180) )
         convLat  =1/(111.11*1000)
         p1 = r*np.sin(wind)
