@@ -111,7 +111,7 @@ def setPoint(listPoint,index):
     return A,B
 
 def setPointBuoy(listPoint,index):
-    global direction
+    global direction,wind
     if ModeBuoy == 0:
         A = xgps[0:2].reshape((2,1))
         B = listPoint[:2,index]
@@ -257,6 +257,7 @@ if __name__ == "__main__":
     refmsgs = Vector3()
     refmsgs.x = xRef[0]
     refmsgs.y = xRef[1]
+    wind = 0
     rate = rospy.Rate(25)
     while not rospy.is_shutdown():
         print(xgps)
