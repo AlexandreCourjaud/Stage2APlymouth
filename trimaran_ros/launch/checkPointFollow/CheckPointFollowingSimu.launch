@@ -1,6 +1,6 @@
 <launch>
     <param name="mode" type="int" value="1" />
-    <param name="modeBuoy" type="int" value="4" />
+    <param name="modeBuoy" type="int" value="$(arg mode)" />
 
     <node type="rviz" name="rviz" pkg="rviz" />
     <node pkg="trimaran_ros" type="simuBoat" name="simuBoat" />
