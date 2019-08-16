@@ -183,8 +183,8 @@ int main(int argc, char **argv)
     nh.param<double>("theta", x[2],0);
     x[3] = 1;
     x[4] = 0;
-    wind = -M_PI/2;
-    awind = 2;
+    wind = 0;
+    awind = 4;
     cmdRudder = 0;
     cmdSail = 0;
 

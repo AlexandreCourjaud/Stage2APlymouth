@@ -54,7 +54,7 @@ def sub_buoy(msg):
 
 
 def sub_ref(msg):
-    global xRef
+    global xRef,newRef
     newRef = 1
     xRef[0] = msg.x
     xRef[1] = msg.y
@@ -113,7 +113,6 @@ if __name__ == "__main__":
         t1 = rospy.get_rostime()
         if newData == 1 and newRef == 1:
             newData = 0
-
             #listTime.append(t1.secs-t0.secs)
             #nbPoint.append(len(listTime))
             angle = capBuoy + yaw

@@ -19,6 +19,7 @@ direction = 0
 
 x = np.array([0.0,0.0,0.0])
 xgps = np.array([0.0,0.0,0.0])
+xBuoy = np.array([0.0,0.0])
 
 def sub_gps(msg):
     global x,xgps
@@ -51,6 +52,11 @@ def sub_imu(msg):
     gy = msg.angular_velocity.y
     gz = msg.angular_velocity.z
 
+def sub_Buoy(msg):
+    global xBuoy
+    xBuoy[0] = msg.x
+    xBuoy[1] = msg.y
+
 
 def lectureCheckpoint(filename):
     listPoint = [[],[],[]]
@@ -76,38 +82,25 @@ def lectureCheckpoint(filename):
     print(listPoint,xRef)
     return np.array(listPoint),xRef
 
-'''
-def control(listPoint,index):
-    newPoint = 0
-    if index == 0:
-        A = listPoint[:2,index].reshape((2,1))
-        B = listPoint[:2,index+1].reshape((2,1))
-        print(A,B)
-        index = index +1
-        newPoint = 1
-    elif index < len(listPoint[0]):
-        A = listPoint[:2,index-1].reshape((2,1))
-        B = listPoint[:2,index].reshape((2,1))
-        Bcart = np.array([ [111.11*1000*(B[0,0]-xRef[0])],[-111.11*1000*(B[1,0]-xRef[1])*np.cos(xRef[0]*np.pi/180)] ])
-        m = x[0:2].reshape((2,1))
-        if np.linalg.norm(Bcart-m) < 5:
-            index = index +1
-            newPoint = 1
-    else:
-        A = xgps[0:2].reshape((2,1))
-        B = listPoint[:2,-1]
-        newPoint =1
-    return A,B,index,newPoint
-
-'''
 
 def setPoint(listPoint,index):
+    global xBuoy
     if index < len(listPoint[0]):
         A = listPoint[:2,index-1].reshape((2,1))
         B = listPoint[:2,index].reshape((2,1))
     else:
         A = xgps[0:2].reshape((2,1))
         B = listPoint[:2,-1]
+
+
+    ta = abs(A[0,0]) + abs(A[1,0])
+    if (ta == 0):
+        A[0,0] = xBuoy[0]
+        A[1,0] = xBuoy[1]
+    tb = abs(B[0,0]) + abs(B[1,0])
+    if (tb == 0):
+        B[0,0] = xBuoy[0]
+        B[1,0] = xBuoy[1]
     return A,B
 
 def setPointBuoy(listPoint,index):
@@ -232,7 +225,7 @@ if __name__ == "__main__":
     ModeBuoy = rospy.get_param('modeBuoy',0)
     file = rospy.get_param('file',"error.txt")
 
-
+    rospy.Subscriber("filter_send_buoy",Pose2D,sub_Buoy)
     print file
     print(mode)
     if (mode ==1):
@@ -260,7 +253,6 @@ if __name__ == "__main__":
     wind = 0
     rate = rospy.Rate(25)
     while not rospy.is_shutdown():
-        print(xgps)
         if abs(xgps[0])>0.01:
             A,B,index,buoy = control(listPoint,index,buoy)
             cubeA.x = A[0]
