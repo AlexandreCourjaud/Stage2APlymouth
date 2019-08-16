@@ -37,6 +37,7 @@ vec2 cubeB = {10,0};
 double buoy[2] = {50.6955,-4.237};
 
 double watchRc = 0;
+double watchXbee = 0;
 
 string numberId;
 string boatId, rudderId, sailId, windId, aId, bId, lineId, buoyId;
@@ -106,24 +107,10 @@ void gpsCB(const gps_common::GPSFix msgGps){
 
 void rcCB(const geometry_msgs::Vector3 msgRc){
   watchRc = msgRc.z;
-  if (watchRc == 1){
-    cmdRudder = msgRc.x;
-    cmdSail = msgRc.y;
-    double theta = yaw;
-    double v = x[3];
-    vec2 w_ap;
-    w_ap[0] = awind*cos(wind-theta)-v;
-    w_ap[1] = awind*sin(wind-theta);
-    double psi_ap = atan2(w_ap[1],w_ap[0]);
-    double a_ap = glm::length(w_ap);
-    double sigma = cos(psi_ap)+cos(cmdSail);
-    if (sigma<0){
-        delta_s = M_PI + psi_ap;
-    }
-    else{
-        delta_s = -sign(sin(psi_ap))*cmdSail;
-    }
-  }
+}
+
+void xbeeCB(const std_msgs::Float32 msgXbee){
+  watchXbee = msgXbee.data;
 }
 /***************************************************************************/
 
@@ -143,10 +130,19 @@ void set_marker_boat(ros::Publisher vis_pub, visualization_msgs::Marker marker){
        marker.scale.x = 0.001;
        marker.scale.y = 0.001;
        marker.scale.z = 0.001;
-       marker.color.a = 1.0; // Don't forget to set the alpha!
-       marker.color.r = 1.0;
-       marker.color.g = 1.0;
-       marker.color.b = 1.0;
+       if (watchRc == 1.0 || watchXbee == 1.0){
+         marker.color.a = 1.0; // Don't forget to set the alpha!
+         marker.color.r = 1.0;
+         marker.color.g = 0;
+         marker.color.b = 0;
+       }
+       else{
+         marker.color.a = 1.0; // Don't forget to set the alpha!
+         marker.color.r = 1.0;
+         marker.color.g = 1.0;
+         marker.color.b = 1.0;
+       }
+
        //only if using a MESH_RESOURCE marker type:
        marker.mesh_resource = "package://trimaran_ros/meshs/boat.STL";
        vis_pub.publish( marker );
@@ -378,12 +374,15 @@ int main(int argc, char **argv)
     ros::Subscriber sub_A = nh.subscribe("control_send_line_begin",0,cubeACB);
     ros::Subscriber sub_B = nh.subscribe("control_send_line_end",0,cubeBCB);
 
-    ros::Subscriber sub_gps_xBee = nh.subscribe("xbee_send_gps_1",0,gpsCB);
+    //ros::Subscriber sub_gps_xBee = nh.subscribe("xbee_send_gps_1",0,gpsCB);
     ros::Subscriber sub_wind_xBee = nh.subscribe("xbee_send_wind_direction_1",0,windCB);
     ros::Subscriber sub_euler_xbee = nh.subscribe("xbee_send_euler_1",0,eulerCB);
     ros::Subscriber sub_A_xbee = nh.subscribe("xbee_send_line_begin_1",0,cubeACB);
     ros::Subscriber sub_B_xbee = nh.subscribe("xbee_send_line_end_1",0,cubeBCB);
 
+
+    ros::Subscriber sub_Rc = nh.subscribe("ardu_send_RC",0,rcCB);
+    ros::Subscriber sub_mode_xbee = nh.subscribe("xbee_send_mode",0,xbeeCB);
 
     ros::Publisher vis_pub = nh.advertise<visualization_msgs::Marker>("visualization_marker", 0 );
     visualization_msgs::Marker marker;
