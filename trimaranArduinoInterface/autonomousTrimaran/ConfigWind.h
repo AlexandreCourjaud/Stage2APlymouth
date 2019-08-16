@@ -7,6 +7,7 @@
 float sensorValue =0;
 float angleWind =0;
 float ref = 0;
+float checkWindSpeed = 0;
 
 std_msgs::Float32 windMsg;
 ros::Publisher pubWind("ardu_send_wind_direction",&windMsg);

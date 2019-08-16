@@ -47,19 +47,17 @@ float minSailAngle = 93;
 // rc module 
 
 
-
-
-#define MAX_CHRUDDER 1950
-#define MIN_CHRUDDER 1080
+#define MAX_CHRUDDER 2030
+#define MIN_CHRUDDER 1040
 
 #define MAX_CHSAIL 1950
-#define MIN_CHSAIL 1300
+#define MIN_CHSAIL 1030
 
 unsigned long timerRc;
 
 /* pin rudder, sail*/ 
 const int chPinRudder = 4; // channel 1 sur le pin 4
-const int chPinSail = 5; // channel 3 sur le pin 5
+const int chPinSail = 5; // channel 2 sur le pin 5
 
 float chRudder;
 float chSail;

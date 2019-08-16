@@ -25,6 +25,10 @@ void updateWind(){
 void publishWind(){
   windMsg.data = angleWind;
   pubWind.publish(&windMsg);
+  if (checkWindSpeed == 1){
+    checkWindSpeed = 0;
+    publishWindSpeed();
+  }
 }
 
 /*******anemo**********/
@@ -62,7 +66,8 @@ void anemoInterrupt(){
     t1 = millis();
     windSpeed =  2.0*3.14*(1000.0/ (double(t1-t0)) )*0.055*3; 
     t0 = t1;
-    publishWindSpeed();
+    checkWindSpeed = 1;
+    
   }
   else{
     validWind = 1;
