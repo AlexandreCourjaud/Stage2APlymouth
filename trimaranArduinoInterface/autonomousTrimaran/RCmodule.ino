@@ -48,8 +48,8 @@ void updateRC(){
   }
    
  }
- rcMsg.x = chRudder;
- rcMsg.y = chSail;
+ rcMsg.x = rudderAngle;
+ rcMsg.y = rudderSail;
  rcMsg.z = watchRc;
  pubRc.publish(&rcMsg);
 
