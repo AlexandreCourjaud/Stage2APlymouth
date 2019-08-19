@@ -49,7 +49,7 @@ void updateRC(){
    
  }
  rcMsg.x = rudderAngle;
- rcMsg.y = rudderSail;
+ rcMsg.y = sailAngle;
  rcMsg.z = watchRc;
  pubRc.publish(&rcMsg);
 
