@@ -31,8 +31,8 @@ ros::Subscriber<std_msgs::Float32> sailSub("mode_send_u_sail", &sailCallBack );
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 float rudderAngle =70;
-float minRudderAngle = 25;
-float maxRudderAngle = 115;
+float maxRudderAngle = 25;
+float minRudderAngle = 115;
 
 float sailAngle = 22;
 float maxSailAngle = 30;
@@ -47,8 +47,8 @@ float minSailAngle = 93;
 // rc module 
 
 
-#define MIN_CHRUDDER 2030
-#define MAX_CHRUDDER 1040
+#define MAX_CHRUDDER 2030
+#define MIN_CHRUDDER 1040
 
 #define MAX_CHSAIL 1950
 #define MIN_CHSAIL 1030
