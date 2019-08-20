@@ -19,32 +19,32 @@ void updateRC(){
    if (chRudder > 500){
       //Serial.print(chRudder);
       //Serial.print("  ");
-      //chRudder = max(MIN_CHRUDDER,chRudder);
-      //chRudder = min(MAX_CHRUDDER,chRudder);
-      rudderAngle = minRudderAngle + maxRudderAngle*(chRudder-MIN_CHRUDDER)/(MAX_CHRUDDER-MIN_CHRUDDER);
+      rudderAngle = minRudderAngle + (maxRudderAngle-minRudderAngle)*(chRudder-MIN_CHRUDDER)/(MAX_CHRUDDER-MIN_CHRUDDER);
       rudderAngle = max( min(minRudderAngle,maxRudderAngle),rudderAngle);
       rudderAngle = min(max(minRudderAngle,maxRudderAngle),rudderAngle);
       watchRc = 1;
-      /*Serial.print("rudder : ");
+      /*
+      Serial.print("rudder : ");
       Serial.print(chRudder);
       Serial.print(" ");
       Serial.println(rudderAngle);
       */
+      
    }
    if (chSail > 500){
       //Serial.print(ch3);
       //Serial.print("  ");
-      chSail = max(MIN_CHSAIL,chSail);
-      chSail = min(MAX_CHSAIL,chSail);
-      sailAngle = maxSailAngle*(chSail-MIN_CHSAIL)/(MAX_CHSAIL-MIN_CHSAIL);
-      //sailAngle = max(minSailAngle,sailAngle);
-      //sailAngle = min(maxSailAngle,sailAngle);
+      sailAngle = minSailAngle + (maxSailAngle-minSailAngle)*(chSail-MIN_CHSAIL)/(MAX_CHSAIL-MIN_CHSAIL);
+      sailAngle = max(min(minSailAngle,maxSailAngle),sailAngle);
+      sailAngle = min(max(maxSailAngle,minSailAngle),sailAngle);
       watchRc = 1;
-      /*Serial.print("sail : ");
+      /*
+      Serial.print("sail : ");
       Serial.print(chSail);
       Serial.print(" ");
       Serial.println(sailAngle);
       */
+      
   }
    
  }
