@@ -32,7 +32,7 @@ void updateRC(){
       
    }
    if (chSail > 500){
-      //Serial.print(ch3);
+      //Serial.print(chSail);
       //Serial.print("  ");
       sailAngle = minSailAngle + (maxSailAngle-minSailAngle)*(chSail-MIN_CHSAIL)/(MAX_CHSAIL-MIN_CHSAIL);
       sailAngle = max(min(minSailAngle,maxSailAngle),sailAngle);

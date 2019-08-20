@@ -24,8 +24,8 @@ double wind,awind;
 double cmdRudder, cmdSail;
 
 double delta_s;
-double p[10] = {0.1,1,6000,1000,2000,1,1,2,300,10000};
-
+//double p[10] = {0.1,1,6000,1000,2000,1,1,2,300,10000};
+double p[10] = {0.03,40,6000,200,1500,0.5,0.5,2,300,400};
 //x,y,cap,v,w: vitesse rotation
 double x[5] = {0,0,0,0,0};
 double xdot[5] = {0,0,0,0,0};
@@ -89,8 +89,8 @@ void f(){
 
 void euler(){
     double t1 = ros::Time::now().toSec();
-    double dt = t1 - t0;
-    //double dt = 0.1;
+    //double dt = t1 - t0;
+    double dt = 0.1;
     x[0] = x[0] + dt*xdot[0];
     x[1] = x[1] + dt*xdot[1];
     x[2] = x[2] + dt*xdot[2];
