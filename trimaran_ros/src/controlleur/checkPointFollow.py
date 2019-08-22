@@ -170,7 +170,7 @@ def setPointBuoy(listPoint,index):
 
     elif ModeBuoy == 4:
         r = 2.5
-        h = 1.5
+        h = 0.75
         convLong = 1/(111.11*1000*np.cos(xRef[0]*np.pi/180) )
         convLat  =1/(111.11*1000)
         p1 = r*np.sin(wind)

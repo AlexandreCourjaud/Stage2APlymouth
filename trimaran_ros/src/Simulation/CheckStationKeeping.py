@@ -14,22 +14,28 @@ import time
 import os
 
 
-xRef = [0,0]
+xRef = [50.359169,-4.114978]
 
-xKeeping = [0,0]
+xKeeping = [50.365426,-4.153212]
 
 
 x = np.array([0.0,0.0,0.0])
 xgps = np.array([0.0,0.0,0.0])
+newData = 0
+beginMean = 0
 
 def sub_gps(msg):
-    global x,xgps
+    global x,xgps,newData
     xgps[0] = msg.latitude
     xgps[1] = msg.longitude
     xgps[2] = msg.track
     x[0] = 111.11*1000*(msg.latitude-xRef[0])
     x[1] = -111.11*1000*(msg.longitude-xRef[1])*np.cos(xRef[0]*np.pi/180)
     x[2] = msg.track
+    newData = 1
+
+
+
 
 
 if __name__ == "__main__":
@@ -39,8 +45,22 @@ if __name__ == "__main__":
     pub_ref = rospy.Publisher('control_send_ref',Vector3,queue_size = 10)
     rospy.Subscriber("filter_send_gps",GPSFix,sub_gps)
 
-
-    rate = rospy.Rate(25)
+    cartXKeeping = [ 111.11*1000*(xKeeping[0]-xRef[0]), -111.11*1000*(xKeeping[1]-xRef[1])*np.cos(xRef[0]*np.pi/180) ]
+    listNorm = []
+    newData = 0
+    beginMean = 0
     while not rospy.is_shutdown():
+        if newData == 1:
+            newData = 0
+            vect = np.array([ [x[0]-cartXKeeping[0]], [x[1]-cartXKeeping[1]] ])
+            norm = np.linalg.norm(vect)
+            if norm < 15:
+                beginMean = 1
+            if beginMean == 1:
+                listNorm.append(norm)
+                print(np.mean(listNorm))
+    print("Fin calcul : ",np.mean(listNorm))
+    print("Max Distance : ",np.max(listNorm))
+    print("Min Distance : ",np.min(listNorm))
 
-        rate.sleep()
+
