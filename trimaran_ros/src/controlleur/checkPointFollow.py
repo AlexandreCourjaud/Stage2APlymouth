@@ -1,8 +1,6 @@
 
 #!/usr/bin/env python2
 
-
-# This Python file uses the following encoding: utf-8
 import numpy as np
 import rospy
 from geometry_msgs.msg import Pose2D
