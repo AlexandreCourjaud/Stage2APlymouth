@@ -24,8 +24,8 @@ double wind,awind;
 double cmdRudder, cmdSail;
 
 double delta_s;
-//double p[10] = {0.1,1,6000,1000,2000,1,1,2,300,10000};
-double p[10] = {0.03,40,6000,200,1500,0.5,0.5,2,300,400};
+double p[10] = {0.1,1,6000,1000,2000,1,1,2,300,10000};
+//double p[10] = {0.03,40,6000,200,1500,0.5,0.5,2,300,400};
 //x,y,cap,v,w: vitesse rotation
 double x[5] = {0,0,0,0,0};
 double xdot[5] = {0,0,0,0,0};
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
     x[3] = 1;
     x[4] = 0;
     wind = 0;
-    awind = 4;
+    awind = 2;
     cmdRudder = 0;
     cmdSail = 0;
 
