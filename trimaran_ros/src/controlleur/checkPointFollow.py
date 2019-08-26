@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python2
 
 
@@ -44,6 +45,7 @@ def sub_euler(msg):
 def sub_wind(msg):
     global wind
     wind = msg.data
+
 
 
 def sub_imu(msg):
