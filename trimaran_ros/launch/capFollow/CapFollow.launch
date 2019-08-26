@@ -3,8 +3,8 @@
 <include file="$(find plymouth_internship_2019)/Launch/systemLaunch/imageProcessing.launch">
         <arg name="horizon" default="False" />
         <arg name="masts" default="False" />
-        <arg name="buoy" default="False" />
-        <arg name="marker" default="False" />
+        <arg name="buoy" default="True" />
+        <arg name="marker" default="True" />
         <arg name="output" default="False" />
         <arg name="size" default="1" />
     </include>
