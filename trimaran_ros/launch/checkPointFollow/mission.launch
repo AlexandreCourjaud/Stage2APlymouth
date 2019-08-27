@@ -6,7 +6,7 @@
         <arg name="buoy" default="True" />
         <arg name="marker" default="False" />
         <arg name="output" default="False" />
-        <arg name="size" default="1" />
+        <arg name="size" default="0.6" />
     </include>
 
 <include file="$(find trimaran_ros)/launch/lowlevel.launch" />
