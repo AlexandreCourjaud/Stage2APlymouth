@@ -17,6 +17,8 @@ xRef = [0,0]
 ModeBuoy = 0
 direction = 0
 
+windFix = 0
+
 x = np.array([0.0,0.0,0.0])
 xgps = np.array([0.0,0.0,0.0])
 xBuoy = np.array([0.0,0.0])
@@ -110,15 +112,15 @@ def setPoint(listPoint,index):
     return A,B
 
 def setPointBuoy(listPoint,index):
-    global direction,wind
+    global direction,wind,windFix
     if ModeBuoy == 0:
         A = xgps[0:2].reshape((2,1))
         B = listPoint[:2,index]
 
     elif ModeBuoy == 1:
-        r = 1
-        A = np.array([  [  listPoint[0,index]+r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
-        B = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
+        r = 1.5
+        A = np.array([  [  listPoint[0,index]+r*np.sin(windFix)/(111.11*1000)  ] , [  listPoint[1,index]+r*np.cos(windFix)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
+        B = np.array([  [  listPoint[0,index]-r*np.sin(windFix)/(111.11*1000)  ] , [  listPoint[1,index]-r*np.cos(windFix)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
 
         if direction == 1:
             A,B = B,A
@@ -206,6 +208,11 @@ def control(listPoint,index,timeBuoy):
                 index = index +1
                 #print(index,len(listPoint[0]))
                 timeBuoy = 0
+
+            elif timeBuoy == 0:
+                timeBuoy = time.time()
+                windFix = wind
+                print("windFix : ",windFix)
             else:
                 timeBuoy = time.time()
     if (timeBuoy > 0):
@@ -257,6 +264,7 @@ if __name__ == "__main__":
     refmsgs.x = xRef[0]
     refmsgs.y = xRef[1]
     wind = 0
+    windFix = 0
 
 
     gpsready = 0

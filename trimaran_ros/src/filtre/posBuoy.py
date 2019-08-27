@@ -127,7 +127,7 @@ if __name__ == "__main__":
             buoyCart[1] = -111.11*1000*(buoy[1]-xRef[1])*np.cos(xRef[0]*np.pi/180)
             #print("mesure",posx,posy)
             #print("true",trueBuoyCart[0],trueBuoyCart[1])
-            if (abs(buoy[0] - trueBuoyCart[0])<30) and (abs(buoy[1] - trueBuoyCart[1])<30 ):
+            if (abs(posx - trueBuoyCart[0])<30) and (abs(posy - trueBuoyCart[1])<30 ):
                 posX.append(posx)
                 posY.append(posy)
 
@@ -196,7 +196,7 @@ if __name__ == "__main__":
         msgBuoy.x = lat
         msgBuoy.y = longi
         pub_buoy.publish(msgBuoy)
-
+        #print("pose B :",lat,longi)
 
 
         #print(error)
