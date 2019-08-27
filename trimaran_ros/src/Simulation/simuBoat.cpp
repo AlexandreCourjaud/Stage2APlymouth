@@ -36,7 +36,7 @@ double t0;
 vec2 cubeA = {-10,0};
 vec2 cubeB = {10,0};
 
-double buoy[2] = {50.6955,-4.237};
+double buoy[2] = {29.867288,121.538464};
 
 
 void windCB(const std_msgs::Float32 msgWind){

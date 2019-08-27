@@ -18,7 +18,10 @@ distance = 0
 capBuoy = 0
 newData = 0
 newRef = 0
-xRef = [0.0,0.0]
+xRef = [29.8678033333,121.53904]
+trueBuoy = [29.867288,121.538464]
+trueBuoyCart = [111.11*1000*(trueBuoy[0]-xRef[0]), -111.11*1000*(trueBuoy[1]-xRef[1])*np.cos(xRef[0]*np.pi/180)]
+
 x = [0,0,0]
 xgps = [0,0,0]
 yaw,pitch,roll = 0,0,0
@@ -48,9 +51,10 @@ def sub_euler(msg):
 
 def sub_buoy(msg):
     global distance, capBuoy, newData
-    distance = msg.x
-    capBuoy = msg.y
-    newData = 1
+    if msg.x != -999:
+        distance = msg.x
+        capBuoy = msg.y
+        newData = 1
 
 
 def sub_ref(msg):
@@ -69,13 +73,14 @@ if __name__ == "__main__":
 
     fpbx = 0
     fpby = 0
-    posX = []
-    posY = []
+    posX = [trueBuoyCart[0]]
+    posY = [trueBuoyCart[1]]
 
 
-    buoy = [50.6955,-4.237];
+    buoy = [0,0];
     buoyCart = [0,0]
-
+    buoyLat = 0
+    buoyLong = 0
     '''
     noFiltrelistTime = []
     nbPoint = []
@@ -120,8 +125,11 @@ if __name__ == "__main__":
             posy = x[1] + np.sin(angle)*distance
             buoyCart[0] = 111.11*1000*(buoy[0]-xRef[0])
             buoyCart[1] = -111.11*1000*(buoy[1]-xRef[1])*np.cos(xRef[0]*np.pi/180)
-            posX.append(posx)
-            posY.append(posy)
+            if (abs(buoyCart[0] - trueBuoyCart[0])<10) and (abs(buoyCart[1] - trueBuoyCart[1])<10 ):
+                posX.append(posx)
+                posY.append(posy)
+
+
             if len(posX)>10000:
                del(posX[0])
             if len(posY)>10000:
@@ -130,71 +138,68 @@ if __name__ == "__main__":
 
 
 
-            '''
-            no filtre
-            '''
+        '''
+        no filtre
+        '''
 
-            '''
-            bx = posx
-            by = posy
-            error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
-            noFiltreError.append(error)
-            plt.plot(nbPoint,noFiltreError,'g')
+        '''
+        bx = posx
+        by = posy
+        error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
+        noFiltreError.append(error)
+        plt.plot(nbPoint,noFiltreError,'g')
 
-            zero.append(0)
-            plt.plot(nbPoint,zero,'black')
-            '''
+        zero.append(0)
+        plt.plot(nbPoint,zero,'black')
+        '''
 
-            '''
-            filtre median
-            '''
-
-
-            bx = np.median(posX)
-            by = np.median(posY)
-            #error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
-            #medianError.append(error)
-            #plt.plot(nbPoint,medianError,'b')
+        '''
+        filtre median
+        '''
 
 
+        bx = np.median(posX)
+        by = np.median(posY)
+        #error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
+        #medianError.append(error)
+        #plt.plot(nbPoint,medianError,'b')
 
-            '''
-            Moyenne
-            '''
+        '''
+        Moyenne
+        '''
 
-            '''
-            bx = np.mean(posX)
-            by = np.mean(posY)
-            error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
-            meanError.append(error)
-            plt.plot(nbPoint,meanError,'r')
-            '''
-
-
-            ''' passe bas'''
-
-            '''
-            fpbx = 0.90*fpbx + 0.10*posx
-            fpby = 0.90*fpby + 0.10*posy
-            error = np.sqrt((fpbx-buoyCart[0])**2 + (fpby-buoyCart[1])**2)
-            fpbError.append(error)
-            plt.plot(nbPoint,fpbError,'y')
-            '''
+        '''
+        bx = np.mean(posX)
+        by = np.mean(posY)
+        error = np.sqrt((bx-buoyCart[0])**2 + (by-buoyCart[1])**2)
+        meanError.append(error)
+        plt.plot(nbPoint,meanError,'r')
+        '''
 
 
-            lat = bx/(111.11*1000)+ xRef[0]
-            longi = -by/(111.11*1000*np.cos(xRef[0]*np.pi/180))+xRef[1]
+        ''' passe bas'''
+
+        '''
+        fpbx = 0.90*fpbx + 0.10*posx
+        fpby = 0.90*fpby + 0.10*posy
+        error = np.sqrt((fpbx-buoyCart[0])**2 + (fpby-buoyCart[1])**2)
+        fpbError.append(error)
+        plt.plot(nbPoint,fpbError,'y')
+        '''
+
+        lat = bx/(111.11*1000)+ xRef[0]
+        longi = -by/(111.11*1000*np.cos(xRef[0]*np.pi/180))+xRef[1]
 
 
-            msgBuoy.x = lat
-            msgBuoy.y = longi
-            pub_buoy.publish(msgBuoy)
+        msgBuoy.x = lat
+        msgBuoy.y = longi
+        pub_buoy.publish(msgBuoy)
 
 
 
-            #print(error)
-            #plt.pause(0.000000001)
-            #plt.cla()
+        #print(error)
+        #plt.pause(0.000000001)
+        #plt.cla()
 
 
 
