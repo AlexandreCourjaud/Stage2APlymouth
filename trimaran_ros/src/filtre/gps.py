@@ -8,7 +8,7 @@ import pyudev
 
 status = 0
 
-time = 0
+time = 0.0
 longitude = 0
 latitude = 0
 type = 0
@@ -38,7 +38,7 @@ def trameGpsIsValide(data):
         return 0
 
 def parseGPGGA(data):
-    time = float(data[1][0:2])*3600 + float(data[1][2:4])*60 + float(data[1][4:])
+    time = data[1]
     if data[2] == '':
         return 0,time,0,0,0,0,0,0
     latitude = float(data[2][0:(len(data[2])-7)])+float(data[2][(len(data[2])-7):])/60
@@ -57,7 +57,7 @@ def parseGPGGA(data):
 
 
 def parseGPRMC(data):
-    time = float(data[1][0:2])*3600 + float(data[1][2:4])*60 + float(data[1][4:])
+    time = data[1]
     if data[3] == '':
         return 0,time,0,0,0,0,0,0,0
     latitude = float(data[3][0:(len(data[3])-7)])+float(data[3][(len(data[3])-7):])/60

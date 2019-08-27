@@ -51,7 +51,7 @@ def sub_euler(msg):
 
 def sub_buoy(msg):
     global distance, capBuoy, newData
-    if msg.x != -999:
+    if msg.x != -999.0:
         distance = msg.x
         capBuoy = msg.y
         newData = 1
@@ -125,7 +125,9 @@ if __name__ == "__main__":
             posy = x[1] + np.sin(angle)*distance
             buoyCart[0] = 111.11*1000*(buoy[0]-xRef[0])
             buoyCart[1] = -111.11*1000*(buoy[1]-xRef[1])*np.cos(xRef[0]*np.pi/180)
-            if (abs(buoyCart[0] - trueBuoyCart[0])<10) and (abs(buoyCart[1] - trueBuoyCart[1])<10 ):
+            #print("mesure",posx,posy)
+            #print("true",trueBuoyCart[0],trueBuoyCart[1])
+            if (abs(buoy[0] - trueBuoyCart[0])<30) and (abs(buoy[1] - trueBuoyCart[1])<30 ):
                 posX.append(posx)
                 posY.append(posy)
 
@@ -193,7 +195,7 @@ if __name__ == "__main__":
 
         msgBuoy.x = lat
         msgBuoy.y = longi
-        pub_buoy.publish(msgBuoy)
+        #pub_buoy.publish(msgBuoy)
 
 
 
