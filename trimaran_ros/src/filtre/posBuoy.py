@@ -195,7 +195,7 @@ if __name__ == "__main__":
 
         msgBuoy.x = lat
         msgBuoy.y = longi
-        #pub_buoy.publish(msgBuoy)
+        pub_buoy.publish(msgBuoy)
 
 
 

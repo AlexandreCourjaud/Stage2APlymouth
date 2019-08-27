@@ -116,7 +116,7 @@ def setPointBuoy(listPoint,index):
         B = listPoint[:2,index]
 
     elif ModeBuoy == 1:
-        r = 2
+        r = 1
         A = np.array([  [  listPoint[0,index]+r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]+r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
         B = np.array([  [  listPoint[0,index]-r*np.sin(wind)/(111.11*1000)  ] , [  listPoint[1,index]-r*np.cos(wind)/(111.11*1000*np.cos(xRef[0]*np.pi/180) )    ]  ])
 
