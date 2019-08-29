@@ -17,6 +17,7 @@
 <node pkg="trimaran_ros" type="checkPointFollow.py" name="checkPointFollow" />
 
 
+<node name="record" pkg="rosbag" type="record" args="record -a -o $(find trimaran_ros)/rosbag/checkPointFollow" -x "/tag_detections_image/compressedDepth(.*)" />
 
 
 </launch>
