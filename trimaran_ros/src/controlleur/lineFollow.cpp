@@ -103,9 +103,10 @@ void capControl(){
         q = sign(e);
     }
     double thetabar = phi-atan(e/r);
-    if ( ( cos(wind-thetabar) + cos(zeta) )<0){
+    /*if ( ( cos(wind-thetabar) + cos(zeta) )<0){
         thetabar = M_PI+wind-zeta*q;
     }
+    */
     double deltar = (3/M_PI)*atan(tan(0.5*(yaw-thetabar)));
     double deltamax = (M_PI/4)*(cos(wind-thetabar)+1);
 

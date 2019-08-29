@@ -4,7 +4,7 @@
         <arg name="horizon" default="False" />
         <arg name="masts" default="False" />
         <arg name="buoy" default="False" />
-        <arg name="marker" default="True" />
+        <arg name="marker" default="False" />
         <arg name="output" default="False" />
         <arg name="size" default="0.6" />
     </include>
